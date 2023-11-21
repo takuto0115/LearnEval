@@ -17,9 +17,9 @@ public class LaearnEvalController {
 	@RequestMapping(path = "/login", method = RequestMethod.POST)
 	public String checkUser(String type,String id,String pass,Model model) {
 		if(type.equals("student")) {
-			return "studentmain";
+			return "redirect:/studentmain";
 		}else if(type.equals("teacher")) {
-			return "teachermain";
+			return "redirect:/teachermain";
 		}else{
 		model.addAttribute("login","<script>alert('一致するIDがありません');</script>");
 		}

@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: rgb(128, 128, 255);
+    padding: 30px; /* 任意のパディングを設定 */
+    color: white; /* ヘッダーの文字色を白に設定 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; /* 相対位置指定 */
+}
+
+#logout-button {
+    background-color: red;
+    color: white;
+    padding: 1%;
+    border-radius: 5px; /* 角を丸める */
+    position: absolute;
+    top: 50%; /* 上端を中央に配置 */
+    transform: translateY(-50%); /* 中央寄せ */
+    right: 3%; /* 左に5px移動 */
+}
