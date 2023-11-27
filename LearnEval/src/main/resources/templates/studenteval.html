@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/header.css" />
+  <link rel="stylesheet" type="text/css" href="/css/num.css" />
+  <meta charset="UTF-8">
+  <title>成績確認</title>
+</head>
+<body>
+  <header> <span>LearnEval</span>
+    <div id="logout-button">ログアウト</div>
+  </header>
+  <table>
+    <tr>
+      <th>問題</th>
+      <th>問題数</th>
+      <th>正答数</th>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>5</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>4</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>4</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>5</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>4</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>5</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>5</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>4</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>5</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>4</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>4</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td id="qnum"></td>
+      <td>5</td>
+      <td>2</td>
+    </tr>
+  </table>
+  <form th:action="@{/studenteval}" method="POST"> <input type="submit" value="メインメニューに戻る"> </form>
+</body>
+</html>

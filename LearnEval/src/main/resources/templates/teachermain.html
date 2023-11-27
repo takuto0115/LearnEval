@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	   <link rel="stylesheet" type="text/css" href="/css/header.css" />
-<meta charset="UTF-8">
-<title>ホーム(教員用)</title>
+  <link rel="stylesheet" type="text/css" href="/css/header.css" />
+  <meta charset="UTF-8">
+  <title>ホーム(教員用)</title>
 </head>
 <body>
-<header>
-        <span>LearnEval</span>
-        <div id="logout-button">ログアウト</div>
-</header>
-<main>
-	メイン
-</main>
-
+  <header> <span>LearnEval</span>
+    <div id="logout-button">ログアウト</div>
+  </header>
+  <main>
+    <form th:action="@{/studentmain}" method="POST"> 
+		<input type="submit" value="テスト一覧" name="page"> 
+		<input type="submit" value="成績一覧" name="page"> 
+		<input type="submit" value="メッセージ一覧" name="page"> 
+	</form>
+  </main>
 </body>
 </html>

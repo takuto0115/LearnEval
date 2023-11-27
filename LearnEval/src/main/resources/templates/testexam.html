@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="/css/question.css" />
+  <title>問題1</title>
+</head>
+<body>
+  <h1>問題1</h1>
+  <p><img src="/images/program_01_example.png" width="60%" height="60%"></p>
+  <form th:action="@{/test}" method="POST">
+    <h2>a : </h2>
+    <div id="que">
+      <section> <input type="radio" name="a" value="a">a<br> 1 </section>
+      <section> <input type="radio" name="a" value="b">b<br> 2 </section>
+      <section> <input type="radio" name="a" value="c">c<br> 3 </section>
+      <section> <input type="radio" name="a" value="d">d<br> 4 </section>
+    </div>
+    <h2>b : </h2>
+    <div id="que">
+      <section> <input type="radio" name="b" value="a"> a </section>
+      <section> <input type="radio" name="b" value="b"> b </section>
+      <section> <input type="radio" name="b" value="c"> c </section>
+      <section><input type="radio" name="b" value="d"> d </section>
+    </div>
+  </form>
+</body>
+</html>

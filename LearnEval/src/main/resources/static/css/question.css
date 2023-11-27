@@ -1,0 +1,22 @@
+@charset "UTF-8";
+body{
+	padding: 10%;
+	padding-top: 0;
+}
+h1,p{
+		text-align: center;
+		margin-bottom: 5%;
+}
+section{
+	padding: 10px;
+}
+#que{
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+
+}
+input{
+	padding-left: 10%;
+	margin-left: 10%;
+	}
+	
