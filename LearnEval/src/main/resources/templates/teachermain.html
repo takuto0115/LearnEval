@@ -8,8 +8,10 @@
 </head>
 <body>
   <header> <span>LearnEval</span>
-    <div id="logout-button">ログアウト</div>
-  </header>
+  <form th:action="@{/login}" method="GET">
+    <input type="submit" id="logout-button" value="ログアウト">
+    </form>
+      </header>
   <main>
     <form th:action="@{/teachermain}" method="POST"> 
 		<input type="submit" value="テスト一覧" name="page" id="choice"> 

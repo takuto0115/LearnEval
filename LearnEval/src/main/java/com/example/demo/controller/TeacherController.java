@@ -32,10 +32,17 @@ public class TeacherController {
 		return "teachertestmenu";
 	}
 	
+
 	@RequestMapping(path = "/teacherstumenu", method = RequestMethod.GET)
 	public String stuMenuGet() {
 		return "teacherstumenu";
 	}
+	
+	@RequestMapping(path = "/testexamedit", method = RequestMethod.GET)
+	public String testExamGet() {
+		return "testexamedit";
+	}
+	
 	
 	@RequestMapping(path = "/teachermessage", method = RequestMethod.GET)
 	public String mesGet() {
