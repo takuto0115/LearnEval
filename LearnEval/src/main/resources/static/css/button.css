@@ -1,8 +1,9 @@
 @charset "UTF-8";
-input{
+#choice{
 background-color: orange;
 text-align: center;
 padding: 10px;
+margin: 10px;
 width: 50%;
 height: 20%;
 }

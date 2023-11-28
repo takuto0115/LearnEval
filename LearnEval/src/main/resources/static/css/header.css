@@ -25,3 +25,8 @@ header {
     transform: translateY(-50%); /* 中央寄せ */
     right: 3%; /* 左に5px移動 */
 }
+
+main{
+	text-align: center;
+	padding: 10px;
+	}

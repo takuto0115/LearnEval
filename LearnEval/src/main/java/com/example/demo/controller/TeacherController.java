@@ -12,4 +12,33 @@ public class TeacherController {
 	public String mainGet() {
 		return "teachermain";
 	}
+	
+	@RequestMapping(path = "/teachermain", method = RequestMethod.POST)
+	public String mainPost(String page) {
+		switch(page) {
+		case"テスト一覧":
+			return "redirect:/teachertestmenu";
+		case"個人成績一覧":
+			return "redirect:/teacherstumenu";
+		case"メッセージ一覧":
+			return "redirect:/teachermessage";
+
+		}
+		return "/studentmain";
+	}
+	
+	@RequestMapping(path = "/teachertestmenu", method = RequestMethod.GET)
+	public String testMenuGet() {
+		return "teachertestmenu";
+	}
+	
+	@RequestMapping(path = "/teacherstumenu", method = RequestMethod.GET)
+	public String stuMenuGet() {
+		return "teacherstumenu";
+	}
+	
+	@RequestMapping(path = "/teachermessage", method = RequestMethod.GET)
+	public String mesGet() {
+		return "teachermessage";
+	}
 }

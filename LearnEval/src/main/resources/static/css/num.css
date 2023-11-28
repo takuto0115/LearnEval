@@ -4,6 +4,10 @@ table {
 counter-reset: number 0;
 text-align: center;	
 }
+
+table#tset{
+	counter-reset: number 11;
+}
 table #qnum::before {
 counter-increment: number 1;
 content: "問" counter(number);
@@ -12,3 +16,8 @@ table #num::before {
 counter-increment: number 1;
 content: counter(number);
 }
+table #t-qnum::before {
+counter-increment: number 1;
+content: "問" counter(number);
+}
+

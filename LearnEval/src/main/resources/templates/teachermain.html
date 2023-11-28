@@ -2,6 +2,7 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
+    <link rel="stylesheet" type="text/css" href="/css/button.css">
   <meta charset="UTF-8">
   <title>ホーム(教員用)</title>
 </head>
@@ -10,10 +11,10 @@
     <div id="logout-button">ログアウト</div>
   </header>
   <main>
-    <form th:action="@{/studentmain}" method="POST"> 
-		<input type="submit" value="テスト一覧" name="page"> 
-		<input type="submit" value="成績一覧" name="page"> 
-		<input type="submit" value="メッセージ一覧" name="page"> 
+    <form th:action="@{/teachermain}" method="POST"> 
+		<input type="submit" value="テスト一覧" name="page" id="choice"> 
+		<input type="submit" value="個人成績一覧" name="page" id="choice"> 
+		<input type="submit" value="メッセージ一覧" name="page" id="choice"> 
 	</form>
   </main>
 </body>
