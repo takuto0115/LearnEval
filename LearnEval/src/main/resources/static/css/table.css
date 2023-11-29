@@ -5,4 +5,5 @@ table{
 th,td{
 	border: solid 1px black;
 	margin: 0;
+	padding: 10px;
 }

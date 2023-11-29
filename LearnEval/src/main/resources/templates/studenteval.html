@@ -9,8 +9,11 @@
 </head>
 <body>
   <header> <span>LearnEval</span>
-  <form th:action="@{/login}" method="GET">
+	<form th:action="@{/login}" method="GET">
     <input type="submit" id="logout-button" value="ログアウト">
+    </form>
+    <form th:action="@{/studentmain}" method="GET">
+    <input type="submit" id="home-button" value="ホーム">
     </form>
   </header>
   <table>
@@ -80,6 +83,5 @@
       <td>2</td>
     </tr>
   </table>
-  <form th:action="@{/studenteval}" method="POST"> <input type="submit" value="メインメニューに戻る"> </form>
 </body>
 </html>

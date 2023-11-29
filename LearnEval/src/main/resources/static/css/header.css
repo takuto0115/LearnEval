@@ -16,14 +16,26 @@ header {
 }
 
 #logout-button {
-    background-color: red;
-    color: white;
+    background-color: white;
+    color: black;
+    width: 100px;
     padding: 1%;
     border-radius: 5px; /* 角を丸める */
     position: absolute;
     top: 50%; /* 上端を中央に配置 */
     transform: translateY(-50%); /* 中央寄せ */
     right: 3%; /* 左に5px移動 */
+}
+#home-button {
+    background-color: lightblue;
+    color: black;
+    width: 100px;
+    padding: 1%;
+    border-radius: 5px; /* 角を丸める */
+    position: absolute;
+    top: 50%; /* 上端を中央に配置 */
+    transform: translateY(-50%); /* 中央寄せ */
+    right: 10%; /* 左に5px移動 */
 }
 
 main{

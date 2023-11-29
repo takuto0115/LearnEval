@@ -1,7 +1,10 @@
 @charset "UTF-8";
 body{
-	padding: 10%;
 	padding-top: 0;
+}
+main{
+padding: 10%;
+padding-top: 0;
 }
 h1,p{
 		text-align: center;
@@ -11,12 +14,36 @@ section{
 	padding: 10px;
 }
 #que{
-                display: grid;
-                grid-template-columns: 1fr 1fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 
 }
+#choice{
+	margin-right: 10px;
+}
+#return{
+	width: 15%;
+}
 input{
-	padding-left: 10%;
 	margin-left: 10%;
 	}
+	
+span{
+	margin-right: 20px;	
+}
+	
+.A{
+    display: inline-block;
+    background: #b6beff;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.B{
+    background: #ffaf74;
+    height: 75px;
+    padding: 5px;
+}
+.C{
+    display: none;
+}
 	
