@@ -3,7 +3,7 @@ table{
 	margin: auto;
 }
 th,td{
-	border: solid 1px black;
+/*	border: solid 1px black;*/
 	margin: 0;
 	padding: 10px;
 }

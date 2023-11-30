@@ -21,22 +21,33 @@
 	  <h2>表示される数字を答えなさい</h2>
     <h2 style="text-align: left;">a : </h2>
     <div id="que">
-      <section><span><input type="radio" name="a" value="a" id="choice">a</span>1</section>
-      <section><span><input type="radio" name="a" value="b" id="choice">b</span>2</section>
-      <section><span><input type="radio" name="a" value="c" id="choice">c</span>3</section>
-      <section><span><input type="radio" name="a" value="d" id="choice">d</span>4</section>
+      <section><span><input type="radio" name="a" value="a" id="choice">a</span><input type="test"></section>
+      <section><span><input type="radio" name="a" value="b" id="choice">b</span><input type="test"></section>
+      <section><span><input type="radio" name="a" value="c" id="choice">c</span><input type="test"></section>
+      <section><span><input type="radio" name="a" value="d" id="choice">d</span><input type="test"></section>
     </div>
     <h2 style="text-align: left;">b : </h2>
     <div id="que">
-      <section><span><input type="radio" name="b" value="a" id="choice">a</span>1</section>
-      <section><span><input type="radio" name="b" value="b" id="choice">b</span>2</section>
-      <section><span><input type="radio" name="b" value="c" id="choice">c</span>3</section>
-      <section><span><input type="radio" name="b" value="d" id="choice">d</span>4</section>
+      <section><span><input type="radio" name="b" value="a" id="choice">a</span><input type="test"></section>
+      <section><span><input type="radio" name="b" value="b" id="choice">b</span><input type="test"></section>
+      <section><span><input type="radio" name="b" value="c" id="choice">c</span><input type="test"></section>
+      <section><span><input type="radio" name="b" value="d" id="choice">d</span><input type="test"></section>
     </div>
-    <div class="A">回答する</div>
-<div class="B"><p>回答 a : c,3<br>回答 b : d,4</p>
+    <p>回答 a : <select id="numbers" name="month">
+        <option value="a">a</option>
+        <option value="b">b</option>
+        <option value="c">c</option>
+        <option value="d">d</option>
+        </select>
+        <input type="test"><br>回答 b : <select id="numbers" name="month">
+        <option value="a">a</option>
+        <option value="b">b</option>
+        <option value="c">c</option>
+        <option value="d">d</option>
+        </select>
+        <input type="test"></p>
  <form th:action="@{/teachermain}" method="GET">
-<input type="submit" id="return" value="メインメニューへ戻る">
+<input type="submit" id="return" value="確定する">
  </form>
 </div>
 </main>

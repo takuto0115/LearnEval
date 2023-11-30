@@ -2,27 +2,36 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <script src="https://code.jquery.com/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/css/question.css" />
+    <script src="/js/anc.js"></script>
   <title>問題1</title>
 </head>
 <body>
   <h1>問題1</h1>
   <p><img src="/images/program_01_example.png" width="60%" height="60%"></p>
   <form th:action="@{/test}" method="POST">
-    <h2>a : </h2>
+	 <h2 style="text-align: left;">a : </h2>
     <div id="que">
-      <section> <input type="radio" name="a" value="a">a<br> 1 </section>
-      <section> <input type="radio" name="a" value="b">b<br> 2 </section>
-      <section> <input type="radio" name="a" value="c">c<br> 3 </section>
-      <section> <input type="radio" name="a" value="d">d<br> 4 </section>
+      <section><span><input type="radio" name="a" value="a" id="choice">a</span>1</section>
+      <section><span><input type="radio" name="a" value="b" id="choice">b</span>2</section>
+      <section><span><input type="radio" name="a" value="c" id="choice">c</span>3</section>
+      <section><span><input type="radio" name="a" value="d" id="choice">d</span>4</section>
     </div>
-    <h2>b : </h2>
+    <h2 style="text-align: left;">b : </h2>
     <div id="que">
-      <section> <input type="radio" name="b" value="a"> a </section>
-      <section> <input type="radio" name="b" value="b"> b </section>
-      <section> <input type="radio" name="b" value="c"> c </section>
-      <section><input type="radio" name="b" value="d"> d </section>
+      <section><span><input type="radio" name="b" value="a" id="choice">a</span>1</section>
+      <section><span><input type="radio" name="b" value="b" id="choice">b</span>2</section>
+      <section><span><input type="radio" name="b" value="c" id="choice">c</span>3</section>
+      <section><span><input type="radio" name="b" value="d" id="choice">d</span>4</section>
     </div>
   </form>
+  </form>
+    <div class="A">回答する</div>
+<!--<div class="B"><p>回答 a : c,3<br>回答 b : d,4</p>-->
+<!-- <form th:action="@{/teachermain}" method="GET">-->
+<!--<input type="submit" id="return" value="メインメニューへ戻る">-->
+<!-- </form>-->
+</div>
 </body>
 </html>

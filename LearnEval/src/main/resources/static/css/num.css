@@ -4,8 +4,10 @@ table {
 counter-reset: number 0;
 text-align: center;	
 }
-
-table#tset{
+table#twoset{
+	counter-reset: number 1;
+}
+table#tenset{
 	counter-reset: number 11;
 }
 table #qnum::before {
