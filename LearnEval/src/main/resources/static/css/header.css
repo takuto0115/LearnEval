@@ -5,6 +5,11 @@ body {
     padding: 0;
 }
 
+span{
+	font-size: 30px;
+}
+
+
 header {
     background-color: rgb(128, 128, 255);
     padding: 30px; /* 任意のパディングを設定 */
