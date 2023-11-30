@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/log.css" />
+  <meta charset="UTF-8">
+  <title>パスワードを忘れた場合</title>
+</head>
+<body>
+  <div class="box">
+    <h1>パスワード変更</h1>
+    <form th:action="@{/forget}" method="POST">
+      <p>ログインID： <input type="text" name="id"> </p>
+      <p>変更後のパスワード： <input type="text" name="pass"> </p>
+      <p>
+      </p> <input type="submit" value="ログイン"> </form>
+  </div>
+</body>
+</html>
