@@ -9,7 +9,9 @@
 </head>
 <body>
   <h1>問題1</h1>
-  <p><img src="/images/program_01_example.png" width="60%" height="60%"></p>
+<th:block th:each="result : ${selectResult}">
+  <p><img th:src="${'data:image/png;base64,' + result.Question}" width="60%" height="60%"></p>
+  </th:block>
   <form th:action="@{/test}" method="POST">
 	 <h2 style="text-align: left;">a : </h2>
     <div id="que">
@@ -28,10 +30,10 @@
   </form>
   </form>
     <div class="A">回答する</div>
-<!--<div class="B"><p>回答 a : c,3<br>回答 b : d,4</p>-->
-<!-- <form th:action="@{/teachermain}" method="GET">-->
-<!--<input type="submit" id="return" value="メインメニューへ戻る">-->
-<!-- </form>-->
+<div class="B"><p>回答 a : c,3<br>回答 b : d,4</p>
+ <form th:action="@{/teachermain}" method="GET">
+<input type="submit" id="return" value="メインメニューへ戻る">
+ </form>
 </div>
 </body>
 </html>
