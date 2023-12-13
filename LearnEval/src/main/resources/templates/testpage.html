@@ -10,14 +10,14 @@
 <body>
   <h1>問題1</h1>
 <th:block th:each="image : ${image}">
-  <p><img th:src="${'data:image/png;base64,' + result.Question}" width="60%" height="60%"></p>
+  <p><img th:src="${'data:image/png;base64,' + image.Question}" width="60%" height="60%"></p>
   </th:block>
   <form th:action="@{/test}" method="POST">
 	  <table>
 <th:block th:each="que : ${que}">
-  <tr><th th:text="'設問'+'${que.selectnumber}'"></th></tr>
-  <tr><td><input type = "radio" name="th:text='${que.selectnumber}'" th:text="${que.selectnumber}"></td>
-  <td><input type = "radio" name="th:text='${que.select_first}'" th:text="${que.select_sec}"></td></tr>
+  <tr><th th:text="'設問'+ ${que.selectnumber}"></th></tr>
+  <tr><td th:text="${que.selectnumber}"><input type = "radio" name="th:text=${que.selectnumber}" ></td>
+  <td th:text="${que.select_sec}"><input type = "radio" name="th:text='${que.select_first}'" ></td></tr>
   </th:block>
   </table>
     <div class="A">回答する</div>

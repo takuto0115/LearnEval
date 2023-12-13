@@ -21,7 +21,7 @@ public class TeacherController {
 		case"個人成績一覧":
 			return "redirect:/teacherstumenu";
 		case"メッセージ一覧":
-			return "redirect:/teachermessage";
+			return "redirect:/teachermessagehome";
 
 		}
 		return "/studentmain";

@@ -30,7 +30,7 @@ public class StudentController {
 		case"成績一覧":
 			return "redirect:/studenteval";
 		case"メッセージ一覧":
-			return "redirect:/studentmessage";
+			return "redirect:/studentmessagehome";
 
 		}
 		return "/studentmain";
@@ -55,14 +55,23 @@ public class StudentController {
 
 
 		//SELECT文の結果をしまうためのリスト
-		List<Map<String, Object>> resultList;
+		List<Map<String, Object>> image;
+		//SELECT文の結果をしまうためのリスト
+		List<Map<String, Object>> question;
 
 		//SELECT文の実行
-		resultList = jdbcTemplate.queryForList("select * from tests where QuestionID = ?",num);
+		image = jdbcTemplate.queryForList("select * from tests where QuestionID = ?",num);
+		//SELECT文の実行
+		question = jdbcTemplate.queryForList("select * from tests where QuestionID = ?",num);
 
-		//実行結果をmodelにしまってHTMLで出せるようにする。
-		model.addAttribute("result", resultList);
+		System.out.println("とおったよーん");
 		
+		//実行結果をmodelにしまってHTMLで出せるようにする。
+		model.addAttribute("image", image);
+		System.out.println("ここもとおったよーん");
+		//実行結果をmodelにしまってHTMLで出せるようにする。
+		model.addAttribute("que", question);
+		System.out.println("ついでにとおったよーん");
 		return "testpage";
 	}
 	
