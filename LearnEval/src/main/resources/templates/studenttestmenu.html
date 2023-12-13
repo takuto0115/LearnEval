@@ -20,113 +20,12 @@
     </form>
   </header>
   <h1 style="text-align: center;">問題一覧</h1>
-  <div class="row">
-  <div class="col-6">
-	<div class="form-group">
-  <table id="twoset">>
-    <tr>
-      <th>問題番号</th>
-      <th>言語</th>
-    </tr>
-    <tr>
-      <td><a href="testpage">問1</a></td>
-      <td>Java</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>Java</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>Java</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>Java</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>Java</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>Java</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>C#</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>C#</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>C#</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>C#</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>C#</td>
-    </tr>
+  <table>
+	  <th>問題番号</th><th>言語</th>
+  <th:block th:each="result : ${result}">
+<tr><td><a th:href="'/testpage/' + ${result.QuestionID}" th:text="問 + ${result.QuestionID}"/></td>
+<td th:text="${result.language}"></tr>
+  </th:block>
   </table>
-	</div>
-  </div>
-    <div class="col-6">
-  <table id="tenset">
-    <tr>
-      <th>問題番号</th>
-      <th>言語</th>
-    </tr>
-    <tr>
-      <td id="t-qnum"></td>
-      <td>PHP</td>
-    </tr>
-    <tr>
-      <td id="t-qnum"></td>
-      <td>PHP</td>
-    </tr>
-        <tr>
-      <td id="t-qnum"></td>
-      <td>PHP</td>
-    </tr>
-        <tr>
-      <td id="t-qnum"></td>
-      <td>PHP</td>
-    </tr>
-        <tr>
-      <td id="t-qnum"></td>
-      <td>PHP</td>
-    </tr>
-        <tr>
-      <td id="t-qnum"></td>
-      <td>PHP</td>
-    </tr>
-        <tr>
-      <td id="t-qnum"></td>
-      <td>Java</td>
-    </tr>
-        <tr>
-      <td id="t-qnum"></td>
-      <td>Java</td>
-    </tr>
-        <tr>
-      <td id="t-qnum"></td>
-      <td>Java</td>
-    </tr>
-        <tr>
-      <td id="t-qnum"></td>
-      <td>Java</td>
-    </tr>
-        <tr>
-      <td id="t-qnum"></td>
-      <td>Java</td>
-    </tr>
-  </table>
-    </div>
-  </div>
 </body>
 </html>

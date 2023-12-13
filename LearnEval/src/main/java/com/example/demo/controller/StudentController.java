@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -36,14 +37,7 @@ public class StudentController {
 	}
 	
 	@RequestMapping(path = "/studenttestmenu", method = RequestMethod.GET)
-	public String testMenuGet() {
-		return "studenttestmenu";
-	}
-	
-	@RequestMapping(path = "/testpage", method = RequestMethod.GET)
-	public String testexGet(Model model) {
-
-
+	public String testMenuGet(Model model) {
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> resultList;
 
@@ -51,7 +45,23 @@ public class StudentController {
 		resultList = jdbcTemplate.queryForList("select * from tests");
 
 		//実行結果をmodelにしまってHTMLで出せるようにする。
-		model.addAttribute("selectResult", resultList);
+		model.addAttribute("result", resultList);
+		
+		return "studenttestmenu";
+	}
+	
+	@RequestMapping(path = "/testpage/{num}", method = RequestMethod.GET)
+	public String testexGet(Model model,@PathVariable String num) {
+
+
+		//SELECT文の結果をしまうためのリスト
+		List<Map<String, Object>> resultList;
+
+		//SELECT文の実行
+		resultList = jdbcTemplate.queryForList("select * from tests where QuestionID = ?",num);
+
+		//実行結果をmodelにしまってHTMLで出せるようにする。
+		model.addAttribute("result", resultList);
 		
 		return "testpage";
 	}
@@ -64,11 +74,6 @@ public class StudentController {
 	@RequestMapping(path = "/studenteval", method = RequestMethod.POST)
 	public String evalPOST() {
 		return "redirect:/studentmain";
-	}
-	
-	@RequestMapping(path = "/studentmessage", method = RequestMethod.GET)
-	public String mesGet() {
-		return "studentmessage";
 	}
 	
 }

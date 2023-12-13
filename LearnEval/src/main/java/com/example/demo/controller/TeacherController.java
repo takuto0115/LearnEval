@@ -43,9 +43,5 @@ public class TeacherController {
 		return "testexamedit";
 	}
 	
-	
-	@RequestMapping(path = "/teachermessage", method = RequestMethod.GET)
-	public String mesGet() {
-		return "teachermessage";
-	}
+
 }
