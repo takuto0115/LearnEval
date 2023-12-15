@@ -5,21 +5,19 @@
   <script src="https://code.jquery.com/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/css/question.css" />
     <script src="/js/anc.js"></script>
-  <title>問題1</title>
+  <title th:text="'問題' + ${number}"></title>
 </head>
 <body>
-  <h1>問題1</h1>
-<th:block th:each="image : ${image}">
-  <p><img th:src="${'data:image/png;base64,' + image.Question}" width="60%" height="60%"></p>
-  </th:block>
+  <h1 th:text="'問題' + ${number}"></h1>
+  <p><img th:src="${'data:image/png;base64,' + image}" width="60%" height="60%"></p>
   <form th:action="@{/test}" method="POST">
-	  <table>
-<th:block th:each="que : ${que}">
-  <tr><th th:text="'設問'+ ${que.selectnumber}"></th></tr>
-  <tr><td th:text="${que.selectnumber}"><input type = "radio" name="th:text=${que.selectnumber}" ></td>
-  <td th:text="${que.select_sec}"><input type = "radio" name="th:text='${que.select_first}'" ></td></tr>
-  </th:block>
-  </table>
+<th:block th:each="que : ${question}">
+  <h2><th th:text="'設問' + ${que.selectnumber}"></h2><br>
+  <input type = "radio" name="${que.selectnumber}" th:text="'　：　' + ${que.select_first}">
+  <input type = "radio" name="${que.selectnumber}" th:text="'　：　' + ${que.select_sec}"><br>
+  <input type = "radio" name="${que.selectnumber}" th:text="'　：　' + ${que.select_third}">
+  <input type = "radio" name="${que.selectnumber}" th:text="'　：　' + ${que.select_forth}">
+  </th:block><br>
     <div class="A">回答する</div>
 <div class="B"><p>回答 a : c,3<br>回答 b : d,4</p>
  <form th:action="@{/teachermain}" method="GET">

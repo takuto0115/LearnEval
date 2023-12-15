@@ -38,14 +38,14 @@ public class StudentController {
 	
 	@RequestMapping(path = "/studenttestmenu", method = RequestMethod.GET)
 	public String testMenuGet(Model model) {
+
 		//SELECT文の結果をしまうためのリスト
-		List<Map<String, Object>> resultList;
+		List<Map<String, Object>> tests;
 
 		//SELECT文の実行
-		resultList = jdbcTemplate.queryForList("select * from tests");
-
+		tests = jdbcTemplate.queryForList("select * from tests");
 		//実行結果をmodelにしまってHTMLで出せるようにする。
-		model.addAttribute("result", resultList);
+		model.addAttribute("question", tests);
 		
 		return "studenttestmenu";
 	}
@@ -53,25 +53,25 @@ public class StudentController {
 	@RequestMapping(path = "/testpage/{num}", method = RequestMethod.GET)
 	public String testexGet(Model model,@PathVariable String num) {
 
-
 		//SELECT文の結果をしまうためのリスト
-		List<Map<String, Object>> image;
+		List<Map<String, Object>> q_result;
 		//SELECT文の結果をしまうためのリスト
-		List<Map<String, Object>> question;
-
-		//SELECT文の実行
-		image = jdbcTemplate.queryForList("select * from tests where QuestionID = ?",num);
-		//SELECT文の実行
-		question = jdbcTemplate.queryForList("select * from tests where QuestionID = ?",num);
-
-		System.out.println("とおったよーん");
+		List<Map<String, Object>> c_result;
 		
-		//実行結果をmodelにしまってHTMLで出せるようにする。
+		//SELECT文の実行
+		q_result = jdbcTemplate.queryForList("select * from tests where questionID = ?",num);
+		//SELECT文の実行
+		c_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionID = ? ORDER BY selectnumber asc",num);
+
+		Map<String, Object> question = q_result.get(0);
+		
+		String image = (String)question.get("image");
+		int number = ((Number) question.get("questionID")).intValue();
+
 		model.addAttribute("image", image);
-		System.out.println("ここもとおったよーん");
-		//実行結果をmodelにしまってHTMLで出せるようにする。
-		model.addAttribute("que", question);
-		System.out.println("ついでにとおったよーん");
+		model.addAttribute("number", number);
+		model.addAttribute("question",c_result);
+		
 		return "testpage";
 	}
 	
