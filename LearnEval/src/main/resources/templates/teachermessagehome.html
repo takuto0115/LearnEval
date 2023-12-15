@@ -2,17 +2,16 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>個人メッセージ</title>
+  <title>メッセージ一覧</title>
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
-  <link rel="stylesheet" type="text/css" href="/css/mes.css" />
-  <link rel="stylesheet" type="text/css" href="/css/message.css" />
+    <link rel="stylesheet" type="text/css" href="/css/mes.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@700&family=Dela+Gothic+One&family=DotGothic16&family=Mochiy+Pop+One&family=Mochiy+Pop+P+One&family=Noto+Sans+JP:wght@800&family=Zen+Maru+Gothic:wght@300;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
 	<span>LearnEval</span>
-	    <form th:action="@{/studentmain}" method="GET">
+	    <form th:action="@{/teachermain}" method="GET">
     <input type="submit" id="home-button" value="ホーム">
     </form>
   <form th:action="@{/login}" method="GET">
@@ -20,33 +19,37 @@
     </form>
   </header>
   <div class="row">
-	  <main>
-	  <h1>個人メッセージ</h1>
 	  
-	  
-	  <div id="messagearea">
-		  
-		  
-		  
-		  
-		  
-		  
-	  </div>
+	  <a href="/teachermessagenew">新規メッセージはこちら</a>
     
-    <div id="textarea">
-		
       <form th:action="@{/example}" method="POST">
-		  
-        <input type="text" width="50%"> <input type="submit">
-        
+        <div class="form-group">
+			<h1>メッセージ一覧</h1>
+          <table>
+            <tr>
+              <td>佐藤 春子</td>
+            </tr>
+            <tr>
+              <td>田中 太郎</td>
+            </tr>
+            <tr>
+              <td>鈴木 美香</td>
+            </tr>
+            <tr>
+              <td>高橋 隆夫</td>
+            </tr>
+            <tr>
+              <td>渡辺 亜美</td>
+            </tr>
+            <tr>
+              <td>伊藤 剛</td>
+            </tr>
+          </table>
+          </div>
       </form>
-      
-    </div>
     
-		
-		
-		
-	</main>
+    
+    
   </div>
 </body>
 </html>
