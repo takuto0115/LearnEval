@@ -46,13 +46,13 @@ public class MessageController {
 		List<Map<String, Object>> resultList;
 
 		//SELECT文の実行
-		resultList = jdbcTemplate.queryForList("select * from room where studentID = ? and teacherID = ?;",session.studentID,teacherID);
+		resultList = jdbcTemplate.queryForList("select * from room where studentID = ? and teacherID = ?;",session.getAttribute("studentID"),teacherID);
 				
 		if(!resultList.isEmpty()) {
 			//model.addAttribute("no",); すでルームがあることを伝える
 			return "studentmessagehome";
 		}else {
-			jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",session.studentID,teacherID);
+			jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",session.getAttribute("studentID"),teacherID);
 		}
 		
 		return "redirect:/studentmessagehome";
@@ -72,13 +72,13 @@ public class MessageController {
 		List<Map<String, Object>> resultList;
 
 		//SELECT文の実行
-		resultList = jdbcTemplate.queryForList("select * from room where studentID = ? and teacherID = ?;",studentID,session.teacherID);
+		resultList = jdbcTemplate.queryForList("select * from room where studentID = ? and teacherID = ?;",studentID,session.getAttribute("teacherID"));
 						
 		if(!resultList.isEmpty()) {
 			//model.addAttribute("no",); すでルームがあることを伝える
 			return "teachermessagehome";
 		}else {
-			jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",session.studentID,teacherID);
+			jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",session.getAttribute("teacherID"),studentID);
 		}
 		
 		
@@ -89,7 +89,15 @@ public class MessageController {
 	
 	
 	@RequestMapping(path = "/studentmessage", method = RequestMethod.GET)
-	public String studentGet() {
+	public String studentGet(Model model) {
+		
+		//SELECT文の結果をしまうためのリスト
+				List<Map<String, Object>> resultList;
+
+				//SELECT文の実行
+				resultList = jdbcTemplate.queryForList("select * from message where roomID = 01;");
+				
+				model.addAttribute("resultList",resultList);
 		
 		return "studentmessage";
 	}

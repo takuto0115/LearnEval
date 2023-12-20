@@ -11,42 +11,38 @@
 </head>
 <body>
   <header>
-	<span>LearnEval</span>
-	    <form th:action="@{/studentmain}" method="GET">
-    <input type="submit" id="home-button" value="ホーム">
+    <span>LearnEval</span>
+    <form th:action="@{/studentmain}" method="GET">
+      <input type="submit" id="home-button" value="ホーム">
     </form>
-  <form th:action="@{/login}" method="GET">
-    <input type="submit" id="logout-button" value="ログアウト">
+    <form th:action="@{/login}" method="GET">
+      <input type="submit" id="logout-button" value="ログアウト">
     </form>
   </header>
   <div class="row">
-	  <main>
-	  <h1>個人メッセージ</h1>
-	  
-	  
-	  <div id="messagearea">
-		  
-		  
-		  
-		  
-		  
-		  
-	  </div>
-    
-    <div id="textarea">
-		
-      <form th:action="@{/example}" method="POST">
-		  
-        <input type="text" width="50%"> <input type="submit">
-        
-      </form>
-      
-    </div>
-    
-		
-		
-		
-	</main>
+    <main>
+      <h1>個人メッセージ</h1>
+
+      <div id="messagearea">
+        <div th:each="item : ${resultList}">
+          <div th:if="${item.senderID == 0}" class="left">
+            <!-- 左に配置するコンテンツ -->
+            <p th:text="${item.text}"></p>
+          </div>
+          <div th:if="${item.senderID == 1}" class="right">
+            <!-- 右に配置するコンテンツ -->
+            <p th:text="${item.text}"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="textarea">
+        <form th:action="@{/example}" method="POST">
+          <textarea id="messageInput" rows="4" placeholder="メッセージを入力してください..."></textarea> 
+          <input type="submit">
+        </form>
+      </div>
+    </main>
   </div>
 </body>
 </html>
