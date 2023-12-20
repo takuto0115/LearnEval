@@ -6,6 +6,7 @@ body {
 }
 
 span{
+	text-align: right;
 	font-size: 30px;
 }
 
@@ -25,23 +26,24 @@ header {
     color: black;
     width: 100px;
     padding: 1%;
-    border-radius: 5px; /* 角を丸める */
+    border-radius: 5px;  
     position: absolute;
-    top: 50px; /* 上端を中央に配置 */
-    transform: translateY(-50%); /* 中央寄せ */
-    right: 50px; /* 左に5px移動 */
+    top: 50px;  
+    transform: translateY(-50%);  
+    right: 50px;  
 }
 #home-button {
     background-color: lightblue;
     color: black;
     width: 100px;
     padding: 1%;
-    border-radius: 5px; /* 角を丸める */
+    border-radius: 5px; 
     position: absolute;
-    top: 50%; /* 上端を中央に配置 */
-    transform: translateY(-50%); /* 中央寄せ */
-    right: 10%; /* 左に5px移動 */
-}
+    top: 50%;  
+    transform: translateY(-50%);  
+    right: 10%;  
+    }
+
 
 main{
 	text-align: center;
