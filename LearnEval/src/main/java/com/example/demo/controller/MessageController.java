@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -40,12 +42,12 @@ public class MessageController {
 	}
 	
 	@RequestMapping(path = "/studentmessagenew", method = RequestMethod.POST)
-	public String studentmessagenewpost(HttpSession session) {
+	public String studentmessagenewpost(HttpSession session,String teacherID) {
 		
-		//SELECT文の結果をしまうためのリスト
+		
 		List<Map<String, Object>> resultList;
 
-		//SELECT文の実行
+		
 		resultList = jdbcTemplate.queryForList("select * from room where studentID = ? and teacherID = ?;",session.getAttribute("studentID"),teacherID);
 				
 		if(!resultList.isEmpty()) {
@@ -66,12 +68,12 @@ public class MessageController {
 	}
 	
 	@RequestMapping(path = "/teachermessagenew", method = RequestMethod.POST)
-	public String teachermessagenewpost(Model model,HttpSession session) {
+	public String teachermessagenewpost(Model model,HttpSession session,String studentID) {
 		
-		//SELECT文の結果をしまうためのリスト
+		
 		List<Map<String, Object>> resultList;
 
-		//SELECT文の実行
+		
 		resultList = jdbcTemplate.queryForList("select * from room where studentID = ? and teacherID = ?;",studentID,session.getAttribute("teacherID"));
 						
 		if(!resultList.isEmpty()) {
@@ -87,14 +89,14 @@ public class MessageController {
 	}
 	
 	
-	
+	//生徒側個人メッセージ画面
 	@RequestMapping(path = "/studentmessage", method = RequestMethod.GET)
 	public String studentGet(Model model) {
 		
-		//SELECT文の結果をしまうためのリスト
+		
 				List<Map<String, Object>> resultList;
 
-				//SELECT文の実行
+				
 				resultList = jdbcTemplate.queryForList("select * from message where roomID = 01;");
 				
 				model.addAttribute("resultList",resultList);
@@ -109,14 +111,40 @@ public class MessageController {
 		return "studentmessage";
 	}
 	
+	
+	
+    //先生側個人メッセージ画面
 	@RequestMapping(path = "/teachermessage", method = RequestMethod.GET)
-	public String teacherGet() {
+	public String teacherGet(Model model) {
+		
+		//SELECT文の結果をしまうためのリスト
+		List<Map<String, Object>> resultList;
+
+		//SELECT文の実行
+		resultList = jdbcTemplate.queryForList("select * from message where roomID = 01;");
+		
+		model.addAttribute("resultList",resultList);
+		
 		return "teachermessage";
 	}
 	
 	@RequestMapping(path = "/teachermessage", method = RequestMethod.POST)
-	public String teacherPost() {
-		return "teachermessage";
+	public String teacherPost(HttpSession session,String messageInput,String studentID,String roomID) {
+		
+		// 現在の日時を取得
+        LocalDateTime now = LocalDateTime.now();
+
+        // 日時のフォーマットを指定
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // フォーマットを適用して文字列として表示
+        String formattedDateTime = now.format(formatter);
+		
+		//jdbcTemplate.update("INSERT INTO message (teacherID, studentID, daytime, senderID, roomID, text) values(?, ?, ?, '0', ?, ?);",session.getAttribute("teacherID"),studentID,formattedDateTime,roomID,messageInput);
+		
+		jdbcTemplate.update("INSERT INTO message (teacherID, studentID, daytime, senderID, roomID, text) values('01', '2201009',?, '0', '01', ?);",formattedDateTime,messageInput);
+		
+		return "redirect:/teachermessage";
 	}
 	
 }

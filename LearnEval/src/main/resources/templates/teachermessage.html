@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>メッセージ一覧</title>
+  <title>メッセージ画面</title>
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
   <link rel="stylesheet" type="text/css" href="/css/mes.css" />
   <link rel="stylesheet" type="text/css" href="/css/message.css" />
@@ -22,21 +22,48 @@
   <div class="row">
     <main>
       <h1>個人メッセージ</h1>
+      
+      <div id="messagearea">
+        <table id="messagetable">
+          <tr th:each="item : ${resultList}">
+            <td th:if="${item.senderID == '1'}" class="left">
+              <!-- 左に配置するコンテンツ -->
+              <div id="lefttext">
+                  <p th:text="${item.text}"></p>
+              </div>
+            </td>
+            <td th:if="${item.senderID == '0'}" class="right">
+              <!-- 右に配置するコンテンツ -->
+              <div id="righttext">
+                <p th:text="${item.text}"></p>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      
+      <!--
       <div id="messagearea">
         <div th:each="item : ${resultList}">
-          <div th:if="${item.senderID == 0}" class="left">
-            <!-- 左に配置するコンテンツ -->
-            <p th:text="${item.message}"></p>
+          <div th:if="${item.senderID == '1'}" class="left">
+             左に配置するコンテンツ
+            <p th:text="${item.text}"></p>
           </div>
-          <div th:if="${item.senderID == 1}" class="right">
-            <!-- 右に配置するコンテンツ -->
-            <p th:text="${item.message}"></p>
+          <div th:if="${item.senderID == '0'}" class="right">
+             右に配置するコンテンツ
+            <div id="mytext">
+               <p th:text="${item.text}"></p>
+            </div>
           </div>
+          <br>
+          <hr>
         </div>
       </div>
+      -->
+      
       <div id="textarea">
-        <form th:action="@{/example}" method="POST">
-          <textarea id="messageInput" rows="4" placeholder="メッセージを入力してください..."></textarea> 
+        <form th:action="@{/teachermessage}" method="POST">
+          <input type="text" name="messageInput" id="messageInput" maxlength="128"></input> 
           <input type="submit">
         </form>
       </div>
