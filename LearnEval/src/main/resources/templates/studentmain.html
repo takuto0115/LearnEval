@@ -14,14 +14,9 @@
   </header>
   <main>
 	  <p th:text = "${session.name}"}></p>
-<!--    <form th:action="@{/studentmain}" method="POST"> -->
-<!--		<input type="submit" value="テスト一覧" name="page" id="choice">-->
-<!--		<input type="submit" value="成績一覧" name="page" id="choice"><br> -->
-<!--		<input type="submit" value="メッセージ一覧" name="page" id="choice"><br> -->
-		<a href = "/studenttestmenu">テスト一覧</a><br>
-		<a href = "/studenteval">成績一覧</a><br>
-		<a href = "/studentmessagehome">メッセージ一覧</a>
-	</form>
+		<a href = "/studenttestmenu"><span>テスト一覧</span></a><br>
+		<a href = "/studenteval"><span>成績一覧</span></a><br>
+		<a href = "/studentmessagehome"><span>メッセージ一覧</span></a>
   </main>
 </body>
 </html>

@@ -13,11 +13,10 @@
     </form>
       </header>
   <main>
-    <form th:action="@{/teachermain}" method="POST"> 
-		<input type="submit" value="テスト一覧" name="page" id="choice"> 
-		<input type="submit" value="個人成績一覧" name="page" id="choice"> 
-		<input type="submit" value="メッセージ一覧" name="page" id="choice"> 
-	</form>
+	  <p th:text = "${session.name}"}></p>
+		<a href = "/teachertestmenu">テスト一覧</a><br>
+		<a href = "/teacherstumenu">成績一覧</a><br>
+		<a href = "/teachermessagehome">メッセージ一覧</a>
   </main>
 </body>
 </html>

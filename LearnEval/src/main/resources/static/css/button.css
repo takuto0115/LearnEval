@@ -1,13 +1,4 @@
 @charset "UTF-8";
-#choice{
-background-color: orange;
-text-align: center;
-font-size: 30px;
-padding: 10px;
-margin: 10px;
-width: 600px;
-height: 85px;
-}
 a {
   color: #333;
   font-size: 30px;
@@ -15,8 +6,8 @@ a {
   background: #fff;
   width: 600px;
   height:  85px;
-  padding:auto;
-  margin:5px;
+text-align: auto;
+  margin:15px;
   border: 3px solid #333;
   box-shadow: 0 5px 0 #333;
   border-radius: 6px;
