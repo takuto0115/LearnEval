@@ -2,54 +2,55 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <script src="https://code.jquery.com/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/header.css" />
+  <link rel="stylesheet" type="text/css" href="/css/header.css" />
   <link rel="stylesheet" type="text/css" href="/css/question.css" />
-    <script src="/js/anc.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/edit.css" />
+  <script src="/js/anc.js"></script>
   <title>問題1</title>
-
 </head>
 <body>
-	    <header> <span>LearnEval</span>
-	<form th:action="@{/teachermain}" method="GET">
-    <input onclick="home()" type="button" id="home-button" value="ホーム">
+  <header>
+    <span>LearnEval</span>
+    <form th:action="@{/teachermain}" method="GET">
+      <input onclick="home()" type="button" id="home-button" value="ホーム">
     </form>
-	    </header>
-	    <main>
-  <h1>問題1</h1>
-  <p><img src="/images/program_01_example.png" width="60%" height="60%"></p>
-	  <h2>表示される数字を答えなさい</h2>
-    <h2 style="text-align: left;">a : </h2>
-    <div id="que">
-      <section><span><input type="radio" name="a" value="a" id="choice">a</span><input type="test"></section>
-      <section><span><input type="radio" name="a" value="b" id="choice">b</span><input type="test"></section>
-      <section><span><input type="radio" name="a" value="c" id="choice">c</span><input type="test"></section>
-      <section><span><input type="radio" name="a" value="d" id="choice">d</span><input type="test"></section>
-    </div>
-    <h2 style="text-align: left;">b : </h2>
-    <div id="que">
-      <section><span><input type="radio" name="b" value="a" id="choice">a</span><input type="test"></section>
-      <section><span><input type="radio" name="b" value="b" id="choice">b</span><input type="test"></section>
-      <section><span><input type="radio" name="b" value="c" id="choice">c</span><input type="test"></section>
-      <section><span><input type="radio" name="b" value="d" id="choice">d</span><input type="test"></section>
-    </div>
-    <p>回答 a : <select id="numbers" name="month">
-        <option value="a">a</option>
-        <option value="b">b</option>
-        <option value="c">c</option>
-        <option value="d">d</option>
-        </select>
-        <input type="test"><br>回答 b : <select id="numbers" name="month">
-        <option value="a">a</option>
-        <option value="b">b</option>
-        <option value="c">c</option>
-        <option value="d">d</option>
-        </select>
-        <input type="test"></p>
- <form th:action="@{/teachermain}" method="GET">
-<input type="submit" id="return" value="確定する">
- </form>
-</div>
-</main>
+  </header>
+  <main>
+    <h1>問題1</h1>
+    <p><img src="/images/program_01_example.png" width="60%" height="60%"></p>
+    <h2>表示される数字を答えなさい</h2>
+    <form th:action="" method="POST">
+      <table>
+        <tbody>
+          <tr>
+            <th>A</th>
+            <th>B</th>
+          </tr>
+          <tr>
+            <td><input type="text" name="text_1[]"></td>
+            <td><input type="text" name="text_2[]"></td>
+          </tr>
+          <tr>
+            <th>C</th>
+            <th>D</th>
+          </tr>
+          <tr>
+            <td><input type="text" name="text_3[]"></td>
+            <td><input type="text" name="text_4[]"></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td><button id="add" type="button">追加</button></td>
+          </tr>
+        </tfoot>
+      </table>
+      <input type="submit" name="send" value="送信">
+    </form>
+
+    <form th:action="@{/teachermain}" method="GET">
+      <input type="submit" id="return" value="確定する">
+    </form>
+  </main>
 </body>
 </html>

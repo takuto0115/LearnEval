@@ -2,21 +2,22 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
-    <link rel="stylesheet" type="text/css" href="/css/button.css">
+  <link rel="stylesheet" type="text/css" href="/css/button.css">
   <meta charset="UTF-8">
   <title>ホーム(教員用)</title>
 </head>
 <body>
-  <header> <span>LearnEval</span>
-  <form th:action="@{/login}" method="GET">
-    <input type="submit" id="logout-button" value="ログアウト">
+  <header>
+    <span>LearnEval</span>
+    <form th:action="@{/login}" method="GET">
+      <input type="submit" id="logout-button" value="ログアウト">
     </form>
-      </header>
+  </header>
   <main>
-	  <p th:text = "${session.name}"}></p>
-		<a href = "/teachertestmenu">テスト一覧</a><br>
-		<a href = "/teacherstumenu">成績一覧</a><br>
-		<a href = "/teachermessagehome">メッセージ一覧</a>
+    <p th:text="${session.name}"></p>
+    <a href="/teachertestmenu">テスト一覧</a><br>
+    <a href="/teacherstumenu">成績一覧</a><br>
+    <a href="/teachermessagehome">メッセージ一覧</a>
   </main>
 </body>
 </html>

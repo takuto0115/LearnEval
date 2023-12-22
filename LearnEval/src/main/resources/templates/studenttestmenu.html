@@ -2,28 +2,32 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="/css/num.css" />
   <link rel="stylesheet" type="text/css" href="/css/table.css" />
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
- <title>問題一覧</title>
+  <title>問題一覧</title>
 </head>
 <body>
-  <header> <span>LearnEval</span>
-      <form th:action="@{/studentmain}" method="GET">
-    <input type="submit" id="home-button" value="ホーム">
+  <header>
+    <span>LearnEval</span>
+    <form th:action="@{/studentmain}" method="GET">
+      <input type="submit" id="home-button" value="ホーム">
     </form>
-  <form th:action="@{/login}" method="GET">
-    <input type="submit" id="logout-button" value="ログアウト">
+    <form th:action="@{/login}" method="GET">
+      <input type="submit" id="logout-button" value="ログアウト">
     </form>
   </header>
   <h1 style="text-align: center;">問題一覧</h1>
   <table>
-	  <th>問題番号</th><th>言語</th>
-  <th:block th:each="question : ${question}">
-<tr><td><a th:href="'/testpage/' + ${question.questionID}" th:text="問 + ${question.questionID}"/></td>
-<td th:text="${question.language}"></td></tr>
-  </th:block>
+    <th>問題番号</th><th>言語</th>
+    <th:block th:each="question : ${question}">
+      <tr>
+        <td>
+          <a th:href="'/testpage/' + ${question.questionID}" th:text="'問' + ${question.questionID}"/>
+        </td>
+        <td th:text="${question.language}"></td>
+      </tr>
+    </th:block>
   </table>
 </body>
 </html>
