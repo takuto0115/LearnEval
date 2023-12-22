@@ -7,16 +7,17 @@
   <title>ホーム(生徒用)</title>
 </head>
 <body>
-  <header> <span>LearnEval</span>
-  <form th:action="@{/login}" method="GET">
-    <input type="submit" id="logout-button" value="ログアウト">
+  <header>
+    <span>LearnEval</span>
+    <form th:action="@{/login}" method="GET">
+      <input type="submit" id="logout-button" value="ログアウト">
     </form>
   </header>
   <main>
-	  <p th:text = "${session.name}"}></p>
-		<a href = "/studenttestmenu"><span>テスト一覧</span></a><br>
-		<a href = "/studenteval"><span>成績一覧</span></a><br>
-		<a href = "/studentmessagehome"><span>メッセージ一覧</span></a>
+    <p th:text="${session.name}"></p>
+    <a href="/studenttestmenu"><span>テスト一覧</span></a><br>
+    <a href="/studenteval"><span>成績一覧</span></a><br>
+    <a href="/studentmessagehome"><span>メッセージ一覧</span></a>
   </main>
 </body>
 </html>
