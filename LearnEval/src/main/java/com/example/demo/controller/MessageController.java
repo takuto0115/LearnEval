@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -36,12 +35,15 @@ public class MessageController {
 		List<Map<String, Object>> resultList;
 		List<Map<String, Object>> nameList;
 		List<Map<String, Object>> userList = new ArrayList<>(); // Initialize userList
+		int i = 0;
 
 		resultList = jdbcTemplate.queryForList("select * from room where teacherID = '20350';"/*session.getAttribute("teacherID")*/);
 
 		// resultList をイテレートし、studentID の値を抽出
 		for (Map<String, Object> result : resultList) {
-
+			
+			String roomID = result.get("roomID").toString();
+			
 		    // マップ内での "studentID" のキーを仮定しています
 		    Object studentIDObject = result.get("studentID");
 
@@ -51,27 +53,18 @@ public class MessageController {
 		        nameList = jdbcTemplate.queryForList("select name from students where studentID = ?;", studentID);
 
 		        for (Map<String, Object> name : nameList) {
-
-		            // マップ内での "name" のキーを仮定しています (修正済み)
-		            Object studentNameObject = name.get("name");
-
-		            if (studentNameObject != null) {
-		                String studentName = studentNameObject.toString();
-		                userList.add(Collections.singletonMap("name", studentName));
-		            }
+		        	
+		        	//roomIDをキーとして要素追加
+		        	name.put("roomID", roomID);
+		            //userListにroomIDとname追加
+		        	userList.add(i++, name);
 		        }
 		    }
 
 		}
 		
+		model.addAttribute("resultList",userList);
 		
-		
-		model.addAttribute("resultList",resultList);
-		
-		model.addAttribute("userList",userList);
-
-
-
 		return "teachermessagehome";
 	}
 
@@ -166,13 +159,23 @@ public class MessageController {
 		resultList = jdbcTemplate.queryForList("select * from message where roomID = ?;",roomID);
 
 		model.addAttribute("resultList",resultList);
+		
+		model.addAttribute("roomID",roomID);
 
 		return "teachermessage";
 	}
 
-	@RequestMapping(path = "/teachermessage", method = RequestMethod.POST)
-	public String teacherPost(HttpSession session,String messageInput,String studentID,String roomID) {
-
+	@RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.POST)
+	public String teacherPost(@PathVariable String roomID,HttpSession session,String messageInput,String studentID) {
+		
+		if(messageInput.isEmpty()) {
+			return "redirect:/teachermessage/"+roomID;
+		}
+		
+//		if (isAllHalfWidth(messageInput)) {
+//			return "redirect:/teachermessage/"+roomID;
+//        } 
+		
 		// 現在の日時を取得
 		LocalDateTime now = LocalDateTime.now();
 
@@ -184,9 +187,15 @@ public class MessageController {
 
 		//jdbcTemplate.update("INSERT INTO message (teacherID, studentID, daytime, senderID, roomID, text) values(?, ?, ?, '0', ?, ?);",session.getAttribute("teacherID"),studentID,formattedDateTime,roomID,messageInput);
 
-		jdbcTemplate.update("INSERT INTO message (teacherID, studentID, daytime, senderID, roomID, text) values('01', '2201009',?, '0', '01', ?);",formattedDateTime,messageInput);
+		jdbcTemplate.update("INSERT INTO message (teacherID, studentID, daytime, senderID, roomID, text) values('20350', '2201009',?, '0', '1', ?);",formattedDateTime,messageInput);
 
-		return "redirect:/teachermessage";
+		return "redirect:/teachermessage/"+roomID;
 	}
+	
+	// 文字列がすべて半角かどうかを判定
+    private static boolean isAllHalfWidth(String input) {
+        String regex = "[\\x00-\\x7F]*";
+        return input.matches(regex);
+    }
 
 }

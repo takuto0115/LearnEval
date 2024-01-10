@@ -23,11 +23,9 @@
 
     <table>
       <th:block th:each="result : ${resultList}">
-		  <th:block th:each="user : ${userList}">
              <tr>
-               <td><a th:href="'/teachermessage/' + ${result.roomID}" th:text="${user.name}"></a></td>
+               <td><a th:href="'/teachermessage/' + ${result.roomID}" th:text="${result.name}"></a></td>
              </tr>
-          </th:block>
       </th:block>
     </table>
   </div>

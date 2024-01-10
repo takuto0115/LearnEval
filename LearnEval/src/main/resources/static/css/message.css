@@ -21,6 +21,8 @@
 }
 
 #righttext{
+	border: 1px solid #ccc;
+  border-radius: 4px;
 	font-size:20px;
 	background-color:greenyellow;
 	max-width: 550px;
