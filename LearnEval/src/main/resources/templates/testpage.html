@@ -10,6 +10,7 @@
 <body>
   <h1 th:text="'問題' + ${number}"></h1>
   <p><img th:src="${'data:image/png;base64,' + image}" width="60%" height="60%"></p>
+      <h2>□に入るものを記号で答えなさい</h2>
   <form th:action="@{/test}" method="POST">
     <th:block th:each="que : ${question}">
       <h2 th:text="'設問' + ${que.selectnumber}"></h2><br>
