@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="/css/header.css" />
+  <link rel="stylesheet" type="text/css" href="/css/question.css" />
+  <link rel="stylesheet" type="text/css" href="/css/edit.css" />
+  <script src="/js/anc.js"></script>
+  <title>問題1</title>
+</head>
+<body>
+  <header>
+    <span>LearnEval</span>
+    <form th:action="@{/teachermain}" method="GET">
+      <input onclick="home()" type="button" id="home-button" value="ホーム">
+    </form>
+  </header>
+  <main>
+	<form th:action="@{/test}" method="POST">
+	<h1 th:text="'問題' + ${number}"></h1>
+	<p>現在の問題画像</p><img th:src="${'data:image/png;base64,' + image}" width="60%" height="60%">
+	<p>更新後の問題画像：<input type="file" name="upimage"><br></p>
+
+
+    <th:block th:each="que : ${question}">
+      <h2 th:text="'設問' + ${que.selectnumber}"></h2>
+      <h2>現在の問題文</h2>
+      <div th:text="'1　：　' + ${que.select_first}"></div>
+      <div th:text="'2　：　' + ${que.select_sec}"></div>
+      <div th:text="'3　：　' + ${que.select_third}"></div>
+      <div th:text="'4　：　' + ${que.select_forth}"></div>
+      <h2>改定後の問題文</h2>
+      <div th:text="'1　：　'"></div><input type="text" name="${que.selectnumber}">
+      <div th:text="'2　：　'"></div><input type="text" name="${que.selectnumber}">
+      <div th:text="'3　：　'"></div><input type="text" name="${que.selectnumber}">
+      <div th:text="'4　：　'"></div><input type="text" name="${que.selectnumber}">
+    </th:block><br>
+  </form>
+</body>
+</html>
