@@ -31,19 +31,8 @@ input{
 span{
 	margin-right: 20px;	
 }
-	
-.A{
-    display: inline-block;
-    background: #b6beff;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-.B{
-    background: #ffaf74;
-    height: 75px;
-    padding: 5px;
-}
-.C{
-    display: none;
+
+img{
+	border : solid 1px black;
 }
 	

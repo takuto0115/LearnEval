@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class TeacherController {
@@ -83,5 +86,37 @@ public class TeacherController {
 		return "testedit";
 	}
 
+	@RequestMapping(path = "/testeditimg/{num}", method = RequestMethod.POST)
+	public String edit_image(MultipartFile upimage,@PathVariable String num)
+			throws IOException {
 
+		//アップロードされたファイルをバイトデータに変換する。
+		byte[] byteData = upimage.getBytes();
+
+		//Base64に変換する。
+		//（変数「encodedImage」に画像が格納されてる）
+		String encodedImage = Base64.getEncoder().encodeToString(byteData);
+
+		//DBに画面から入力されたデータを登録する。
+		jdbcTemplate.update("insert into tests (questionID,image,language) value ('2',?,'Java');",encodedImage);
+
+		return "/testedit";
+	}
+	
+	@RequestMapping(path = "/testedit_q", method = RequestMethod.POST)
+	public String edit_q(String first,String second,String third,String forth,int answer_num)
+			throws IOException {
+
+		String[] question = {first,second,third,forth};
+		
+		String answer = question[answer_num-1];
+
+		//DBに画面から入力されたデータを登録する。
+		jdbcTemplate.update("update tests set select_first = ?,select_sec = ?,select_third = ?,select_forth = ?,"
+				+ "answer = ? where "
+				,question[0],question[1],question[2],question[3],answer);
+
+		return "/testedit";
+	}
+	
 }

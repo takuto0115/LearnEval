@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="/css/question.css" />
   <link rel="stylesheet" type="text/css" href="/css/edit.css" />
   <script src="/js/anc.js"></script>
-  <title>問題1</title>
+  <title th:text="'問題' + ${number}"></title>
 </head>
 <body>
   <header>
@@ -16,25 +16,35 @@
     </form>
   </header>
   <main>
-	<form th:action="@{/test}" method="POST">
+	<form th:action="'@{/testeditimg/' + ${number} + '}'" method="POST">
 	<h1 th:text="'問題' + ${number}"></h1>
-	<p>現在の問題画像</p><img th:src="${'data:image/png;base64,' + image}" width="60%" height="60%">
-	<p>更新後の問題画像：<input type="file" name="upimage"><br></p>
+	<h3>現在の問題画像</h3><img th:src="${'data:image/png;base64,' + image}" width="60%" height="60%">
+	<h3>更新後の問題画像</h3><input type="file" name="upimage"><br>
+	<input type = "submit" value="更新する">
+	</form>
 
 
     <th:block th:each="que : ${question}">
+	<form th:action="@{/testedit_q}" method="POST">
       <h2 th:text="'設問' + ${que.selectnumber}"></h2>
       <h2>現在の問題文</h2>
       <div th:text="'1　：　' + ${que.select_first}"></div>
       <div th:text="'2　：　' + ${que.select_sec}"></div>
       <div th:text="'3　：　' + ${que.select_third}"></div>
       <div th:text="'4　：　' + ${que.select_forth}"></div>
-      <h2>改定後の問題文</h2>
-      <div th:text="'1　：　'"></div><input type="text" name="${que.selectnumber}">
-      <div th:text="'2　：　'"></div><input type="text" name="${que.selectnumber}">
-      <div th:text="'3　：　'"></div><input type="text" name="${que.selectnumber}">
-      <div th:text="'4　：　'"></div><input type="text" name="${que.selectnumber}">
+      <div th:text="'答え　：　' + ${que.answer}"></div>
+      <h2>更新後の問題文</h2>
+      <div th:text="'1　：　 '"></div><input type="text" name="first">
+      <div th:text="'2　：　'"></div><input type="text" name="second">
+      <div th:text="'3　：　'"></div><input type="text" name="third">
+      <div th:text="'4　：　'"></div><input type="text" name="forth">
+      <div th:text="'答え　：　'"></div><input type="text" name="answer_num"><br>
+      <input type="submit" value="更新する">
+	</form>
     </th:block><br>
-  </form>
 </body>
 </html>
+
+
+
+<!-- 問題番号をコントローラーで識別する -->
