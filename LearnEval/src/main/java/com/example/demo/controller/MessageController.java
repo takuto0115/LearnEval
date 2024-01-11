@@ -96,24 +96,31 @@ public class MessageController {
 	}
 
 	@RequestMapping(path = "/teachermessagenew", method = RequestMethod.GET)
-	public String teachermessagenew() {
+	public String teachermessagenew(Model model) {
 
+		List<Map<String, Object>> resultList;
+		
+		int i = 0;
 
+		resultList = jdbcTemplate.queryForList("select * from students order by number asc;");
+		
+		model.addAttribute("resultList",resultList);
+		
 		return "teachermessagenew";
 	}
 
-	@RequestMapping(path = "/teachermessagenew", method = RequestMethod.POST)
-	public String teachermessagenewpost(Model model,HttpSession session,String studentID) {
+	@RequestMapping(path = "/teachermessagenew/{studentID}", method = RequestMethod.GET)
+	public String teachermessagenewpost(Model model,HttpSession session,@PathVariable String studentID) {
 
 
 		List<Map<String, Object>> resultList;
 
 
-		resultList = jdbcTemplate.queryForList("select * from room where studentID = ? and teacherID = ?;",studentID,session.getAttribute("teacherID"));
+		resultList = jdbcTemplate.queryForList("select * from room where studentID = ? and teacherID = 20350;",studentID/*,session.getAttribute("teacherID")*/);
 
 		if(!resultList.isEmpty()) {
-			//model.addAttribute("no",); すでルームがあることを伝える
-			return "teachermessagehome";
+			model.addAttribute("alert","<script>すでにルームがあります</script>"); //すでルームがあることを伝える
+			return "redirect:/teachermessagehome";
 		}else {
 			jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",session.getAttribute("teacherID"),studentID);
 		}
@@ -166,7 +173,7 @@ public class MessageController {
 	}
 
 	@RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.POST)
-	public String teacherPost(@PathVariable String roomID,HttpSession session,String messageInput,String studentID) {
+	public String teacherPost(@PathVariable String roomID,String messageInput) {
 		
 		if(messageInput.isEmpty()) {
 			return "redirect:/teachermessage/"+roomID;
@@ -187,7 +194,7 @@ public class MessageController {
 
 		//jdbcTemplate.update("INSERT INTO message (teacherID, studentID, daytime, senderID, roomID, text) values(?, ?, ?, '0', ?, ?);",session.getAttribute("teacherID"),studentID,formattedDateTime,roomID,messageInput);
 
-		jdbcTemplate.update("INSERT INTO message (teacherID, studentID, daytime, senderID, roomID, text) values('20350', '2201009',?, '0', '1', ?);",formattedDateTime,messageInput);
+		jdbcTemplate.update("INSERT INTO message (daytime, senderID, roomID, text) values( ?, '0', ?, ?);",formattedDateTime,roomID,messageInput);
 
 		return "redirect:/teachermessage/"+roomID;
 	}

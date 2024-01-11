@@ -21,7 +21,7 @@
   </header>
   <div class="row">
     <main>
-      <h1>個人メッセージ</h1>
+      <h1>個人メッセージ</h1><a href="/teachermessagehome">メッセージ一覧へ</a>
       
       <div id="messagearea">
         <table id="messagetable">
@@ -41,25 +41,6 @@
           </tr>
         </table>
       </div>
-      
-      <!--
-      <div id="messagearea">
-        <div th:each="item : ${resultList}">
-          <div th:if="${item.senderID == '1'}" class="left">
-             左に配置するコンテンツ
-            <p th:text="${item.text}"></p>
-          </div>
-          <div th:if="${item.senderID == '0'}" class="right">
-             右に配置するコンテンツ
-            <div id="mytext">
-               <p th:text="${item.text}"></p>
-            </div>
-          </div>
-          <br>
-          <hr>
-        </div>
-      </div>
-      -->
       
       <div id="textarea">
         <form th:action="@{'/teachermessage/'+${roomID}}" method="POST">
