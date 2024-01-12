@@ -26,19 +26,27 @@
 
     <th:block th:each="que : ${question}">
 	<form th:action="@{/testedit_q}" method="POST">
-      <h2 th:text="'設問' + ${que.selectnumber}"></h2>
+      <h2 th:text="'設問' + ${que.selectNumber}"></h2>
       <h2>現在の問題文</h2>
-      <div th:text="'1　：　' + ${que.select_first}"></div>
-      <div th:text="'2　：　' + ${que.select_sec}"></div>
-      <div th:text="'3　：　' + ${que.select_third}"></div>
-      <div th:text="'4　：　' + ${que.select_forth}"></div>
-      <div th:text="'答え　：　' + ${que.answer}"></div>
+      <label th:text="'1：' + ${que.select_first}"></label>
+      <label th:text="'2：' + ${que.select_sec}"></label><br>
+      <label th:text="'3：' + ${que.select_third}"></label>
+      <label th:text="'4：' + ${que.select_forth}"></label><br>
+      <label th:text="'答え：' + ${que.answer}"></label>
       <h2>更新後の問題文</h2>
-      <div th:text="'1　：　 '"></div><input type="text" name="first">
-      <div th:text="'2　：　'"></div><input type="text" name="second">
-      <div th:text="'3　：　'"></div><input type="text" name="third">
-      <div th:text="'4　：　'"></div><input type="text" name="forth">
-      <div th:text="'答え　：　'"></div><input type="text" name="answer_num"><br>
+      <label th:text="'1： '"></label><input type="text" name="first">
+      <label th:text="'2：'"></label><input type="text" name="second">
+      <br>
+      <label th:text="'3：'"></label><input type="text" name="third">
+      <label th:text="'4：'"></label><input type="text" name="forth">
+      <br>
+      <label th:text="'答え：'"></label> 
+    <select id="dropdown1" name="answer_num">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select><br>
       <input type="submit" value="更新する">
 	</form>
     </th:block><br>

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class TeacherController {
 
@@ -62,22 +64,25 @@ public class TeacherController {
 	}
 
 	@RequestMapping(path = "/testedit/{num}", method = RequestMethod.GET)
-	public String testexGet(Model model,@PathVariable String num) {
+	public String testexGet(Model model,@PathVariable String num,HttpSession session) {
 
+		session.removeAttribute("num");
+		session.setAttribute("num",num);
+		
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> q_result;
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> c_result;
 
 		//SELECT文の実行
-		q_result = jdbcTemplate.queryForList("select * from tests where questionID = ?",num);
+		q_result = jdbcTemplate.queryForList("select * from tests where questionNumber = ?",num);
 		//SELECT文の実行
-		c_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionID = ? ORDER BY selectnumber asc",num);
+		c_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ? ORDER BY selectNumber asc",num);
 
 		Map<String, Object> question = q_result.get(0);
 
 		String image = (String)question.get("image");
-		int number = ((Number) question.get("questionID")).intValue();
+		int number = ((Number) question.get("questionNumber")).intValue();
 
 		model.addAttribute("image", image);
 		model.addAttribute("number", number);
@@ -98,25 +103,29 @@ public class TeacherController {
 		String encodedImage = Base64.getEncoder().encodeToString(byteData);
 
 		//DBに画面から入力されたデータを登録する。
-		jdbcTemplate.update("insert into tests (questionID,image,language) value ('2',?,'Java');",encodedImage);
+		jdbcTemplate.update("insert into tests (questionNumber,image,language) value ('2',?,'Java');",encodedImage);
 
 		return "/testedit";
 	}
 	
 	@RequestMapping(path = "/testedit_q", method = RequestMethod.POST)
-	public String edit_q(String first,String second,String third,String forth,int answer_num)
+	public String edit_q(String first,String second,String third,String forth,String answer_num,HttpSession session)
 			throws IOException {
-
+		
+		String num = session.getAttribute("num").toString();
+		
 		String[] question = {first,second,third,forth};
 		
-		String answer = question[answer_num-1];
+		int ans = Integer.parseInt(answer_num);
+		
+		String answer = question[ans - 1];
 
 		//DBに画面から入力されたデータを登録する。
-		jdbcTemplate.update("update tests set select_first = ?,select_sec = ?,select_third = ?,select_forth = ?,"
-				+ "answer = ? where "
-				,question[0],question[1],question[2],question[3],answer);
+		jdbcTemplate.update("update choices set select_first = ?,select_sec = ?,select_third = ?,select_forth = ?,"
+				+ "answer = ? where questionNumber = ? and selectNumber"
+				,question[0],question[1],question[2],question[3],answer,num);
 
-		return "/testedit";
+		return "/testedit/" + num;
 	}
 	
 }
