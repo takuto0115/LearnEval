@@ -7,6 +7,13 @@
   <link rel="stylesheet" type="text/css" href="/css/edit.css" />
   <script src="/js/anc.js"></script>
   <title th:text="'問題' + ${number}"></title>
+    <style>
+		
+    /* 初めは非表示に設定 */
+    .hiddenContent {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -23,9 +30,12 @@
 	<input type = "submit" value="更新する">
 	</form>
 
-
+<hr>
     <th:block th:each="que : ${question}">
-	<form th:action="@{/testedit_q}" method="POST">
+
+       <button th:onclick="'toggleSection(' + ${que.selectNumber} + ')'">Show/Hide</button>
+
+  <div th:id="${que.selectNumber}" class="hiddenContent">
       <h2 th:text="'設問' + ${que.selectNumber}"></h2>
       <h2>現在の問題文</h2>
       <label th:text="'1：' + ${que.select_first}"></label>
@@ -33,8 +43,13 @@
       <label th:text="'3：' + ${que.select_third}"></label>
       <label th:text="'4：' + ${que.select_forth}"></label><br>
       <label th:text="'答え：' + ${que.answer}"></label>
+      </form>
+  </div>
+      <hr>
+    </th:block><br>
+    	<form th:action="@{/testedit_q}" method="POST">
       <h2>更新後の問題文</h2>
-      <label th:text="'1： '"></label><input type="text" name="first">
+      <label th:text="'1：'"></label><input type="text" name="first">
       <label th:text="'2：'"></label><input type="text" name="second">
       <br>
       <label th:text="'3：'"></label><input type="text" name="third">
@@ -49,10 +64,5 @@
     </select><br>
       <input type="submit" value="更新する">
 	</form>
-    </th:block><br>
 </body>
 </html>
-
-
-
-<!-- 問題番号をコントローラーで識別する -->

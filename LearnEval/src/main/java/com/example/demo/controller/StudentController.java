@@ -59,14 +59,14 @@ public class StudentController {
 		List<Map<String, Object>> c_result;
 
 		//SELECT文の実行
-		q_result = jdbcTemplate.queryForList("select * from tests where questionID = ?",num);
+		q_result = jdbcTemplate.queryForList("select * from tests where questionNumber = ?",num);
 		//SELECT文の実行
-		c_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionID = ? ORDER BY selectnumber asc",num);
+		c_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ? ORDER BY selectNumber asc",num);
 
 		Map<String, Object> question = q_result.get(0);
 
 		String image = (String)question.get("image");
-		int number = ((Number) question.get("questionID")).intValue();
+		int number = ((Number) question.get("questionNumber")).intValue();
 
 		model.addAttribute("image", image);
 		model.addAttribute("number", number);

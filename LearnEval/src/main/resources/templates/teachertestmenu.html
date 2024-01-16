@@ -23,7 +23,7 @@
     <th:block th:each="question : ${question}">
       <tr>
         <td>
-          <a th:href="'/testedit/' + ${question.questionID}" th:text="'問' + ${question.questionID}"/>
+          <a th:href="'/testedit/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>
         </td>
         <td th:text="${question.language}"></td>
       </tr>
