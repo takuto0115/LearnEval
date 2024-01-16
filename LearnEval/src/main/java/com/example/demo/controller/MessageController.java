@@ -18,6 +18,9 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MessageController {
+	
+	
+	String i ="0";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -98,33 +101,59 @@ public class MessageController {
     }
 
     @RequestMapping(path = "/studentmessagenew", method = RequestMethod.GET)
-    public String studentmessagenew() {
+    public String studentmessagenew(Model model,HttpSession session) {
+    	
+    	List<Map<String, Object>> resultList;
+
+        resultList = jdbcTemplate.queryForList("select * from teachers order by name asc;");
+        
+        
+        i = (String) session.getAttribute("alert");
+        
+        if(i=="1") {
+        	model.addAttribute("alert","1");
+        	
+        	session.setAttribute("alert", "0");
+        }
+
+        model.addAttribute("resultList", resultList);
+    	
         return "studentmessagenew";
     }
 
-    @RequestMapping(path = "/studentmessagenew", method = RequestMethod.POST)
-    public String studentmessagenewpost(HttpSession session, String teacherID) {
+    @RequestMapping(path = "/studentmessagenew/{teacherID}", method = RequestMethod.GET)
+    public String studentmessagenewpost(HttpSession session,@PathVariable String teacherID) {
 
         List<Map<String, Object>> resultList;
 
-        resultList = jdbcTemplate.queryForList("select * from room where studentID = ? and teacherID = ?;", session.getAttribute("studentID"), teacherID);
+        resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;",teacherID , 2201009 /*session.getAttribute("studentID")*/);
 
         if (!resultList.isEmpty()) {
-            //model.addAttribute("no",); すでルームがあることを伝える
-            return "studentmessagehome";
+        	i = "1";
+            session.setAttribute("alert", i); //すでルームがあることを伝える
+            return "redirect:/studentmessagenew";
         } else {
-            jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);", session.getAttribute("studentID"), teacherID);
+            jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);", teacherID, 2201009/*session.getAttribute("studentID")*/);
         }
 
         return "redirect:/studentmessagehome";
     }
 
     @RequestMapping(path = "/teachermessagenew", method = RequestMethod.GET)
-    public String teachermessagenew(Model model) {
+    public String teachermessagenew(Model model,HttpSession session) {
 
         List<Map<String, Object>> resultList;
 
         resultList = jdbcTemplate.queryForList("select * from students order by number asc;");
+        
+        
+        i = (String) session.getAttribute("alert");
+        
+        if(i=="1") {
+        	model.addAttribute("alert","1");
+        	
+        	session.setAttribute("alert", "0");
+        }
 
         model.addAttribute("resultList", resultList);
 
@@ -136,14 +165,14 @@ public class MessageController {
 
         List<Map<String, Object>> resultList;
 
-        resultList = jdbcTemplate.queryForList("select * from room where studentID = ? and teacherID = 20350;", studentID/*,session.getAttribute("teacherID")*/);
+        resultList = jdbcTemplate.queryForList("select * from room where teacherID = 20350 and studentID = ?;", studentID /*,session.getAttribute("teacherID")*/);
 
         if (!resultList.isEmpty()) {
-            String i = "1";
-            model.addAttribute("alert", i); //すでルームがあることを伝える
+            i = "1";
+            session.setAttribute("alert", i); //すでルームがあることを伝える
             return "redirect:/teachermessagenew";
         } else {
-            jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);", session.getAttribute("teacherID"), studentID);
+            jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);", 20350 /*session.getAttribute("teacherID")*/, studentID);
         }
 
         return "redirect:/teachermessagehome";
