@@ -33,7 +33,7 @@
 <hr>
     <th:block th:each="que : ${question}">
 
-       <button th:onclick="'toggleSection(' + ${que.selectNumber} + ')'">Show/Hide</button>
+       <button th:onclick="'toggleSection(' + ${que.selectNumber} + ')'"><label th:text="'設問' + ${que.selectNumber}"></label></button>
 
   <div th:id="${que.selectNumber}" class="hiddenContent">
       <h2 th:text="'設問' + ${que.selectNumber}"></h2>
@@ -48,6 +48,7 @@
       <hr>
     </th:block><br>
     	<form th:action="@{/testedit_q}" method="POST">
+			<!-- プルダウン 作成-->
       <h2>更新後の問題文</h2>
       <label th:text="'1：'"></label><input type="text" name="first">
       <label th:text="'2：'"></label><input type="text" name="second">
