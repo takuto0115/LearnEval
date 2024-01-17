@@ -19,17 +19,24 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class TeacherController {
 
+	boolean move ;
+	SessionCheck check = new SessionCheck();
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
-	//コピペ用サンプル(ページ表示用メソッド)
 	@RequestMapping(path = "/teachermain", method = RequestMethod.GET)
-	public String mainGet() {
+	public String mainGet(HttpSession session) {
+		move = check.sessionCheck(session);
+		/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (move) {
+			return "redirect:/sessionError";
+		}
 		return "teachermain";
 	}
 
 	@RequestMapping(path = "/teachermain", method = RequestMethod.POST)
 	public String mainPost(String page) {
+		
 		switch(page) {
 		case"テスト一覧":
 			return "redirect:/teachertestmenu";
@@ -43,7 +50,13 @@ public class TeacherController {
 	}
 
 	@RequestMapping(path = "/teachertestmenu", method = RequestMethod.GET)
-	public String testMenuGet(Model model) {
+	public String testMenuGet(Model model,HttpSession session) {
+		
+		move = check.sessionCheck(session);
+		/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (move) {
+			return "redirect:/sessionError";
+		}
 
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> tests;
@@ -59,12 +72,23 @@ public class TeacherController {
 
 
 	@RequestMapping(path = "/teacherstumenu", method = RequestMethod.GET)
-	public String stuMenuGet() {
+	public String stuMenuGet(HttpSession session) {
+		move = check.sessionCheck(session);
+		/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (move) {
+			return "redirect:/sessionError";
+		}
 		return "teacherstumenu";
 	}
 
 	@RequestMapping(path = "/testedit/{num}", method = RequestMethod.GET)
 	public String testexGet(Model model,@PathVariable String num,HttpSession session) {
+		
+		move = check.sessionCheck(session);
+		/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (move) {
+			return "redirect:/sessionError";
+		}
 
 		session.removeAttribute("num");
 		session.setAttribute("num",num);

@@ -11,14 +11,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class StudentController {
 
+	boolean move;
+	SessionCheck check = new SessionCheck();
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
 	@RequestMapping(path = "/studentmain", method = RequestMethod.GET)
-	public String mainGet() {
+	public String mainGet(HttpSession session) {
+		
+		move = check.sessionCheck(session);
+		/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (move) {
+			return "redirect:/sessionError";
+		}
+		
 		return "studentmain";
 	}
 
@@ -37,7 +48,13 @@ public class StudentController {
 	}
 
 	@RequestMapping(path = "/studenttestmenu", method = RequestMethod.GET)
-	public String testMenuGet(Model model) {
+	public String testMenuGet(Model model,HttpSession session) {
+		
+		move = check.sessionCheck(session);
+		/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (move) {
+			return "redirect:/sessionError";
+		}
 
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> tests;
@@ -51,7 +68,13 @@ public class StudentController {
 	}
 
 	@RequestMapping(path = "/testpage/{num}", method = RequestMethod.GET)
-	public String testexGet(Model model,@PathVariable String num) {
+	public String testexGet(Model model,@PathVariable String num,HttpSession session) {
+		
+		move = check.sessionCheck(session);
+		/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (move) {
+			return "redirect:/sessionError";
+		}
 
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> q_result;
@@ -76,7 +99,12 @@ public class StudentController {
 	}
 
 	@RequestMapping(path = "/studenteval", method = RequestMethod.GET)
-	public String evalGet() {
+	public String evalGet(HttpSession session) {
+		move = check.sessionCheck(session);
+		/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (move) {
+			return "redirect:/sessionError";
+		}
 		return "studenteval";
 	}
 
