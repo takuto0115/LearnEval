@@ -10,22 +10,18 @@
 <body>
   <h1 th:text="'問題' + ${number}"></h1>
   <p><img th:src="${'data:image/png;base64,' + image}" width="60%" height="60%"></p>
-      <h2>□に入るものを記号で答えなさい</h2>
+      <h2>□に入るものを答えなさい</h2>
   <form th:action="@{/test}" method="POST">
     <th:block th:each="que : ${question}">
-      <h2 th:text="'設問' + ${que.selectNumber}"></h2><br>
-      <input type="radio" name="${que.selectNumber}" th:text="'　：　' + ${que.select_first}">
-      <input type="radio" name="${que.selectNumber}" th:text="'　：　' + ${que.select_sec}"><br>
-      <input type="radio" name="${que.selectNumber}" th:text="'　：　' + ${que.select_third}">
-      <input type="radio" name="${que.selectNumber}" th:text="'　：　' + ${que.select_forth}">
+      <label th:text="'設問　' + ${que.selectNumber} + ':'"></label>
+      <select th:name="'select'+${que.selectNumber}">
+		<option th:value="${que.select_first}" th:text="${que.select_first}"></option>
+        <option th:value="${que.select_first}" th:text="${que.select_sec}"></option>
+        <option th:value="${que.select_first}" th:text="${que.select_third}"></option>
+        <option th:value="${que.select_first}" th:text="${que.select_forth}"></option>
+	  </select><br>
     </th:block><br>
-    <div class="A">回答する</div>
-    <div class="B">
-      <p>回答 a : c,3<br>回答 b : d,4</p>
-      <form th:action="@{/teachermain}" method="GET">
-        <input type="submit" id="return" value="メインメニューへ戻る">
-      </form>
-    </div>
+	<input type="submit" value="回答する">
   </form>
 </body>
 </html>

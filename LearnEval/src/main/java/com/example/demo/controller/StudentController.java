@@ -70,6 +70,8 @@ public class StudentController {
 		if (check.sessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
+		
+		session.setAttribute("qestion", num);
 
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> q_result;
@@ -91,6 +93,36 @@ public class StudentController {
 		model.addAttribute("question",c_result);
 
 		return "testpage";
+	}
+	
+	@RequestMapping(path = "/test", method = RequestMethod.POST)
+	public String test(HttpSession session,String select1,String select2,String select3,String select4,String select5,String select6) {
+		System.out.println(select1);
+		String[] select = {select1,select2,select3,select4,select5,select6};
+		String name = (String)session.getAttribute("name");
+		String num = (String)session.getAttribute("num");
+		boolean[] ratio;
+		//SELECT文の結果をしまうためのリスト
+		List<Map<String, Object>> q_result;
+		
+		q_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ?",num);
+		
+	      // resultList をイテレートし、studentID の値を抽出
+        for (Map<String, Object> result : q_result) {
+        	
+        }
+
+
+		/*
+		 * 生徒名(セッション)、解答(DB)
+		 * 解答をとってきて回答と照らし合わせる
+		 * 照らし合わせた結果の割合を求め計算
+		 * 
+		 * 成績処理のテーブルへ保存する
+		 * */
+		System.out.println(select);
+		return "testpage";
+		
 	}
 
 	@RequestMapping(path = "/studenteval", method = RequestMethod.GET)

@@ -1,69 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="/css/header.css" />
-  <link rel="stylesheet" type="text/css" href="/css/question.css" />
-  <link rel="stylesheet" type="text/css" href="/css/edit.css" />
-  <script src="/js/anc.js"></script>
-  <title th:text="'問題' + ${number}"></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/header.css" />
+    <link rel="stylesheet" type="text/css" href="/css/question.css" />
+    <link rel="stylesheet" type="text/css" href="/css/edit.css" />
+    <script src="/js/anc.js"></script>
+    <title th:text="'問題' + ${number}"></title>
     <style>
-		
-    /* 初めは非表示に設定 */
-    .hiddenContent {
-      display: none;
-    }
-  </style>
+        /* 初めは非表示に設定 */
+        .hiddenContent {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <header>
+<header>
     <span>LearnEval</span>
     <form th:action="@{/teachermain}" method="GET">
-      <input onclick="home()" type="button" id="home-button" value="ホーム">
+        <input onclick="home()" type="button" id="home-button" value="ホーム">
     </form>
-  </header>
-  <main>
-	<form th:action="'@{/testeditimg/' + ${number} + '}'" method="POST">
-	<h1 th:text="'問題' + ${number}"></h1>
-	<h3>現在の問題画像</h3><img th:src="${'data:image/png;base64,' + image}" width="60%" height="60%">
-	<h3>更新後の問題画像</h3><input type="file" name="upimage"><br>
-	<input type = "submit" value="更新する">
-	</form>
+</header>
+<main>
+    <form th:action="'@{/testeditimg/' + ${number} + '}'" method="POST">
+        <h1 th:text="'問題' + ${number}"></h1>
+        <h3>現在の問題画像</h3><img th:src="${'data:image/png;base64,' + image}" width="60%" height="60%">
+        <h3>更新後の問題画像</h3><input type="file" name="upimage"><br>
+        <input type="submit" value="更新する">
+    </form>
 
-<hr>
+    <hr>
+
     <th:block th:each="que : ${question}">
+        <button th:onclick="'toggleSection(' + ${que.selectNumber} + ')'">
+            <label th:text="'設問' + ${que.selectNumber}"></label>
+        </button>
 
-       <button th:onclick="'toggleSection(' + ${que.selectNumber} + ')'"><label th:text="'設問' + ${que.selectNumber}"></label></button>
-
-  <div th:id="${que.selectNumber}" class="hiddenContent">
-      <h2 th:text="'設問' + ${que.selectNumber}"></h2>
-      <h2>現在の問題文</h2>
-      <label th:text="'1：' + ${que.select_first}"></label>
-      <label th:text="'2：' + ${que.select_sec}"></label><br>
-      <label th:text="'3：' + ${que.select_third}"></label>
-      <label th:text="'4：' + ${que.select_forth}"></label><br>
-      <label th:text="'答え：' + ${que.answer}"></label>
-      </form>
-  </div>
-      <hr>
+        <div th:id="${que.selectNumber}" class="hiddenContent">
+            <h2 th:text="'設問' + ${que.selectNumber}"></h2>
+            <h2>現在の問題文</h2>
+            <label th:text="'1：' + ${que.select_first}"></label>
+            <label th:text="'2：' + ${que.select_sec}"></label><br>
+            <label th:text="'3：' + ${que.select_third}"></label>
+            <label th:text="'4：' + ${que.select_forth}"></label><br>
+            <label th:text="'答え：' + ${que.answer}"></label>
+        </div>
+        <hr>
     </th:block><br>
-    	<form th:action="@{/testedit_q}" method="POST">
-			<!-- プルダウン 作成-->
-      <h2>更新後の問題文</h2>
-      <label th:text="'1：'"></label><input type="text" name="first">
-      <label th:text="'2：'"></label><input type="text" name="second">
-      <br>
-      <label th:text="'3：'"></label><input type="text" name="third">
-      <label th:text="'4：'"></label><input type="text" name="forth">
-      <br>
-      <label th:text="'答え：'"></label> 
-    <select id="dropdown1" name="answer_num">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-    </select><br>
-      <input type="submit" value="更新する">
-	</form>
+
+    <form th:action="@{/testedit_q}" method="POST">
+        <!-- プルダウン 作成-->
+        <h2>更新後の問題文</h2>
+        <label th:text="'1：'"></label><input type="text" name="first">
+        <label th:text="'2：'"></label><input type="text" name="second"><br>
+        <label th:text="'3：'"></label><input type="text" name="third">
+        <label th:text="'4：'"></label><input type="text" name="forth"><br>
+        <label th:text="'答え：'"></label>
+        <select id="dropdown1" name="answer_num">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select><br>
+        <input type="submit" value="更新する">
+    </form>
+</main>
 </body>
 </html>
