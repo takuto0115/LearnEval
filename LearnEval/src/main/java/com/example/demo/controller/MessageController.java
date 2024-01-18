@@ -25,7 +25,7 @@ public class MessageController {
     public String studentmessagehome(Model model, HttpSession session) {
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
-        List<Map<String, Object>> userList = new ArrayList<>(); 
+        List<Map<String, Object>> userList = new ArrayList<>();
         int i = 0;
 
         resultList = jdbcTemplate.queryForList("select * from room where studentID = ?;", session.getAttribute("studentID"));
@@ -85,7 +85,7 @@ public class MessageController {
 
         String i = (String) session.getAttribute("alert");
 
-        if (i == "1") {
+        if ("1".equals(i)) {
             model.addAttribute("alert", "1");
             session.setAttribute("alert", "0");
         }
@@ -98,7 +98,8 @@ public class MessageController {
     public String studentmessagenewpost(HttpSession session, @PathVariable String teacherID) {
         List<Map<String, Object>> resultList;
 
-        resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;", teacherID,session.getAttribute("studentID"));
+        resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;", teacherID,
+                session.getAttribute("studentID"));
 
         if (!resultList.isEmpty()) {
             String i = "1";
@@ -120,7 +121,7 @@ public class MessageController {
 
         String i = (String) session.getAttribute("alert");
 
-        if (i == "1") {
+        if ("1".equals(i)) {
             model.addAttribute("alert", "1");
             session.setAttribute("alert", "0");
         }
@@ -133,7 +134,8 @@ public class MessageController {
     public String teachermessagenewpost(Model model, HttpSession session, @PathVariable String studentID) {
         List<Map<String, Object>> resultList;
 
-        resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID = ?;",session.getAttribute("teacherID"), studentID);
+        resultList = jdbcTemplate.queryForList(
+                "select * from room where teacherID = ? and studentID = ?;", session.getAttribute("teacherID"),studentID);
 
         if (!resultList.isEmpty()) {
             String i = "1";
@@ -167,7 +169,9 @@ public class MessageController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
 
-        jdbcTemplate.update("INSERT INTO message (daytime, senderID, roomID, text) values( ?, '1', ?, ?);",formattedDateTime, roomID, messageInput);
+        jdbcTemplate.update(
+                "INSERT INTO message (daytime, senderID, roomID, text) values( ?, '1', ?, ?);", formattedDateTime,
+                roomID, messageInput);
 
         return "redirect:/studentmessage/" + roomID;
     }
@@ -175,6 +179,30 @@ public class MessageController {
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.GET)
     public String teacherGet(Model model, @PathVariable String roomID) {
         List<Map<String, Object>> resultList;
+        List<Map<String, Object>> nameList;
+
+        nameList = jdbcTemplate.queryForList("select studentID from room where roomID = ?", roomID);
+
+        if (!nameList.isEmpty()) {
+            Map<String, Object> studentIDMap = nameList.get(0); 
+            Object studentIDObject = studentIDMap.get("studentID"); 
+
+            
+            String studentID = (studentIDObject != null) ? studentIDObject.toString() : null;
+
+            nameList = jdbcTemplate.queryForList("select name from students where studentID = ?", studentID);
+
+            if (!nameList.isEmpty()) {
+                Map<String, Object> nameMap = nameList.get(0); 
+                Object nameObject = nameMap.get("name"); 
+
+                
+                String name = (nameObject != null) ? nameObject.toString() : null;
+
+                model.addAttribute("name", name);
+
+            }
+        }
 
         resultList = jdbcTemplate.queryForList("select * from message where roomID = ?;", roomID);
 
@@ -182,6 +210,7 @@ public class MessageController {
         model.addAttribute("roomID", roomID);
 
         return "teachermessage";
+
     }
 
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.POST)
@@ -199,8 +228,4 @@ public class MessageController {
         return "redirect:/teachermessage/" + roomID;
     }
 
-    private static boolean isAllHalfWidth(String input) {
-        String regex = "[\\x00-\\x7F]*";
-        return input.matches(regex);
-    }
 }
