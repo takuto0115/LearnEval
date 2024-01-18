@@ -19,16 +19,14 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class TeacherController {
 
-	boolean move ;
 	SessionCheck check = new SessionCheck();
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
 	@RequestMapping(path = "/teachermain", method = RequestMethod.GET)
 	public String mainGet(HttpSession session) {
-		move = check.sessionCheck(session);
 		/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (move) {
+		if (check.sessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
 		return "teachermain";
@@ -51,10 +49,8 @@ public class TeacherController {
 
 	@RequestMapping(path = "/teachertestmenu", method = RequestMethod.GET)
 	public String testMenuGet(Model model,HttpSession session) {
-		
-		move = check.sessionCheck(session);
 		/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (move) {
+		if (check.sessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
 
@@ -73,9 +69,8 @@ public class TeacherController {
 
 	@RequestMapping(path = "/teacherstumenu", method = RequestMethod.GET)
 	public String stuMenuGet(HttpSession session) {
-		move = check.sessionCheck(session);
 		/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (move) {
+		if (check.sessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
 		return "teacherstumenu";
@@ -84,9 +79,8 @@ public class TeacherController {
 	@RequestMapping(path = "/testedit/{num}", method = RequestMethod.GET)
 	public String testexGet(Model model,@PathVariable String num,HttpSession session) {
 		
-		move = check.sessionCheck(session);
 		/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (move) {
+		if (check.sessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
 

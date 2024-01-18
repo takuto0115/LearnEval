@@ -35,7 +35,7 @@ public class DBController {
 		String encodedImage = Base64.getEncoder().encodeToString(byteData);
 
 		//DBに画面から入力されたデータを登録する。
-		jdbcTemplate.update("insert into tests (questionID,image,language) value ('2',?,'Java');",encodedImage);
+		jdbcTemplate.update("insert into tests (questionNumber,image,language) value ('2',?,'Java');",encodedImage);
 
 		return "db";
 	}
