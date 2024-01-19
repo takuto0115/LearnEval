@@ -98,8 +98,7 @@ public class MessageController {
     public String studentmessagenewpost(HttpSession session, @PathVariable String teacherID) {
         List<Map<String, Object>> resultList;
 
-        resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;", teacherID,
-                session.getAttribute("studentID"));
+        resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;", teacherID,session.getAttribute("studentID"));
 
         if (!resultList.isEmpty()) {
             String i = "1";
@@ -142,8 +141,7 @@ public class MessageController {
             session.setAttribute("alert", i);
             return "redirect:/teachermessagenew";
         } else {
-            jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",
-                    session.getAttribute("teacherID"), studentID);
+            jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",session.getAttribute("teacherID"), studentID);
         }
 
         return "redirect:/teachermessagehome";
@@ -152,10 +150,36 @@ public class MessageController {
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.GET)
     public String studentGet(Model model, @PathVariable String roomID) {
         List<Map<String, Object>> resultList;
+        List<Map<String, Object>> nameList;
+
+        nameList = jdbcTemplate.queryForList("select teacherID from room where roomID = ?", roomID);
+
+        if (!nameList.isEmpty()) {
+            Map<String, Object> teacherIDMap = nameList.get(0); 
+            Object teacherIDObject = teacherIDMap.get("teacherID"); 
+
+            
+            String teacherID = (teacherIDObject != null) ? teacherIDObject.toString() : null;
+
+            nameList = jdbcTemplate.queryForList("select name from teachers where teacherID = ?", teacherID);
+
+            if (!nameList.isEmpty()) {
+                Map<String, Object> nameMap = nameList.get(0); 
+                Object nameObject = nameMap.get("name"); 
+
+                String name = (nameObject != null) ? nameObject.toString() : null;
+
+                System.out.println(name);
+                
+                model.addAttribute("name", name);
+
+            }
+        }
 
         resultList = jdbcTemplate.queryForList("select * from message where roomID = ?;", roomID);
 
         model.addAttribute("resultList", resultList);
+        
         return "studentmessage";
     }
 
@@ -170,8 +194,7 @@ public class MessageController {
         String formattedDateTime = now.format(formatter);
 
         jdbcTemplate.update(
-                "INSERT INTO message (daytime, senderID, roomID, text) values( ?, '1', ?, ?);", formattedDateTime,
-                roomID, messageInput);
+                "INSERT INTO message (daytime, senderID, roomID, text) values( ?, '1', ?, ?);", formattedDateTime,roomID, messageInput);
 
         return "redirect:/studentmessage/" + roomID;
     }
