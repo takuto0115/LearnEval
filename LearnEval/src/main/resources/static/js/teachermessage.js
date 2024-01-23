@@ -1,37 +1,47 @@
-window.onload = function() {
-            var scrollContainer = document.getElementById('messagearea');
-            var lastScrollPosition = localStorage.getItem('lastScrollPosition');
+document.addEventListener('DOMContentLoaded', function() {
+    // メッセージエリアのコンテナを取得
+    var scrollContainer = document.getElementById('messagearea');
 
-            if (lastScrollPosition !== null) {
-                scrollContainer.scrollTop = parseInt(lastScrollPosition);
-            } else {
-                scrollContainer.scrollTop = scrollContainer.scrollHeight;
-            }
+    // localStorageから最後のスクロール位置を取得
+    var lastScrollPosition = localStorage.getItem('lastScrollPosition');
 
-            scrollContainer.addEventListener('scroll', function() {
-                localStorage.setItem('lastScrollPosition', scrollContainer.scrollTop);
-            });
+    // ストアされた値に基づいてスクロール位置を設定または利用可能でない場合は一番下に設定
+    if (lastScrollPosition !== null) {
+        scrollContainer.scrollTop = parseInt(lastScrollPosition);
+    } else {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+    }
 
-            // Retrieve and set input field value
-            var messageInput = document.getElementById('messageInput');
-            var savedMessage = localStorage.getItem('savedMessage');
-            if (savedMessage !== null) {
-                messageInput.value = savedMessage;
-            }
+    // ユーザーがスクロールしたときにスクロール位置をlocalStorageに保存
+    scrollContainer.addEventListener('scroll', function() {
+        localStorage.setItem('lastScrollPosition', scrollContainer.scrollTop);
+    });
 
-            // Save input field value on change
-            messageInput.addEventListener('input', function() {
-                localStorage.setItem('savedMessage', messageInput.value);
-            });
+    // メッセージ入力エレメントを取得
+    var messageInput = document.getElementById('messageInput');
 
-            // Clear input field value on form submission
-            var messageForm = document.querySelector('form');
-            messageForm.addEventListener('submit', function() {
-                localStorage.removeItem('savedMessage');
-            });
+    // localStorageから保存されたメッセージを取得し、入力値として設定
+    var savedMessage = localStorage.getItem('savedMessage');
+    if (savedMessage !== null) {
+        messageInput.value = savedMessage;
+    }
 
-            // Automatic page refresh every 5 seconds
-            setInterval(function() {
-                location.reload();
-            }, 5000);
-        };
+    // 入力値が変更されたときにlocalStorageにメッセージを保存
+    messageInput.addEventListener('input', function() {
+        localStorage.setItem('savedMessage', messageInput.value);
+    });
+
+    // フォームの送信を処理
+    var messageForm = document.querySelector('form');
+    messageForm.addEventListener('submit', function(event) {
+        // フォームが送信されたときに保存されたメッセージと入力値をクリア
+        localStorage.removeItem('savedMessage');
+        messageInput.value = '';
+        event.preventDefault(); // デフォルトのフォーム送信を防ぐ
+    });
+
+    // 5000ミリ秒（5秒）ごとにページをリロード
+    setInterval(function() {
+        location.reload();
+    }, 5000);
+});

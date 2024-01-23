@@ -1,75 +1,110 @@
 @charset "UTF-8";
 
-main{
-	text-align: center;
+/* 文書全体のテキスト配置をセンターに設定 */
+main {
+    text-align: center;
 }
 
+/* メッセージエリアのスタイリング */
 #messagearea {
-  width: 1250px;
-  height: 500px;
-  border: 1px solid black;
-  padding: 10px;
-  margin: auto;
-  margin-bottom: 10px;
-  overflow: auto;
-  word-break: break-all;
-  background-color:skyblue;
+    width: 1250px;
+    height: 500px;
+    border: 1px solid black;
+    padding: 10px;
+    margin: auto;
+    margin-bottom: 10px;
+    overflow: auto;
+    word-break: break-all;
+    background-color: skyblue;
 }
 
+/* メッセージ入力のスタイリング */
 #messageInput {
-  width: 1200px;
-  height:100px;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px; /* 垂直方向のリサイズを許可 */
-}
-
-#righttext{
-	border: 1px solid #ccc;
+    width: 1200px;
+    height: 100px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
     border-radius: 4px;
-	font-size:20px;
-	background-color:greenyellow;
-	max-width: 550px;
-	padding-bottom:0;
-	padding-bottom:1px;
+    font-size: 14px;
+    /* 垂直方向のリサイズを許可 */
 }
 
-#righttext.p{
-	 word-wrap: break-word;   
-}
-
-.getmessage{
-	font-size:20px;
-}
-
-#lefttext{
-	border: 1px solid #ccc;
+/* 右側のテキストコンテナのスタイリング */
+#righttext {
+    border: 1px solid #ccc;
     border-radius: 4px;
-	font-size:20px;
-	background-color:white;
-	max-width: 550px;
+    font-size: 20px;
+    background-color: greenyellow;
+    max-width: 550px;
+    padding-bottom: 0;
+    padding-bottom: 1px;
 }
 
-#lefttext.p{
-	 word-wrap: break-word;   
+#righttext.p {
+    word-wrap: break-word;
 }
 
+/* クラス .getmessage に対するメッセージのスタイリング */
+.getmessage {
+    font-size: 20px;
+}
+
+/* 左側のテキストコンテナのスタイリング */
+#lefttext {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 20px;
+    background-color: white;
+    max-width: 550px;
+}
+
+#lefttext.p {
+    word-wrap: break-word;
+}
+
+/* 左右のアラインメントのためのフロート */
 .left {
-  float: left;
-  margin-right: 20px;
+    float: left;
+    margin-right: 20px;
 }
 
 .right {
-  float: right;
-  margin-left: 20px;
+    float: right;
+    margin-left: 20px;
 }
 
-#messagetable{
-	width: 1200px;
+/* メッセージテーブルのスタイリング */
+#messagetable {
+    width: 1200px;
 }
 
-#x{
-	color:white;
+/* メッセージボタンのスタイリング */
+.messagebottun {
+    font-weight: bold;
+    transition: .3s; /* 変化時間 0.3秒 */
+    padding: 10px; /* 内側の余白設定 */
+    border-radius: 12px; /* 要素の角を丸くする */
+    background-color: #2ecadf; /* 背景色指定 */
+    text-decoration: none; /* aタグの下線を非表示に */
+    color: #fff; /* 文字色 */
+    font-size: 1.5rem; /* フォントサイズ */
+}
+
+/* メッセージボタンのホバーエフェクト */
+.messagebottun:hover {
+    transition: .3s; /* 変化時間 0.3秒 */
+    background-color: #00a9de; /* 背景色 */
+}
+
+/* 'x'要素のスタイリング */
+#x {
+    color: white;
+}
+
+/* 新しいルーム要素のスタイリング */
+#newroom {
+    position: absolute;
+    top: 105px;
+    right: 10px;
 }

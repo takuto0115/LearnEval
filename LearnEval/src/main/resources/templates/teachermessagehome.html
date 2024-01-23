@@ -19,20 +19,20 @@
       <input type="submit" id="logout-button" value="ログアウト">
     </form>
   </header>
- <main>
-  <div class="row">
-	<h1 style="float: left;">先生側メッセージhome</h1>
-    <a href="/teachermessagenew" id="newroom">新規メッセージはこちら</a>
-
-
-    <table>
-      <th:block th:each="result : ${resultList}">
-             <tr>
-               <td><a th:href="'/teachermessage/' + ${result.roomID}" th:text="${result.name}"></a></td>
-             </tr>
-      </th:block>
-    </table>
-  </div>
- </main>
+  <main>
+    <div class="row">
+      <div class="top">
+        <h1>先生側メッセージhome</h1>
+        <a href="/teachermessagenew" id="newroom">新規メッセージはこちら</a>
+      </div>
+      <table>
+        <th:block th:each="result : ${resultList}">
+          <tr>
+            <td><a class="messagebottun" th:href="'/teachermessage/' + ${result.roomID}" th:text="${result.name}"></a></td>
+          </tr>
+        </th:block>
+      </table>
+    </div>
+  </main>
 </body>
 </html>
