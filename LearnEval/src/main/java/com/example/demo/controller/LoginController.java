@@ -45,7 +45,7 @@ public class LoginController {
 				Map<String, Object> user = result.get(0);
 
 				String name = (String)user.get("name");
-				int studentID = ((Number) user.get("studentID")).intValue();
+				String studentID = (String)user.get("studentID").toString();
 
 				System.out.println(name);
 
@@ -69,7 +69,7 @@ public class LoginController {
 				Map<String, Object> user = result.get(0);
 
 				String name = (String)user.get("name");
-				int teacherID = ((Number) user.get("teacherID")).intValue();
+				String teacherID = (String)user.get("teacherID").toString();
 
 				System.out.println(name);
 

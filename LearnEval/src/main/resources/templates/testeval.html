@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>テスト結果</title>
+</head>
+<body>
+	  <header>
+    <span>LearnEval</span>
+    <form th:action="@{/studentmain}" method="GET">
+      <input type="submit" id="home-button" value="ホーム">
+    </form>
+    <form th:action="@{/login}" method="GET">
+      <input type="submit" id="logout-button" value="ログアウト">
+    </form>
+  </header>
+	<h1>テスト結果</h1>
+	<table border="1">
+		<tr>
+		<th:block th:each="select : ${selectList}">
+			<td th:text="${select}"></td>
+		</th:block>
+		</tr>
+		<tr>
+		<th:block th;each="ratio : ${ratioList}">
+			<td th:text="${ratio}"></td>
+		</th:block>
+		<td th:text="${test.endTime}"></td>
+		<td th:text="${test.correctRate}"></td>
+		</tr>
+		</table>
+		<a href="/teachertestmenu">戻る</a>
+</body>
+</html>

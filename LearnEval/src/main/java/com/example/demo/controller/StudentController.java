@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -96,14 +98,15 @@ public class StudentController {
 	}
 
 	@RequestMapping(path = "/test", method = RequestMethod.POST)
-	public String test(HttpSession session,String select1,String select2,String select3,String select4,String select5,String select6) {
+	public String test(HttpSession session,String select1,String select2,String select3,String select4,String select5,String select6,Model model) {
 		System.out.println(select1);
+		
 		String[] select = {select1,select2,select3,select4,select5,select6};
 		int i = 0;
 		double count = 0;
 		String studentID = (String)session.getAttribute("studentID");
 		String num = (String)session.getAttribute("num");
-		boolean[] ratio = {false,false,false,false,false,false};
+		String[] ratio = {"×","×","×","×","×","×"};
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> q_result;
 		//SELECT文の結果をしまうためのリスト
@@ -113,22 +116,47 @@ public class StudentController {
 
 		for (Map<String, Object> result : q_result) {
 			String answer = result.get("answer").toString();
-			ratio[i] =  select[i].equals(answer);
+			if(select[i].equals(answer)){
+				ratio[i] = "〇";
+			}
 			i++;
 		}
 
 		for(int j = 0 ; j < i ; j++) {
-			if(ratio[i]) {
+			if(ratio[j].equals("〇")) {
 				count++;
 			}
 		}
 
 		double answer_rate = count / i;
-
-//        正答率をevalテーブルに保存する
-
-		jdbcTemplate.update("insert into eval (studentID,questionNumber,answer_rate) value (?,?,?);",studentID,num,answer_rate);
 		
+		//現在時刻をnowに保存する
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String endTime = now.format(formatter);
+        
+//       学生ID、問題ID、選んだ六つの選択肢(select_first-sixth)、正答率、終了時間をevalテーブルに保存する
+
+        jdbcTemplate.update("insert into eval (studentID,questionNumber,select_first,select_second,select_third,select_fourth,select_fifth,select_sixth,answer_rate,end_time) value (?,?,?,?,?,?,?,?,?,?);"
+        		,studentID,num,select1,select2,select3,select4,select5,select6,answer_rate,endTime);
+        
+        //select1から6をlistに保存する
+        
+        List<String> selectList = List.of(select1,select2,select3,select4,select5,select6);
+        //selectListから""を削除する
+        selectList.removeIf(s -> s.equals(""));
+        //ratioの中身をtrueを〇に、falseを×に変換するしListに保存する
+        List<String> ratioList = List.of(ratio);
+        
+        //selectListをmodelに保存する
+        model.addAttribute("selectList",selectList);
+        //answer_rateをmodelに保存する	
+        model.addAttribute("answer_rate",answer_rate);
+        //終了時刻をmodelに保存する
+        model.addAttribute("endTime",endTime);
+        //ratioListをmodelに保存する
+        model.addAttribute("ratioList",ratioList);
+        
 		/*
 		 * 生徒名(セッション)、解答(DB)
 		 * 解答をとってきて回答と照らし合わせる
@@ -136,7 +164,7 @@ public class StudentController {
 		 * 
 		 * 成績処理のテーブルへ保存する
 		 * */
-		return "testpage";
+		return "testeval";
 
 	}
 
