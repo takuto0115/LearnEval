@@ -5,6 +5,7 @@
   <title>メッセージ一覧</title>
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
   <link rel="stylesheet" type="text/css" href="/css/mes.css" />
+  <link rel="stylesheet" type="text/css" href="/css/message.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@700&family=Dela+Gothic+One&family=DotGothic16&family=Mochiy+Pop+One&family=Mochiy+Pop+P+One&family=Noto+Sans+JP:wght@800&family=Zen+Maru+Gothic:wght@300;700&display=swap" rel="stylesheet">
 </head>
@@ -18,9 +19,10 @@
       <input type="submit" id="logout-button" value="ログアウト">
     </form>
   </header>
+ <main>
   <div class="row">
-	<h1>先生側メッセージhome</h1>
-    <a href="/teachermessagenew" style="padding: auto;">新規メッセージはこちら</a>
+	<h1 style="float: left;">先生側メッセージhome</h1>
+    <a href="/teachermessagenew" id="newroom">新規メッセージはこちら</a>
 
 
     <table>
@@ -31,5 +33,6 @@
       </th:block>
     </table>
   </div>
+ </main>
 </body>
 </html>
