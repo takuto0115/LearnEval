@@ -24,6 +24,10 @@ section{
 #return{
 	width: 15%;
 }
+#pull{
+ padding: 10px;	
+}
+
 input{
 	margin-left: 10%;
 	}
