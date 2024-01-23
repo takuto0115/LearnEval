@@ -18,6 +18,20 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MessageController {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
     @Autowired
     JdbcTemplate jdbcTemplate;
 
