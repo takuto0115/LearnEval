@@ -35,6 +35,30 @@
   <main>
 	  <h1>先生側新規メッセージ画面</h1>
 	  
+	  
+	  <a th:href="@{/teachermessagehome}" id="newroom">メッセージホームはこちら</a>
+	  
+	  <form th:action="@{/teachermessagenew}" method="GET">
+        <label for="class">クラス:</label>
+          <select id="selectclass" name="selectclass">
+            <option value="1A">1A</option>
+            <option value="2A">2A</option>
+            <option value="3A">3A</option>
+            <option value="4A">4A</option>
+            <option value="1B">1B</option>
+            <option value="2B">2B</option>
+            <option value="3B">3B</option>
+            <option value="1C">1C</option>
+            <option value="2C">2C</option>
+            <option value="1D">1D</option>
+            <option value="2D">2D</option>
+            <option value="1N">1N</option>
+            <option value="2N">2N</option>
+          </select>
+
+          <input type="submit" value="検索">
+       </form>
+	  
     <table>
       <th:block th:each="result : ${resultList}">
              <tr>

@@ -24,7 +24,7 @@ public class MessageController {
     JdbcTemplate jdbcTemplate;
 
     @RequestMapping(path = "/studentmessagehome", method = RequestMethod.GET)
-    public String studentmessagehome(Model model, HttpSession session) {
+    public String studentmessagehomeGET(Model model, HttpSession session) {
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
         List<Map<String, Object>> userList = new ArrayList<>();
@@ -52,7 +52,7 @@ public class MessageController {
     }
 
     @RequestMapping(path = "/teachermessagehome", method = RequestMethod.GET)
-    public String teachermessagehome(HttpSession session, Model model) {
+    public String teachermessagehomeGET(HttpSession session, Model model) {
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
         List<Map<String, Object>> userList = new ArrayList<>();
@@ -115,10 +115,15 @@ public class MessageController {
     }
 
     @RequestMapping(path = "/teachermessagenew", method = RequestMethod.GET)
-    public String teachermessagenew(Model model, HttpSession session) {
+    public String teachermessagenew(Model model, HttpSession session,String selectclass) {
         List<Map<String, Object>> resultList;
 
-        resultList = jdbcTemplate.queryForList("select * from students order by number asc;");
+        //プルダウンで選択されたselectclassをもとにstudentsテーブルから生徒を検索
+        if(selectclass != null) {
+        	resultList = jdbcTemplate.queryForList("select * from students where class = ? order by number asc;",selectclass);
+        	}else {
+            resultList = jdbcTemplate.queryForList("select * from students order by number asc;");
+            }
 
         String i = (String) session.getAttribute("alert");
 
