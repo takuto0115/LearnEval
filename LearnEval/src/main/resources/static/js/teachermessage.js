@@ -31,17 +31,18 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('savedMessage', messageInput.value);
     });
 
-    // フォームの送信を処理
-    var messageForm = document.querySelector('form');
-    messageForm.addEventListener('submit', function(event) {
-        // フォームが送信されたときに保存されたメッセージと入力値をクリア
-        localStorage.removeItem('savedMessage');
-        messageInput.value = '';
-        event.preventDefault(); // デフォルトのフォーム送信を防ぐ
-    });
+//    // フォームの送信を処理
+//    var messageForm = document.querySelector('form');
+//    messageForm.addEventListener('submit', function(event) {
+//        // フォームが送信されたときに保存されたメッセージと入力値をクリア
+//        localStorage.removeItem('savedMessage');
+//        messageInput.value = '';
+//        event.preventDefault(); // デフォルトのフォーム送信を防ぐ
+//    });
 
     // 5000ミリ秒（5秒）ごとにページをリロード
-    setInterval(function() {
-        location.reload();
-    }, 5000);
+//	setInterval(function() {
+//		location.reload();
+//	}, 5000);
+
 });
