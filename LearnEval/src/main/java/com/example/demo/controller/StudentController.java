@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,6 +25,8 @@ public class StudentController {
 
 	@RequestMapping(path = "/studentmain", method = RequestMethod.GET)
 	public String mainGet(HttpSession session) {
+
+		System.out.println("teachermain");
 		/*セッションの中身がない場合、ログイン画面へ移行*/
 		if (check.sessionCheck(session)) {
 			return "redirect:/sessionError";
@@ -96,21 +99,27 @@ public class StudentController {
 
 		return "testpage";
 	}
+	
+	
 
 	@RequestMapping(path = "/test", method = RequestMethod.POST)
 	public String test(HttpSession session,String select1,String select2,String select3,String select4,String select5,String select6,Model model) {
 		System.out.println(select1);
 		
 		String[] select = {select1,select2,select3,select4,select5,select6};
+		//selectの中身がNullの場合、""に変換する
+		for (int i = 0; i < select.length; i++) {
+			if (select[i] == null) {
+				select[i] = "";
+			}
+		}
 		int i = 0;
 		double count = 0;
 		String studentID = (String)session.getAttribute("studentID");
-		String num = (String)session.getAttribute("num");
+		String num = (String)session.getAttribute("qestion");
 		String[] ratio = {"×","×","×","×","×","×"};
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> q_result;
-		//SELECT文の結果をしまうためのリスト
-		List<Map<String, Object>> e_result;
 
 		q_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ? ORDER BY selectNumber asc",num);
 
@@ -130,6 +139,8 @@ public class StudentController {
 
 		double answer_rate = count / i;
 		
+		int answer_rate_int = (int)(answer_rate * 100);
+		
 		//現在時刻をnowに保存する
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -138,13 +149,14 @@ public class StudentController {
 //       学生ID、問題ID、選んだ六つの選択肢(select_first-sixth)、正答率、終了時間をevalテーブルに保存する
 
         jdbcTemplate.update("insert into eval (studentID,questionNumber,select_first,select_second,select_third,select_fourth,select_fifth,select_sixth,answer_rate,end_time) value (?,?,?,?,?,?,?,?,?,?);"
-        		,studentID,num,select1,select2,select3,select4,select5,select6,answer_rate,endTime);
+        		,studentID,num,select1,select2,select3,select4,select5,select6,answer_rate_int,endTime);
         
         //select1から6をlistに保存する
         
-        List<String> selectList = List.of(select1,select2,select3,select4,select5,select6);
+        List<String> selectList = List.of(select);
         //selectListから""を削除する
-        selectList.removeIf(s -> s.equals(""));
+        selectList = selectList.stream().filter(s -> !s.equals("")).collect(Collectors.toList());
+
         //ratioの中身をtrueを〇に、falseを×に変換するしListに保存する
         List<String> ratioList = List.of(ratio);
         

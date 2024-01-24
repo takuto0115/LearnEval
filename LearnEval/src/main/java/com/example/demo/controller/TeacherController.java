@@ -25,6 +25,7 @@ public class TeacherController {
 
 	@RequestMapping(path = "/teachermain", method = RequestMethod.GET)
 	public String mainGet(HttpSession session) {
+		System.out.println("teachermain");
 		/*セッションの中身がない場合、ログイン画面へ移行*/
 		if (check.sessionCheck(session)) {
 			return "redirect:/sessionError";
@@ -44,7 +45,7 @@ public class TeacherController {
 			return "redirect:/teachermessagehome";
 
 		}
-		return "/studentmain";
+		return "/teachermain";
 	}
 
 	@RequestMapping(path = "/teachertestmenu", method = RequestMethod.GET)
