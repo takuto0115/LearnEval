@@ -85,9 +85,6 @@ public class TeacherController {
 			return "redirect:/sessionError";
 		}
 
-		session.removeAttribute("num");
-		session.setAttribute("num",num);
-		
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> q_result;
 		//SELECT文の結果をしまうためのリスト
@@ -110,8 +107,8 @@ public class TeacherController {
 		return "testedit";
 	}
 
-	@RequestMapping(path = "/testeditimg/{num}", method = RequestMethod.POST)
-	public String edit_image(MultipartFile upimage,@PathVariable String num)
+	@RequestMapping(path = "/testeditimg", method = RequestMethod.POST)
+	public String edit_image(MultipartFile upimage,String num)
 			throws IOException {
 
 		//アップロードされたファイルをバイトデータに変換する。
@@ -128,10 +125,8 @@ public class TeacherController {
 	}
 	
 	@RequestMapping(path = "/testedit_q", method = RequestMethod.POST)
-	public String edit_q(String first,String second,String third,String forth,String answer_num,HttpSession session)
+	public String edit_q(String first,String second,String third,String forth,String answer_num,String quenum,String num,HttpSession session)
 			throws IOException {
-		
-		String num = session.getAttribute("num").toString();
 		
 		String[] question = {first,second,third,forth};
 		
@@ -141,10 +136,10 @@ public class TeacherController {
 
 		//DBに画面から入力されたデータを登録する。
 		jdbcTemplate.update("update choices set select_first = ?,select_sec = ?,select_third = ?,select_forth = ?,"
-				+ "answer = ? where questionNumber = ? and selectNumber"
-				,question[0],question[1],question[2],question[3],answer,num);
+				+ "answer = ? where questionNumber = ? and selectNumber = ?"
+				,question[0],question[1],question[2],question[3],answer,quenum,num);
 
-		return "/testedit/" + num;
+		return "redirect:/testedit/" + num;
 	}
 	
 }

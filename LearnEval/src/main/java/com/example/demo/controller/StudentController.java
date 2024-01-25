@@ -103,9 +103,7 @@ public class StudentController {
 	
 
 	@RequestMapping(path = "/test", method = RequestMethod.POST)
-	public String test(HttpSession session,String select1,String select2,String select3,String select4,String select5,String select6,Model model) {
-		System.out.println(select1);
-		
+	public String test(HttpSession session,String select1,String select2,String select3,String select4,String select5,String select6,String num,String selectNumber,Model model) {
 		String[] select = {select1,select2,select3,select4,select5,select6};
 		//selectの中身がNullの場合、""に変換する
 		for (int i = 0; i < select.length; i++) {
@@ -116,15 +114,16 @@ public class StudentController {
 		int i = 0;
 		double count = 0;
 		String studentID = (String)session.getAttribute("studentID");
-		String num = (String)session.getAttribute("qestion");
 		String[] ratio = {"×","×","×","×","×","×"};
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> q_result;
+		List<Map<String, Object>> result;
+		Map<String,Object> map;
 
 		q_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ? ORDER BY selectNumber asc",num);
 
-		for (Map<String, Object> result : q_result) {
-			String answer = result.get("answer").toString();
+		for (Map<String, Object> Checking : q_result) {
+			String answer = Checking.get("answer").toString();
 			if(select[i].equals(answer)){
 				ratio[i] = "〇";
 			}
@@ -157,25 +156,18 @@ public class StudentController {
         //selectListから""を削除する
         selectList = selectList.stream().filter(s -> !s.equals("")).collect(Collectors.toList());
 
-        //ratioの中身をtrueを〇に、falseを×に変換するしListに保存する
         List<String> ratioList = List.of(ratio);
-        
+          //ratioListをi番目までだけにする
+          ratioList = ratioList.subList(0, i);
+        //ratioListをmodelに保存する
+        model.addAttribute("ratioList",ratioList);
         //selectListをmodelに保存する
         model.addAttribute("selectList",selectList);
         //answer_rateをmodelに保存する	
         model.addAttribute("answer_rate",answer_rate);
         //終了時刻をmodelに保存する
         model.addAttribute("endTime",endTime);
-        //ratioListをmodelに保存する
-        model.addAttribute("ratioList",ratioList);
-        
-		/*
-		 * 生徒名(セッション)、解答(DB)
-		 * 解答をとってきて回答と照らし合わせる
-		 * 照らし合わせた結果の割合を求め計算
-		 * 
-		 * 成績処理のテーブルへ保存する
-		 * */
+
 		return "testeval";
 
 	}
