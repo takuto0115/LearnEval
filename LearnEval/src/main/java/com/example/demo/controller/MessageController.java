@@ -234,7 +234,15 @@ public class MessageController {
             }
         }
 
-        resultList = jdbcTemplate.queryForList("select * from message where roomID = ?;", roomID);
+        resultList = jdbcTemplate.queryForList("select * from message where roomID = ? order by messageID asc;", roomID);
+
+        //resultListに入っているdaytime(2024-01-26T11:10:21)を01/26 11:10に変換
+        for (Map<String, Object> result : resultList) {
+            String daytime = result.get("daytime").toString(); // 2024-01-26T11:10:21
+            LocalDateTime dateTime = LocalDateTime.parse(daytime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm")); // 01/26 11:10
+            result.put("daytime", formattedDateTime);
+        }
 
         model.addAttribute("resultList", resultList);
         model.addAttribute("roomID", roomID);

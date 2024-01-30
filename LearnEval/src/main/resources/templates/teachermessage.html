@@ -32,11 +32,17 @@
                             <div id="lefttext">
                                 <span th:text="${item.text}" class="getmessage"></span>
                             </div>
+                            <div id="leftdaytime">
+                            <div th:text="${item.daytime}"></div>
+                            </div>
                         </td>
                         <td th:if="${item.senderID == '0'}" class="right">
                             <!-- 右に配置するコンテンツ -->
                             <div id="righttext">
                                 <span th:text="${item.text}" class="getmessage"></span>
+                            </div>
+                            <div id="rightdaytime">
+                            <div th:text="${item.daytime}"></div>
                             </div>
                         </td>
                     </tr>
