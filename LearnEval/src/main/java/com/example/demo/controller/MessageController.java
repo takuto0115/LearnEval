@@ -19,12 +19,21 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class MessageController {
 	
-	
+	SessionCheck check = new SessionCheck();
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    //生徒側メッセージホーム画面表示
     @RequestMapping(path = "/studentmessagehome", method = RequestMethod.GET)
     public String studentmessagehomeGET(Model model, HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
+    	
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
         List<Map<String, Object>> userList = new ArrayList<>();
@@ -51,8 +60,15 @@ public class MessageController {
         return "studentmessagehome";
     }
 
+    //教師側メッセージホーム画面表示
     @RequestMapping(path = "/teachermessagehome", method = RequestMethod.GET)
     public String teachermessagehomeGET(HttpSession session, Model model) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
         List<Map<String, Object>> userList = new ArrayList<>();
@@ -78,9 +94,17 @@ public class MessageController {
         model.addAttribute("resultList", userList);
         return "teachermessagehome";
     }
+    
 
+    //生徒側新規room作成画面表示
     @RequestMapping(path = "/studentmessagenew", method = RequestMethod.GET)
     public String studentmessagenew(Model model, HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
 
         resultList = jdbcTemplate.queryForList("select * from teachers order by name asc;");
@@ -96,11 +120,19 @@ public class MessageController {
         return "studentmessagenew";
     }
 
+    //生徒側新規room作成
     @RequestMapping(path = "/studentmessagenew/{teacherID}", method = RequestMethod.GET)
     public String studentmessagenewpost(HttpSession session, @PathVariable String teacherID) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
 
-        resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;", teacherID,session.getAttribute("studentID"));
+        resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;",
+                teacherID, session.getAttribute("studentID"));
 
         if (!resultList.isEmpty()) {
             String i = "1";
@@ -114,16 +146,23 @@ public class MessageController {
         return "redirect:/studentmessagehome";
     }
 
+    //教師側新規room作成画面表示
     @RequestMapping(path = "/teachermessagenew", method = RequestMethod.GET)
-    public String teachermessagenew(Model model, HttpSession session,String selectclass) {
+    public String teachermessagenew(Model model, HttpSession session, String selectclass) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
 
-        //プルダウンで選択されたselectclassをもとにstudentsテーブルから生徒を検索
-        if(selectclass != null) {
-        	resultList = jdbcTemplate.queryForList("select * from students where class = ? order by number asc;",selectclass);
-        	}else {
+        if (selectclass != null) {
+            resultList = jdbcTemplate.queryForList("select * from students where class = ? order by number asc;",
+                    selectclass);
+        } else {
             resultList = jdbcTemplate.queryForList("select * from students order by number asc;");
-            }
+        }
 
         String i = (String) session.getAttribute("alert");
 
@@ -136,62 +175,83 @@ public class MessageController {
         return "teachermessagenew";
     }
 
+    //教師側新規room作成
     @RequestMapping(path = "/teachermessagenew/{studentID}", method = RequestMethod.GET)
     public String teachermessagenewpost(Model model, HttpSession session, @PathVariable String studentID) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
 
         resultList = jdbcTemplate.queryForList(
-                "select * from room where teacherID = ? and studentID = ?;", session.getAttribute("teacherID"),studentID);
+                "select * from room where teacherID = ? and studentID = ?;", session.getAttribute("teacherID"),
+                studentID);
 
         if (!resultList.isEmpty()) {
             String i = "1";
             session.setAttribute("alert", i);
             return "redirect:/teachermessagenew";
         } else {
-            jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",session.getAttribute("teacherID"), studentID);
+            jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",
+                    session.getAttribute("teacherID"), studentID);
         }
 
         return "redirect:/teachermessagehome";
     }
 
+    //生徒側メッセージ画面表示
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.GET)
-    public String studentGet(Model model, @PathVariable String roomID) {
+    public String studentGet(Model model, @PathVariable String roomID,HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
 
         nameList = jdbcTemplate.queryForList("select teacherID from room where roomID = ?", roomID);
 
         if (!nameList.isEmpty()) {
-            Map<String, Object> teacherIDMap = nameList.get(0); 
-            Object teacherIDObject = teacherIDMap.get("teacherID"); 
+            Map<String, Object> teacherIDMap = nameList.get(0);
+            Object teacherIDObject = teacherIDMap.get("teacherID");
 
-            
             String teacherID = (teacherIDObject != null) ? teacherIDObject.toString() : null;
 
             nameList = jdbcTemplate.queryForList("select name from teachers where teacherID = ?", teacherID);
 
             if (!nameList.isEmpty()) {
-                Map<String, Object> nameMap = nameList.get(0); 
-                Object nameObject = nameMap.get("name"); 
+                Map<String, Object> nameMap = nameList.get(0);
+                Object nameObject = nameMap.get("name");
 
                 String name = (nameObject != null) ? nameObject.toString() : null;
 
                 System.out.println(name);
-                
-                model.addAttribute("name", name);
 
+                model.addAttribute("name", name);
             }
         }
 
         resultList = jdbcTemplate.queryForList("select * from message where roomID = ?;", roomID);
 
         model.addAttribute("resultList", resultList);
-        
+
         return "studentmessage";
     }
 
+    //生徒側メッセージ送信
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.POST)
-    public String studentPost(@PathVariable String roomID, String messageInput) {
+    public String studentPost(@PathVariable String roomID, String messageInput,HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+		
         if (messageInput.isEmpty()) {
             return "redirect:/studentmessage/" + roomID;
         }
@@ -201,46 +261,50 @@ public class MessageController {
         String formattedDateTime = now.format(formatter);
 
         jdbcTemplate.update(
-                "INSERT INTO message (daytime, senderID, roomID, text) values( ?, '1', ?, ?);", formattedDateTime,roomID, messageInput);
+                "INSERT INTO message (daytime, senderID, roomID, text) values( ?, '1', ?, ?);",
+                formattedDateTime, roomID, messageInput);
 
         return "redirect:/studentmessage/" + roomID;
     }
 
+    //教師側メッセージ画面表示
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.GET)
-    public String teacherGet(Model model, @PathVariable String roomID) {
+    public String teacherGet(Model model, @PathVariable String roomID,HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
 
         nameList = jdbcTemplate.queryForList("select studentID from room where roomID = ?", roomID);
 
         if (!nameList.isEmpty()) {
-            Map<String, Object> studentIDMap = nameList.get(0); 
-            Object studentIDObject = studentIDMap.get("studentID"); 
+            Map<String, Object> studentIDMap = nameList.get(0);
+            Object studentIDObject = studentIDMap.get("studentID");
 
-            
             String studentID = (studentIDObject != null) ? studentIDObject.toString() : null;
 
             nameList = jdbcTemplate.queryForList("select name from students where studentID = ?", studentID);
 
             if (!nameList.isEmpty()) {
-                Map<String, Object> nameMap = nameList.get(0); 
-                Object nameObject = nameMap.get("name"); 
+                Map<String, Object> nameMap = nameList.get(0);
+                Object nameObject = nameMap.get("name");
 
-                
                 String name = (nameObject != null) ? nameObject.toString() : null;
 
                 model.addAttribute("name", name);
-
             }
         }
 
         resultList = jdbcTemplate.queryForList("select * from message where roomID = ? order by messageID asc;", roomID);
 
-        //resultListに入っているdaytime(2024-01-26T11:10:21)を01/26 11:10に変換
         for (Map<String, Object> result : resultList) {
-            String daytime = result.get("daytime").toString(); // 2024-01-26T11:10:21
+            String daytime = result.get("daytime").toString();
             LocalDateTime dateTime = LocalDateTime.parse(daytime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm")); // 01/26 11:10
+            String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm"));
             result.put("daytime", formattedDateTime);
         }
 
@@ -248,11 +312,17 @@ public class MessageController {
         model.addAttribute("roomID", roomID);
 
         return "teachermessage";
-
     }
 
+    //教師側メッセージ送信
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.POST)
-    public String teacherPost(@PathVariable String roomID, String messageInput) {
+    public String teacherPost(@PathVariable String roomID, String messageInput,HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         if (messageInput.isEmpty()) {
             return "redirect:/teachermessage/" + roomID;
         }
@@ -261,9 +331,9 @@ public class MessageController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
 
-        jdbcTemplate.update("INSERT INTO message (daytime, senderID, roomID, text) values( ?, '0', ?, ?);",formattedDateTime, roomID, messageInput);
+        jdbcTemplate.update("INSERT INTO message (daytime, senderID, roomID, text) values( ?, '0', ?, ?);",
+                formattedDateTime, roomID, messageInput);
 
         return "redirect:/teachermessage/" + roomID;
     }
-
 }
