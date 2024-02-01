@@ -24,6 +24,7 @@ public class MessageController {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    //生徒側メッセージホーム画面表示
     @RequestMapping(path = "/studentmessagehome", method = RequestMethod.GET)
     public String studentmessagehomeGET(Model model, HttpSession session) {
     	
@@ -59,6 +60,7 @@ public class MessageController {
         return "studentmessagehome";
     }
 
+    //教師側メッセージホーム画面表示
     @RequestMapping(path = "/teachermessagehome", method = RequestMethod.GET)
     public String teachermessagehomeGET(HttpSession session, Model model) {
     	
@@ -92,7 +94,9 @@ public class MessageController {
         model.addAttribute("resultList", userList);
         return "teachermessagehome";
     }
+    
 
+    //生徒側新規room作成画面表示
     @RequestMapping(path = "/studentmessagenew", method = RequestMethod.GET)
     public String studentmessagenew(Model model, HttpSession session) {
     	
@@ -116,6 +120,7 @@ public class MessageController {
         return "studentmessagenew";
     }
 
+    //生徒側新規room作成
     @RequestMapping(path = "/studentmessagenew/{teacherID}", method = RequestMethod.GET)
     public String studentmessagenewpost(HttpSession session, @PathVariable String teacherID) {
     	
@@ -141,6 +146,7 @@ public class MessageController {
         return "redirect:/studentmessagehome";
     }
 
+    //教師側新規room作成画面表示
     @RequestMapping(path = "/teachermessagenew", method = RequestMethod.GET)
     public String teachermessagenew(Model model, HttpSession session, String selectclass) {
     	
@@ -169,6 +175,7 @@ public class MessageController {
         return "teachermessagenew";
     }
 
+    //教師側新規room作成
     @RequestMapping(path = "/teachermessagenew/{studentID}", method = RequestMethod.GET)
     public String teachermessagenewpost(Model model, HttpSession session, @PathVariable String studentID) {
     	
@@ -195,6 +202,7 @@ public class MessageController {
         return "redirect:/teachermessagehome";
     }
 
+    //生徒側メッセージ画面表示
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.GET)
     public String studentGet(Model model, @PathVariable String roomID,HttpSession session) {
     	
@@ -235,6 +243,7 @@ public class MessageController {
         return "studentmessage";
     }
 
+    //生徒側メッセージ送信
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.POST)
     public String studentPost(@PathVariable String roomID, String messageInput,HttpSession session) {
     	
@@ -258,6 +267,7 @@ public class MessageController {
         return "redirect:/studentmessage/" + roomID;
     }
 
+    //教師側メッセージ画面表示
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.GET)
     public String teacherGet(Model model, @PathVariable String roomID,HttpSession session) {
     	
@@ -304,6 +314,7 @@ public class MessageController {
         return "teachermessage";
     }
 
+    //教師側メッセージ送信
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.POST)
     public String teacherPost(@PathVariable String roomID, String messageInput,HttpSession session) {
     	
