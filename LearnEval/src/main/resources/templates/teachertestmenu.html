@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
-  <link rel="stylesheet" type="text/css" href="/css/num.css" />
   <link rel="stylesheet" type="text/css" href="/css/table.css" />
   <title>問題一覧</title>
 </head>
@@ -17,7 +16,8 @@
       <input type="submit" id="logout-button" value="ログアウト">
     </form>
   </header>
-  <h1 style="text-align: center;">問題一覧</h1>
+  <main>
+  <h1 style="text-align: center;">問題一覧</h1> 
   <table>
     <th>問題番号</th><th>言語</th>
     <th:block th:each="question : ${question}">
@@ -28,11 +28,8 @@
         <td th:text="${question.language}"></td>
       </tr>
     </th:block>
-        <tr>
-		<td>
-			<a th:href="'/testpage/' + ${new}" text="新規問題作成"></a>
-		</td>
-	</tr>
   </table>
+  <a th:href="'/testedit/' + ${newNum}" id="newquestion">新規問題作成</a>
+  </main>
 </body>
 </html>

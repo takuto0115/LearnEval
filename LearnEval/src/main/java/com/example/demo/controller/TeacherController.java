@@ -78,7 +78,7 @@ public class TeacherController {
 		System.out.println(newNum);
 		//実行結果をmodelにしまってHTMLで出せるようにする。
 		model.addAttribute("question", tests);
-		model.addAttribute("new", newNum);
+		model.addAttribute("newNum", newNum);
 
 
 		return "teachertestmenu";
@@ -118,7 +118,23 @@ public class TeacherController {
 			System.out.println(i);
 			delNum.add(i, i+1);
 		}
-
+		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from tests");
+		
+		//nresultのかぶった項目を取り除く
+		for (int i = 0; i < n_result.size(); i++) {
+			Map<String, Object> map = n_result.get(i);
+			String language = (String) map.get("language");
+			for (int j = i + 1; j < n_result.size(); j++) {
+				Map<String, Object> map2 = n_result.get(j);
+				String language2 = (String) map2.get("language");
+				if (language.equals(language2)) {
+					n_result.remove(j);
+					j--;
+				}
+			}
+		}
+		//被りを取り除いたリストをmodelにしまってHTMLで出せるようにする。
+		model.addAttribute("language", n_result);
 		model.addAttribute("delNum", delNum);
 		model.addAttribute("image", q_result);
 		model.addAttribute("number", num);
@@ -128,7 +144,7 @@ public class TeacherController {
 	}
 
 	@RequestMapping(path = "/testeditimg", method = RequestMethod.POST)
-	public String edit_image(MultipartFile upimage,String num,String imagenum)
+	public String edit_image(MultipartFile upimage,String num,String imagenum,String language,Model model)
 			throws IOException {
 
 		if (upimage==null || upimage.isEmpty()) {
@@ -144,10 +160,15 @@ public class TeacherController {
 			List<Map<String, Object>> i_result = jdbcTemplate.queryForList("select * from tests where questionNumber = ?",num);
 
 			int imageNumber = i_result.size() + 1;
-
+			
+			if (language == null&&i_result.size() == 0) {
+				//アラートで言語の入力を求める
+				model.addAttribute("alert", "言語を選択してください");
+                return "redirect:/testedit/" + num;
+            }
 			Map<String, Object> map = i_result.get(0);
 
-			String language = (String) map.get("language");
+			language = (String) map.get("language");
 
 			int questionNumber = (int)map.get("questionNumber");
 

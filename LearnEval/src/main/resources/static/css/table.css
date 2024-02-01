@@ -7,3 +7,9 @@ th,td{
 	margin: 0;
 	padding: 10px;
 }
+
+#newquestion {
+    position: absolute;
+    top: 105px;
+    right: 10px;
+}

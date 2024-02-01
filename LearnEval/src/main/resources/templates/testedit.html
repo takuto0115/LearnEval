@@ -28,8 +28,15 @@
     <div class="container">
         <div class="row">
             <div class="col-9" id="imagearea">
-                <th:block th:each="image : ${image}">
-                    <form th:action="@{/testeditimg}" method="POST" enctype="multipart/form-data">
+						<input type="text" name="langage">
+						<lavel>既存の言語</lavel>
+						<select>
+						<th:block th:each="lang : ${language}">
+                        <option th:text="${lang.language}"></option>
+                        </select>
+                        </th:block><br>
+                        <th:block th:each="image : ${image}">
+						<form th:action="@{/testeditimg}" method="POST" enctype="multipart/form-data">
                         <h3 th:text="'現在の問題画像 '+ ${image.imageNumber} + '枚目' "></h3>
                         <img th:src="${'data:image/png;base64,' + image.image}" width="100%" height="100%">
                         <h3>更新後の問題画像</h3>
