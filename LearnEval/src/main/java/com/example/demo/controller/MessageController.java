@@ -18,12 +18,21 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MessageController {
+	
+	SessionCheck check = new SessionCheck();
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     @RequestMapping(path = "/studentmessagehome", method = RequestMethod.GET)
     public String studentmessagehomeGET(Model model, HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
+    	
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
         List<Map<String, Object>> userList = new ArrayList<>();
@@ -52,6 +61,12 @@ public class MessageController {
 
     @RequestMapping(path = "/teachermessagehome", method = RequestMethod.GET)
     public String teachermessagehomeGET(HttpSession session, Model model) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
         List<Map<String, Object>> userList = new ArrayList<>();
@@ -80,6 +95,12 @@ public class MessageController {
 
     @RequestMapping(path = "/studentmessagenew", method = RequestMethod.GET)
     public String studentmessagenew(Model model, HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
 
         resultList = jdbcTemplate.queryForList("select * from teachers order by name asc;");
@@ -97,6 +118,12 @@ public class MessageController {
 
     @RequestMapping(path = "/studentmessagenew/{teacherID}", method = RequestMethod.GET)
     public String studentmessagenewpost(HttpSession session, @PathVariable String teacherID) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
 
         resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;",
@@ -116,6 +143,12 @@ public class MessageController {
 
     @RequestMapping(path = "/teachermessagenew", method = RequestMethod.GET)
     public String teachermessagenew(Model model, HttpSession session, String selectclass) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
 
         if (selectclass != null) {
@@ -138,6 +171,12 @@ public class MessageController {
 
     @RequestMapping(path = "/teachermessagenew/{studentID}", method = RequestMethod.GET)
     public String teachermessagenewpost(Model model, HttpSession session, @PathVariable String studentID) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
 
         resultList = jdbcTemplate.queryForList(
@@ -157,7 +196,13 @@ public class MessageController {
     }
 
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.GET)
-    public String studentGet(Model model, @PathVariable String roomID) {
+    public String studentGet(Model model, @PathVariable String roomID,HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
 
@@ -191,7 +236,13 @@ public class MessageController {
     }
 
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.POST)
-    public String studentPost(@PathVariable String roomID, String messageInput) {
+    public String studentPost(@PathVariable String roomID, String messageInput,HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+		
         if (messageInput.isEmpty()) {
             return "redirect:/studentmessage/" + roomID;
         }
@@ -208,7 +259,13 @@ public class MessageController {
     }
 
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.GET)
-    public String teacherGet(Model model, @PathVariable String roomID) {
+    public String teacherGet(Model model, @PathVariable String roomID,HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
 
@@ -248,7 +305,13 @@ public class MessageController {
     }
 
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.POST)
-    public String teacherPost(@PathVariable String roomID, String messageInput) {
+    public String teacherPost(@PathVariable String roomID, String messageInput,HttpSession session) {
+    	
+    	/*セッションの中身がない場合、ログイン画面へ移行*/
+		if (check.sessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         if (messageInput.isEmpty()) {
             return "redirect:/teachermessage/" + roomID;
         }
