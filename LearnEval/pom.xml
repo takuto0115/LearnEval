@@ -85,8 +85,6 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId><!--$NO-MVN-MAN-VER$-->
 		</dependency>
-		
-		
 	</dependencies>
 
 	<build>

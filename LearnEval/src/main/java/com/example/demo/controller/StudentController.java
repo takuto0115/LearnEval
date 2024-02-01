@@ -62,6 +62,19 @@ public class StudentController {
 
 		//SELECT文の実行
 		tests = jdbcTemplate.queryForList("select * from tests");
+		//questionNumberが被っているものを削除する
+		for (int i = 0; i < tests.size(); i++) {
+			Map<String, Object> map = tests.get(i);
+			int questionNumber = (int) map.get("questionNumber");
+			for (int j = i + 1; j < tests.size(); j++) {
+				Map<String, Object> map2 = tests.get(j);
+				int questionNumber2 = (int) map2.get("questionNumber");
+				if (questionNumber == questionNumber2) {
+					tests.remove(j);
+					j--;
+				}
+			}
+		}
 		//実行結果をmodelにしまってHTMLで出せるようにする。
 		model.addAttribute("question", tests);
 

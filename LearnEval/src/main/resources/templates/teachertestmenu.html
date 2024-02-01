@@ -28,6 +28,11 @@
         <td th:text="${question.language}"></td>
       </tr>
     </th:block>
+        <tr>
+		<td>
+			<a th:href="'/testpage/' + ${new}" text="新規問題作成"></a>
+		</td>
+	</tr>
   </table>
 </body>
 </html>
