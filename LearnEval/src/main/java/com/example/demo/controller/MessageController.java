@@ -18,8 +18,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MessageController {
-	
-	
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -100,7 +99,8 @@ public class MessageController {
     public String studentmessagenewpost(HttpSession session, @PathVariable String teacherID) {
         List<Map<String, Object>> resultList;
 
-        resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;", teacherID,session.getAttribute("studentID"));
+        resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;",
+                teacherID, session.getAttribute("studentID"));
 
         if (!resultList.isEmpty()) {
             String i = "1";
@@ -115,15 +115,15 @@ public class MessageController {
     }
 
     @RequestMapping(path = "/teachermessagenew", method = RequestMethod.GET)
-    public String teachermessagenew(Model model, HttpSession session,String selectclass) {
+    public String teachermessagenew(Model model, HttpSession session, String selectclass) {
         List<Map<String, Object>> resultList;
 
-        //プルダウンで選択されたselectclassをもとにstudentsテーブルから生徒を検索
-        if(selectclass != null) {
-        	resultList = jdbcTemplate.queryForList("select * from students where class = ? order by number asc;",selectclass);
-        	}else {
+        if (selectclass != null) {
+            resultList = jdbcTemplate.queryForList("select * from students where class = ? order by number asc;",
+                    selectclass);
+        } else {
             resultList = jdbcTemplate.queryForList("select * from students order by number asc;");
-            }
+        }
 
         String i = (String) session.getAttribute("alert");
 
@@ -141,14 +141,16 @@ public class MessageController {
         List<Map<String, Object>> resultList;
 
         resultList = jdbcTemplate.queryForList(
-                "select * from room where teacherID = ? and studentID = ?;", session.getAttribute("teacherID"),studentID);
+                "select * from room where teacherID = ? and studentID = ?;", session.getAttribute("teacherID"),
+                studentID);
 
         if (!resultList.isEmpty()) {
             String i = "1";
             session.setAttribute("alert", i);
             return "redirect:/teachermessagenew";
         } else {
-            jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",session.getAttribute("teacherID"), studentID);
+            jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",
+                    session.getAttribute("teacherID"), studentID);
         }
 
         return "redirect:/teachermessagehome";
@@ -162,31 +164,29 @@ public class MessageController {
         nameList = jdbcTemplate.queryForList("select teacherID from room where roomID = ?", roomID);
 
         if (!nameList.isEmpty()) {
-            Map<String, Object> teacherIDMap = nameList.get(0); 
-            Object teacherIDObject = teacherIDMap.get("teacherID"); 
+            Map<String, Object> teacherIDMap = nameList.get(0);
+            Object teacherIDObject = teacherIDMap.get("teacherID");
 
-            
             String teacherID = (teacherIDObject != null) ? teacherIDObject.toString() : null;
 
             nameList = jdbcTemplate.queryForList("select name from teachers where teacherID = ?", teacherID);
 
             if (!nameList.isEmpty()) {
-                Map<String, Object> nameMap = nameList.get(0); 
-                Object nameObject = nameMap.get("name"); 
+                Map<String, Object> nameMap = nameList.get(0);
+                Object nameObject = nameMap.get("name");
 
                 String name = (nameObject != null) ? nameObject.toString() : null;
 
                 System.out.println(name);
-                
-                model.addAttribute("name", name);
 
+                model.addAttribute("name", name);
             }
         }
 
         resultList = jdbcTemplate.queryForList("select * from message where roomID = ?;", roomID);
 
         model.addAttribute("resultList", resultList);
-        
+
         return "studentmessage";
     }
 
@@ -201,7 +201,8 @@ public class MessageController {
         String formattedDateTime = now.format(formatter);
 
         jdbcTemplate.update(
-                "INSERT INTO message (daytime, senderID, roomID, text) values( ?, '1', ?, ?);", formattedDateTime,roomID, messageInput);
+                "INSERT INTO message (daytime, senderID, roomID, text) values( ?, '1', ?, ?);",
+                formattedDateTime, roomID, messageInput);
 
         return "redirect:/studentmessage/" + roomID;
     }
@@ -214,33 +215,29 @@ public class MessageController {
         nameList = jdbcTemplate.queryForList("select studentID from room where roomID = ?", roomID);
 
         if (!nameList.isEmpty()) {
-            Map<String, Object> studentIDMap = nameList.get(0); 
-            Object studentIDObject = studentIDMap.get("studentID"); 
+            Map<String, Object> studentIDMap = nameList.get(0);
+            Object studentIDObject = studentIDMap.get("studentID");
 
-            
             String studentID = (studentIDObject != null) ? studentIDObject.toString() : null;
 
             nameList = jdbcTemplate.queryForList("select name from students where studentID = ?", studentID);
 
             if (!nameList.isEmpty()) {
-                Map<String, Object> nameMap = nameList.get(0); 
-                Object nameObject = nameMap.get("name"); 
+                Map<String, Object> nameMap = nameList.get(0);
+                Object nameObject = nameMap.get("name");
 
-                
                 String name = (nameObject != null) ? nameObject.toString() : null;
 
                 model.addAttribute("name", name);
-
             }
         }
 
         resultList = jdbcTemplate.queryForList("select * from message where roomID = ? order by messageID asc;", roomID);
 
-        //resultListに入っているdaytime(2024-01-26T11:10:21)を01/26 11:10に変換
         for (Map<String, Object> result : resultList) {
-            String daytime = result.get("daytime").toString(); // 2024-01-26T11:10:21
+            String daytime = result.get("daytime").toString();
             LocalDateTime dateTime = LocalDateTime.parse(daytime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm")); // 01/26 11:10
+            String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm"));
             result.put("daytime", formattedDateTime);
         }
 
@@ -248,7 +245,6 @@ public class MessageController {
         model.addAttribute("roomID", roomID);
 
         return "teachermessage";
-
     }
 
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.POST)
@@ -261,9 +257,9 @@ public class MessageController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
 
-        jdbcTemplate.update("INSERT INTO message (daytime, senderID, roomID, text) values( ?, '0', ?, ?);",formattedDateTime, roomID, messageInput);
+        jdbcTemplate.update("INSERT INTO message (daytime, senderID, roomID, text) values( ?, '0', ?, ?);",
+                formattedDateTime, roomID, messageInput);
 
         return "redirect:/teachermessage/" + roomID;
     }
-
 }
