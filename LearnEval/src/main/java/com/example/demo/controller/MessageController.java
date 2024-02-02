@@ -204,13 +204,13 @@ public class MessageController {
 
     //生徒側メッセージ画面表示
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.GET)
-    public String studentGet(Model model, @PathVariable String roomID,HttpSession session) {
-    	
-    	/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
-    	
+    public String studentGet(Model model, @PathVariable String roomID, HttpSession session) {
+        
+        /* セッションの中身がない場合、ログイン画面へ移行 */
+        if (check.sessionCheck(session)) {
+            return "redirect:/sessionError";
+        }
+        
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
 
@@ -230,28 +230,34 @@ public class MessageController {
 
                 String name = (nameObject != null) ? nameObject.toString() : null;
 
-                System.out.println(name);
-
                 model.addAttribute("name", name);
             }
         }
 
-        resultList = jdbcTemplate.queryForList("select * from message where roomID = ?;", roomID);
+        resultList = jdbcTemplate.queryForList("select * from message where roomID = ? order by messageID asc;", roomID);
+
+        for (Map<String, Object> result : resultList) {
+            String daytime = result.get("daytime").toString();
+            LocalDateTime dateTime = LocalDateTime.parse(daytime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm"));
+            result.put("daytime", formattedDateTime);
+        }
 
         model.addAttribute("resultList", resultList);
+        model.addAttribute("roomID", roomID);
 
         return "studentmessage";
     }
 
     //生徒側メッセージ送信
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.POST)
-    public String studentPost(@PathVariable String roomID, String messageInput,HttpSession session) {
-    	
-    	/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
-		
+    public String studentPost(@PathVariable String roomID, String messageInput, HttpSession session) {
+        
+        /* セッションの中身がない場合、ログイン画面へ移行 */
+        if (check.sessionCheck(session)) {
+            return "redirect:/sessionError";
+        }
+        
         if (messageInput.isEmpty()) {
             return "redirect:/studentmessage/" + roomID;
         }
