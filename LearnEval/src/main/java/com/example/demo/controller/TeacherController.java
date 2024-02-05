@@ -34,21 +34,6 @@ public class TeacherController {
 		return "teachermain";
 	}
 
-	@RequestMapping(path = "/teachermain", method = RequestMethod.POST)
-	public String mainPost(String page) {
-
-		switch(page) {
-		case"テスト一覧":
-			return "redirect:/teachertestmenu";
-		case"個人成績一覧":
-			return "redirect:/teacherstumenu";
-		case"メッセージ一覧":
-			return "redirect:/teachermessagehome";
-
-		}
-		return "/teachermain";
-	}
-
 	@RequestMapping(path = "/teachertestmenu", method = RequestMethod.GET)
 	public String testMenuGet(Model model,HttpSession session) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
@@ -60,20 +45,8 @@ public class TeacherController {
 		List<Map<String, Object>> tests;
 
 		//SELECT文の実行
-		tests = jdbcTemplate.queryForList("select * from tests");
-		//questionNumberが被っているものを削除する
-		for (int i = 0; i < tests.size(); i++) {
-			Map<String, Object> map = tests.get(i);
-			int questionNumber = (int) map.get("questionNumber");
-			for (int j = i + 1; j < tests.size(); j++) {
-				Map<String, Object> map2 = tests.get(j);
-				int questionNumber2 = (int) map2.get("questionNumber");
-				if (questionNumber == questionNumber2) {
-					tests.remove(j);
-					j--;
-				}
-			}
-		}
+		tests = jdbcTemplate.queryForList("select * from testtitle");
+
 		String newNum = Integer.toString(tests.size() + 1);
 		System.out.println(newNum);
 		//実行結果をmodelにしまってHTMLで出せるようにする。
@@ -93,6 +66,8 @@ public class TeacherController {
 		}
 		return "teacherstumenu";
 	}
+	
+	//ここから問題編集
 
 	@RequestMapping(path = "/testedit/{num}", method = RequestMethod.GET)
 	public String testexGet(Model model,@PathVariable String num,HttpSession session) {
@@ -106,11 +81,10 @@ public class TeacherController {
 		List<Map<String, Object>> q_result;
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> c_result;
-		//SELECT文の結果をしまうためのリスト
-		String title;
-
-		//SELECT文の実行,タイトルをStringで取得
-		title = jdbcTemplate.queryForObject("select title from testtitle where questionNumber = ?",String.class,num);
+		//SELECT文の結果をしまう
+		String title = jdbcTemplate.queryForObject("select title from testtitle where questionNumber = ?",String.class,num);
+		//SELECT文の結果をしまう
+		String language = jdbcTemplate.queryForObject("select language from testtitle where questionNumber = ?",String.class,num);
 		//SELECT文の実行
 		q_result = jdbcTemplate.queryForList("select * from tests where questionNumber = ?",num);
 		//SELECT文の実行
@@ -125,22 +99,23 @@ public class TeacherController {
 		}
 
 		//languageの一覧を取得
-		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from tests");
+		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from testtitle");
 
 		//nresultのかぶった項目を取り除く
 		for (int i = 0; i < n_result.size(); i++) {
 			Map<String, Object> map = n_result.get(i);
-			String language = (String) map.get("language");
+			String lang = (String) map.get("language");
 			for (int j = i + 1; j < n_result.size(); j++) {
 				Map<String, Object> map2 = n_result.get(j);
-				String language2 = (String) map2.get("language");
-				if (language.equals(language2)) {
+				String lang2 = (String) map2.get("language");
+				if (lang.equals(lang2)) {
 					n_result.remove(j);
 					j--;
 				}
 			}
 		}
 
+		model.addAttribute("language", language);
 		model.addAttribute("title", title);
 		model.addAttribute("lang_list", n_result);
 		model.addAttribute("delNum", delNum);
@@ -158,14 +133,10 @@ public class TeacherController {
 		return "redirect:/testedit/" + num; 
 	}
 
-	//画像、言語選択
+	//画像の編集
 	@RequestMapping(path = "/imgedit", method = RequestMethod.POST)
-	public String edit_image(MultipartFile upimage,String num,String imagenum,String in_lang,Model model)
+	public String edit_image(MultipartFile upimage,String num,String imagenum,Model model)
 			throws IOException {
-
-		System.out.println(num + " " + imagenum + " " + in_lang);
-
-		String language = in_lang;
 
 		if (upimage==null || upimage.isEmpty()) {
 			return "redirect:/testedit/" + num;
@@ -181,20 +152,9 @@ public class TeacherController {
 
 			int imageNumber = i_result.size() + 1;
 
-			if (language == null&&i_result.size() == 0) {
-				//アラートで言語の入力を求める
-				model.addAttribute("lang_null", "言語を入力してください");
-				return "redirect:/testedit/" + num;
-			}
-			if (language == null) {
-				Map<String, Object> map = i_result.get(0);
-				language = (String) map.get("language");
-				num = (String)map.get("questionNumber");
-			}
-
 			//DBに画面から入力されたデータを登録する。
-			jdbcTemplate.update("insert into tests (questionNumber,image,language,imageNumber) value (?,?,?,?);"
-					,num ,encodedImage,language,imageNumber);
+			jdbcTemplate.update("insert into tests (questionNumber,image,imageNumber) value (?,?,?);"
+					,num ,encodedImage,imageNumber);
 
 		}else {
 			//アップロードされたファイルをバイトデータに変換する。
@@ -241,6 +201,10 @@ public class TeacherController {
 
 		return "redirect:/testedit/" + quenum;
 	}
+	
+	//ここまで問題編集
+	
+	//問題削除
 
 	@RequestMapping(path = "/delete", method = RequestMethod.POST)
 	public String delete(String num, String quenum, HttpSession session)
@@ -262,6 +226,10 @@ public class TeacherController {
 		return "redirect:/testedit/" + quenum;
 
 	}
+	
+	//ここまで問題削除
+	
+	//新規問題作成
 
 	@RequestMapping(path = "/newtest/{num}", method = RequestMethod.GET)
 	public String newtestGet(HttpSession session,@PathVariable String num,Model model) {
@@ -271,7 +239,7 @@ public class TeacherController {
 		}
 
 		//languageの一覧を取得
-		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from tests");
+		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from testtitle");
 
 		//nresultのかぶった項目を取り除く
 		for (int i = 0; i < n_result.size(); i++) {
@@ -292,7 +260,6 @@ public class TeacherController {
 		return "newtest";
 	}
 
-	//新規問題作成
 	@RequestMapping(path = "/newtest", method = RequestMethod.POST)
 	public String newtestGet(HttpSession session,Model model,String num,String language
 			,String first,String second,String third,String forth,String answer_num,
@@ -319,16 +286,16 @@ public class TeacherController {
 			//選択肢の数値から答えを取得
 			String answer = questions[ans - 1];
 			//タイトルの登録
-			jdbcTemplate.update("insert into testtitle (questionNumber,title) value (?,?)",num,title);
+			jdbcTemplate.update("insert into testtitle (questionNumber,title,language) value (?,?,?)",num,title,language);
 			//新規問題の登録
-			jdbcTemplate.update("insert into tests (questionNumber,image,language,imageNumber) value (?,?,?,1)",
-					num, encodedImage, language);
+			jdbcTemplate.update("insert into tests (questionNumber,image,imageNumber) value (?,?,1)",
+					num, encodedImage);
 			//新規選択肢の登録
 			jdbcTemplate.update("insert into choices (questionNumber,select_first,select_sec,select_third,select_forth,answer,selectNumber) value (?,?,?,?,?,?,1)",
 					num,first,second,third,forth,answer);
 		}else {
 			//languageの一覧を取得
-			List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from tests");
+			List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from testtitle");
 
 			//nresultのかぶった項目を取り除く
 			for (int i = 0; i < n_result.size(); i++) {
@@ -361,4 +328,6 @@ public class TeacherController {
 		}
 		return "testedit/" + num;
 	}
+	
+	//ここまで新規問題作成
 }
