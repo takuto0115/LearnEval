@@ -10,7 +10,6 @@ public class SessionCheckService {
 	//教員用セッションチェック
 	public boolean teacherSessionCheck(HttpSession session) {
 		if(session.getAttribute("teacherID") == null){
-			System.out.println(session.getAttribute("teacherID"));
 			return true;
 		}
 		return false;

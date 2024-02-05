@@ -32,9 +32,15 @@ public class StudentController {
         System.out.println("studentmain");
 
         // studentIDがない場合、sessionErrorへ移行
-		if (check.studentSessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
+        if (check.studentSessionCheck(session)) {
+
+            // teacherIDがある場合、teachermainへ移行
+            if(session.getAttribute("teacherID") != null) {
+                return "redirect:/teachermain";
+            }
+
+            return "redirect:/sessionError";
+        }
 
         return "studentmain";
     }
@@ -55,10 +61,16 @@ public class StudentController {
     @RequestMapping(path = "/studenttestmenu", method = RequestMethod.GET)
     public String testMenuGet(Model model, HttpSession session) {
 
-    	// studentIDがない場合、sessionErrorへ移行
-    			if (check.studentSessionCheck(session)) {
-    				return "redirect:/sessionError";
-    			}
+        // studentIDがない場合、sessionErrorへ移行
+        if (check.studentSessionCheck(session)) {
+
+            // teacherIDがある場合、teachermainへ移行
+            if(session.getAttribute("teacherID") != null) {
+                return "redirect:/teachermain";
+            }
+
+            return "redirect:/sessionError";
+        }
 
         // SELECT文の結果をしまうためのリスト
         List<Map<String, Object>> tests;
@@ -89,10 +101,16 @@ public class StudentController {
     @RequestMapping(path = "/testpage/{num}", method = RequestMethod.GET)
     public String testexGet(Model model, @PathVariable String num, HttpSession session) {
 
-    	// studentIDがない場合、sessionErrorへ移行
-    			if (check.studentSessionCheck(session)) {
-    				return "redirect:/sessionError";
-    			}
+        // studentIDがない場合、sessionErrorへ移行
+        if (check.studentSessionCheck(session)) {
+
+            // teacherIDがある場合、teachermainへ移行
+            if(session.getAttribute("teacherID") != null) {
+                return "redirect:/teachermain";
+            }
+
+            return "redirect:/sessionError";
+        }
 
         session.setAttribute("qestion", num);
 
@@ -200,15 +218,20 @@ public class StudentController {
         model.addAttribute("endTime", endTime);
 
         return "testeval";
-
     }
 
     @RequestMapping(path = "/studenteval", method = RequestMethod.GET)
     public String evalGet(HttpSession session) {
-    	// studentIDがない場合、sessionErrorへ移行
-    			if (check.studentSessionCheck(session)) {
-    				return "redirect:/sessionError";
-    			}
+        // studentIDがない場合、sessionErrorへ移行
+        if (check.studentSessionCheck(session)) {
+
+            // teacherIDがある場合、teachermainへ移行
+            if(session.getAttribute("teacherID") != null) {
+                return "redirect:/teachermain";
+            }
+
+            return "redirect:/sessionError";
+        }
         return "studenteval";
     }
 
@@ -216,5 +239,4 @@ public class StudentController {
     public String evalPOST() {
         return "redirect:/studentmain";
     }
-
 }
