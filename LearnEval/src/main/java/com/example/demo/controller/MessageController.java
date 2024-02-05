@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.example.demo.service.SessionCheckService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MessageController {
 
-    SessionCheck check = new SessionCheck();
+    @Autowired
+    SessionCheckService check;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -28,10 +31,10 @@ public class MessageController {
     @RequestMapping(path = "/studentmessagehome", method = RequestMethod.GET)
     public String studentmessagehomeGET(Model model, HttpSession session) {
 
-        // studentIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("studentID") == null) {
-            return "redirect:/sessionError";
-        }
+    	// studentIDがない場合、sessionErrorへ移行
+    			if (check.studentSessionCheck(session)) {
+    				return "redirect:/sessionError";
+    			}
 
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
@@ -64,9 +67,9 @@ public class MessageController {
     public String teachermessagehomeGET(HttpSession session, Model model) {
 
         // teacherIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("teacherID") == null) {
-            return "redirect:/sessionError";
-        }
+		if (check.teacherSessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
 
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
@@ -98,10 +101,10 @@ public class MessageController {
     @RequestMapping(path = "/studentmessagenew", method = RequestMethod.GET)
     public String studentmessagenew(Model model, HttpSession session) {
 
-        // studentIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("studentID") == null) {
-            return "redirect:/sessionError";
-        }
+    	// studentIDがない場合、sessionErrorへ移行
+		if (check.studentSessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
 
         List<Map<String, Object>> resultList;
 
@@ -122,11 +125,10 @@ public class MessageController {
     @RequestMapping(path = "/studentmessagenew/{teacherID}", method = RequestMethod.GET)
     public String studentmessagenewpost(HttpSession session, @PathVariable String teacherID) {
 
-        /* セッションの中身がない場合、ログイン画面へ移行 */
-        // studentIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("studentID") == null) {
-            return "redirect:/sessionError";
-        }
+    	// studentIDがない場合、sessionErrorへ移行
+		if (check.studentSessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
 
         List<Map<String, Object>> resultList;
 
@@ -149,10 +151,10 @@ public class MessageController {
     @RequestMapping(path = "/teachermessagenew", method = RequestMethod.GET)
     public String teachermessagenew(Model model, HttpSession session, String selectclass) {
 
-        // teacherIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("teacherID") == null) {
-            return "redirect:/sessionError";
-        }
+    	// teacherIDがない場合、sessionErrorへ移行
+    			if (check.teacherSessionCheck(session)) {
+    				return "redirect:/sessionError";
+    			}
 
         List<Map<String, Object>> resultList;
 
@@ -178,10 +180,10 @@ public class MessageController {
     @RequestMapping(path = "/teachermessagenew/{studentID}", method = RequestMethod.GET)
     public String teachermessagenewpost(Model model, HttpSession session, @PathVariable String studentID) {
 
-        // teacherIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("teacherID") == null) {
-            return "redirect:/sessionError";
-        }
+    	// teacherIDがない場合、sessionErrorへ移行
+    			if (check.teacherSessionCheck(session)) {
+    				return "redirect:/sessionError";
+    			}
 
         List<Map<String, Object>> resultList;
 
@@ -205,10 +207,10 @@ public class MessageController {
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.GET)
     public String studentGet(Model model, @PathVariable String roomID, HttpSession session) {
 
-        // studentIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("studentID") == null) {
-            return "redirect:/sessionError";
-        }
+    	// studentIDがない場合、sessionErrorへ移行
+		if (check.studentSessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
 
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
@@ -252,6 +254,11 @@ public class MessageController {
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.POST)
     public String studentPost(@PathVariable String roomID, String messageInput, HttpSession session) {
 
+    	// studentIDがない場合、sessionErrorへ移行
+		if (check.studentSessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
+    	
         if (messageInput.isEmpty()) {
             return "redirect:/studentmessage/" + roomID;
         }
@@ -270,10 +277,10 @@ public class MessageController {
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.GET)
     public String teacherGet(Model model, @PathVariable String roomID, HttpSession session) {
 
-        // teacherIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("teacherID") == null) {
-            return "redirect:/sessionError";
-        }
+    	// teacherIDがない場合、sessionErrorへ移行
+    			if (check.teacherSessionCheck(session)) {
+    				return "redirect:/sessionError";
+    			}
 
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
@@ -317,6 +324,11 @@ public class MessageController {
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.POST)
     public String teacherPost(@PathVariable String roomID, String messageInput, HttpSession session) {
 
+    	// teacherIDがない場合、sessionErrorへ移行
+    			if (check.teacherSessionCheck(session)) {
+    				return "redirect:/sessionError";
+    			}
+    	
         if (messageInput.isEmpty()) {
             return "redirect:/teachermessage/" + roomID;
         }

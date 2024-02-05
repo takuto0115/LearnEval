@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.example.demo.service.SessionCheckService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class StudentController {
 
-    SessionCheck check = new SessionCheck();
+    @Autowired
+    SessionCheckService check;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -29,9 +32,9 @@ public class StudentController {
         System.out.println("studentmain");
 
         // studentIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("studentID") == null) {
-            return "redirect:/sessionError";
-        }
+		if (check.studentSessionCheck(session)) {
+			return "redirect:/sessionError";
+		}
 
         return "studentmain";
     }
@@ -52,10 +55,10 @@ public class StudentController {
     @RequestMapping(path = "/studenttestmenu", method = RequestMethod.GET)
     public String testMenuGet(Model model, HttpSession session) {
 
-        // studentIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("studentID") == null) {
-            return "redirect:/sessionError";
-        }
+    	// studentIDがない場合、sessionErrorへ移行
+    			if (check.studentSessionCheck(session)) {
+    				return "redirect:/sessionError";
+    			}
 
         // SELECT文の結果をしまうためのリスト
         List<Map<String, Object>> tests;
@@ -86,10 +89,10 @@ public class StudentController {
     @RequestMapping(path = "/testpage/{num}", method = RequestMethod.GET)
     public String testexGet(Model model, @PathVariable String num, HttpSession session) {
 
-        // studentIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("studentID") == null) {
-            return "redirect:/sessionError";
-        }
+    	// studentIDがない場合、sessionErrorへ移行
+    			if (check.studentSessionCheck(session)) {
+    				return "redirect:/sessionError";
+    			}
 
         session.setAttribute("qestion", num);
 
@@ -202,11 +205,10 @@ public class StudentController {
 
     @RequestMapping(path = "/studenteval", method = RequestMethod.GET)
     public String evalGet(HttpSession session) {
-        /* セッションの中身がない場合、ログイン画面へ移行 */
-        // studentIDがない場合、sessionErrorへ移行
-        if (session.getAttribute("studentID") == null) {
-            return "redirect:/sessionError";
-        }
+    	// studentIDがない場合、sessionErrorへ移行
+    			if (check.studentSessionCheck(session)) {
+    				return "redirect:/sessionError";
+    			}
         return "studenteval";
     }
 
