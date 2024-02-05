@@ -25,12 +25,15 @@
 </header>
 <main>
     <h1 th:text="'問題' + ${number}"></h1>
+    <h2>ボタンを押すと編集画面が現れます</h2>
     <div class="container">
         <div class="row">
             <div class="col-9" id="imagearea">
-                <form th:action="@{/imgedit}" method="POST" enctype="multipart/form-data">
                     <br>
                     <th:block th:each="image : ${image}">
+                  <button th:onclick="'toggleSection('+ ${image.questionNumber} +${image.imageNumber} +')'" th:text = "${image.imageNumber} + '枚目の画像'"></button>
+                    <div th:id="${image.questionNumber} + '' + ${image.imageNumber}" class="hiddenContent">
+                <form th:action="@{/imgedit}" method="POST" enctype="multipart/form-data">
                         <h3 th:text="'現在の問題画像 '+ ${image.imageNumber} + '枚目' "></h3>
                         <img th:src="${'data:image/png;base64,' + image.image}" width="100%" height="100%">
                         <h3>更新後の問題画像</h3>
@@ -38,9 +41,10 @@
                         <input type="hidden" name="imagenum" th:value="${image.imageNumber}">
                         <input type="hidden" name="num" th:value="${number}">
                         <input type="submit" value="更新する">
-                    </th:block>
                 </form>
-                <hr>
+                    </div>
+                    <hr>
+                    </th:block>
                 <form th:action="@{/imgedit}" method="POST" enctype="multipart/form-data">
                     <h3>画像を追加する</h3><input type="file" name="upimage"><br>
                     <input type="hidden" name="imagenum" value="new">
@@ -51,16 +55,14 @@
             <div class="col-3" id="editarea">
                   <button onclick="toggleSection('language')">言語変更</button>
                     <div id="language" class="hiddenContent">
-				<p>
-                <lavel>既存の言語</lavel>
-				</p>
+				<p>既存の言語</p>
                 <select>
                     <th:block th:each="lang : ${lang_list}">
                         <option th:text="${lang.language}"></option>
                     </th:block>
                 </select><br>
                 <form th:action="@{/langedit}" method="POST">
-                    <p>変更後の言語：</p>
+                    <p>変更後の言語</p>
                     <input type="text" th:value="${language}" name="in_lang">
                     <input type="hidden" name="num" th:value="${number}">
                     <input type="submit" value="更新する">
@@ -82,16 +84,17 @@
                             th:text="'設問' + ${que.selectNumber}"></button>
 
                     <div th:id="${que.selectNumber}" class="hiddenContent">
-                        <h2>現在の問題文</h2>
-                        <label th:text="'1：' + ${que.select_first}"></label><br>
-                        <label th:text="'2：' + ${que.select_sec}"></label><br>
-                        <label th:text="'3：' + ${que.select_third}"></label><br>
-                        <label th:text="'4：' + ${que.select_forth}"></label><br>
-                        <label th:text="'答え：' + ${que.answer}"></label><br>
-
+                        <p>現在の問題文</p>
+						<ul>
+                        <li th:text="'1：' + ${que.select_first}"></li>
+                        <li th:text="'2：' + ${que.select_sec}"></li>
+                        <li th:text="'3：' + ${que.select_third}"></li>
+                        <li th:text="'4：' + ${que.select_forth}"></li>
+                        <p th:text="'答え：' + ${que.answer}"></p>
+                        </ul>
                         <form th:action="@{/questionedit}" method="POST">
                             <!-- プルダウン 作成-->
-                            <h2>更新後の問題文</h2>
+                            <p>更新後の問題文</p>
                             <label th:text="'1：'"></label><input type="text" name="first" th:value="${que.select_first}"><br>
                             <label th:text="'2：'"></label><input type="text" name="second" th:value="${que.select_sec}"><br>
                             <label th:text="'3：'"></label><input type="text" name="third" th:value="${que.select_third}"><br>
@@ -115,7 +118,7 @@
                 <div id="new" class="hiddenContent">
                     <form th:action="@{/questionedit}" method="POST">
                         <!-- プルダウン 作成-->
-                        <h2>追加の問題文</h2>
+                        <p>追加の問題文</p>
                         <label th:text="'1：'"></label><input type="text" name="first"><br>
                         <label th:text="'2：'"></label><input type="text" name="second"><br>
                         <label th:text="'3：'"></label><input type="text" name="third"><br>
@@ -146,9 +149,6 @@
             </div>
         </div>
     </div>
-    <form onclick="">
-
-    </form>
 </main>
 </body>
 </html>

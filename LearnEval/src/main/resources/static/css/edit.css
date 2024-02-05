@@ -1,4 +1,18 @@
 @charset "UTF-8";
+p,input,button{
+	margin: 5px;
+	padding: auto;
+}
+li {
+	text-align: left;
+	list-style-type: none; /* マーカーをなくす */
+	margin: 1px;
+}
+#q_list{
+	margin: auto;
+	padding: auto;
+	text-align: left;
+}
 #answer{
 	width: 300px;
 	height: 30px;
