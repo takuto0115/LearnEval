@@ -18,22 +18,21 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MessageController {
-	
-	SessionCheck check = new SessionCheck();
+
+    SessionCheck check = new SessionCheck();
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    //生徒側メッセージホーム画面表示
+    // 生徒側メッセージホーム画面表示
     @RequestMapping(path = "/studentmessagehome", method = RequestMethod.GET)
     public String studentmessagehomeGET(Model model, HttpSession session) {
-    	
-    	/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
-    	
-    	
+
+        // studentIDがない場合、sessionErrorへ移行
+        if (session.getAttribute("studentID") == null) {
+            return "redirect:/sessionError";
+        }
+
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
         List<Map<String, Object>> userList = new ArrayList<>();
@@ -60,15 +59,15 @@ public class MessageController {
         return "studentmessagehome";
     }
 
-    //教師側メッセージホーム画面表示
+    // 教師側メッセージホーム画面表示
     @RequestMapping(path = "/teachermessagehome", method = RequestMethod.GET)
     public String teachermessagehomeGET(HttpSession session, Model model) {
-    	
-    	/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
-    	
+
+        // teacherIDがない場合、sessionErrorへ移行
+        if (session.getAttribute("teacherID") == null) {
+            return "redirect:/sessionError";
+        }
+
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
         List<Map<String, Object>> userList = new ArrayList<>();
@@ -94,17 +93,16 @@ public class MessageController {
         model.addAttribute("resultList", userList);
         return "teachermessagehome";
     }
-    
 
-    //生徒側新規room作成画面表示
+    // 生徒側新規room作成画面表示
     @RequestMapping(path = "/studentmessagenew", method = RequestMethod.GET)
     public String studentmessagenew(Model model, HttpSession session) {
-    	
-    	/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
-    	
+
+        // studentIDがない場合、sessionErrorへ移行
+        if (session.getAttribute("studentID") == null) {
+            return "redirect:/sessionError";
+        }
+
         List<Map<String, Object>> resultList;
 
         resultList = jdbcTemplate.queryForList("select * from teachers order by name asc;");
@@ -120,15 +118,16 @@ public class MessageController {
         return "studentmessagenew";
     }
 
-    //生徒側新規room作成
+    // 生徒側新規room作成
     @RequestMapping(path = "/studentmessagenew/{teacherID}", method = RequestMethod.GET)
     public String studentmessagenewpost(HttpSession session, @PathVariable String teacherID) {
-    	
-    	/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
-    	
+
+        /* セッションの中身がない場合、ログイン画面へ移行 */
+        // studentIDがない場合、sessionErrorへ移行
+        if (session.getAttribute("studentID") == null) {
+            return "redirect:/sessionError";
+        }
+
         List<Map<String, Object>> resultList;
 
         resultList = jdbcTemplate.queryForList("select * from room where teacherID = ? and studentID  = ?;",
@@ -146,15 +145,15 @@ public class MessageController {
         return "redirect:/studentmessagehome";
     }
 
-    //教師側新規room作成画面表示
+    // 教師側新規room作成画面表示
     @RequestMapping(path = "/teachermessagenew", method = RequestMethod.GET)
     public String teachermessagenew(Model model, HttpSession session, String selectclass) {
-    	
-    	/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
-    	
+
+        // teacherIDがない場合、sessionErrorへ移行
+        if (session.getAttribute("teacherID") == null) {
+            return "redirect:/sessionError";
+        }
+
         List<Map<String, Object>> resultList;
 
         if (selectclass != null) {
@@ -175,15 +174,15 @@ public class MessageController {
         return "teachermessagenew";
     }
 
-    //教師側新規room作成
+    // 教師側新規room作成
     @RequestMapping(path = "/teachermessagenew/{studentID}", method = RequestMethod.GET)
     public String teachermessagenewpost(Model model, HttpSession session, @PathVariable String studentID) {
-    	
-    	/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
-    	
+
+        // teacherIDがない場合、sessionErrorへ移行
+        if (session.getAttribute("teacherID") == null) {
+            return "redirect:/sessionError";
+        }
+
         List<Map<String, Object>> resultList;
 
         resultList = jdbcTemplate.queryForList(
@@ -202,15 +201,15 @@ public class MessageController {
         return "redirect:/teachermessagehome";
     }
 
-    //生徒側メッセージ画面表示
+    // 生徒側メッセージ画面表示
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.GET)
     public String studentGet(Model model, @PathVariable String roomID, HttpSession session) {
-        
-        /* セッションの中身がない場合、ログイン画面へ移行 */
-        if (check.sessionCheck(session)) {
+
+        // studentIDがない場合、sessionErrorへ移行
+        if (session.getAttribute("studentID") == null) {
             return "redirect:/sessionError";
         }
-        
+
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
 
@@ -249,15 +248,10 @@ public class MessageController {
         return "studentmessage";
     }
 
-    //生徒側メッセージ送信
+    // 生徒側メッセージ送信
     @RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.POST)
     public String studentPost(@PathVariable String roomID, String messageInput, HttpSession session) {
-        
-        /* セッションの中身がない場合、ログイン画面へ移行 */
-        if (check.sessionCheck(session)) {
-            return "redirect:/sessionError";
-        }
-        
+
         if (messageInput.isEmpty()) {
             return "redirect:/studentmessage/" + roomID;
         }
@@ -266,22 +260,21 @@ public class MessageController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = now.format(formatter);
 
-        jdbcTemplate.update(
-                "INSERT INTO message (daytime, senderID, roomID, text) values( ?, '1', ?, ?);",
+        jdbcTemplate.update("INSERT INTO message (daytime, senderID, roomID, text) values( ?, '1', ?, ?);",
                 formattedDateTime, roomID, messageInput);
 
         return "redirect:/studentmessage/" + roomID;
     }
 
-    //教師側メッセージ画面表示
+    // 教師側メッセージ画面表示
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.GET)
-    public String teacherGet(Model model, @PathVariable String roomID,HttpSession session) {
-    	
-    	/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
-    	
+    public String teacherGet(Model model, @PathVariable String roomID, HttpSession session) {
+
+        // teacherIDがない場合、sessionErrorへ移行
+        if (session.getAttribute("teacherID") == null) {
+            return "redirect:/sessionError";
+        }
+
         List<Map<String, Object>> resultList;
         List<Map<String, Object>> nameList;
 
@@ -320,15 +313,10 @@ public class MessageController {
         return "teachermessage";
     }
 
-    //教師側メッセージ送信
+    // 教師側メッセージ送信
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.POST)
-    public String teacherPost(@PathVariable String roomID, String messageInput,HttpSession session) {
-    	
-    	/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
-			return "redirect:/sessionError";
-		}
-    	
+    public String teacherPost(@PathVariable String roomID, String messageInput, HttpSession session) {
+
         if (messageInput.isEmpty()) {
             return "redirect:/teachermessage/" + roomID;
         }
