@@ -17,71 +17,16 @@
     </form>
   </header>
   <table>
-    <tr>
-      <th>問題</th>
-      <th>問題数</th>
-      <th>正答数</th>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>2</td>
-    </tr>
+	<tr>
+		<th>問題</th>
+		<th>正答率</th>
+		<th>最終解答時刻</th>
+	</tr>
+	<th:block th:each="test : ${test_list}">
+		<tr>
+			<td th:text="${test.test_name}"></td>
+			<td th:text="${test.score}"></td>
+			<td th:text="${test.pass}"></td>
   </table>
 </body>
 </html>

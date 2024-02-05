@@ -73,28 +73,17 @@ public class StudentController {
             return "redirect:/sessionError";
         }
 
-        // SELECT文の結果をしまうためのリスト
-        List<Map<String, Object>> tests;
+		//SELECT文の結果をしまうためのリスト
+		List<Map<String, Object>> tests;
 
-        // SELECT文の実行
-        tests = jdbcTemplate.queryForList("select * from tests");
+		//SELECT文の実行
+		tests = jdbcTemplate.queryForList("select * from testtitle");
 
-        // questionNumberが被っているものを削除する
-        for (int i = 0; i < tests.size(); i++) {
-            Map<String, Object> map = tests.get(i);
-            int questionNumber = (int) map.get("questionNumber");
-            for (int j = i + 1; j < tests.size(); j++) {
-                Map<String, Object> map2 = tests.get(j);
-                int questionNumber2 = (int) map2.get("questionNumber");
-                if (questionNumber == questionNumber2) {
-                    tests.remove(j);
-                    j--;
-                }
-            }
-        }
-
-        // 実行結果をmodelにしまってHTMLで出せるようにする。
-        model.addAttribute("question", tests);
+		String newNum = Integer.toString(tests.size() + 1);
+		System.out.println(newNum);
+		//実行結果をmodelにしまってHTMLで出せるようにする。
+		model.addAttribute("question", tests);
+		model.addAttribute("newNum", newNum);
 
         return "studenttestmenu";
     }
@@ -120,6 +109,9 @@ public class StudentController {
 
         // SELECT文の結果をしまうためのリスト
         List<Map<String, Object>> c_result;
+        
+        // SELECT文の実行
+        String title= jdbcTemplate.queryForObject("select * from testtitle where questionNumber = ?",String.class, num);
 
         // SELECT文の実行
         q_result = jdbcTemplate.queryForList("select * from tests where questionNumber = ?", num);
@@ -133,6 +125,7 @@ public class StudentController {
         String image = (String) question.get("image");
         int number = ((Number) question.get("questionNumber")).intValue();
 
+        model.addAttribute("title", title);
         model.addAttribute("image", image);
         model.addAttribute("number", number);
         model.addAttribute("question", c_result);
