@@ -35,7 +35,7 @@ public class MessageController {
 
             // teacherIDがある場合、teachermainへ移行
             if (session.getAttribute("teacherID") != null) {
-                return "redirect:/teachermain";
+                return "redirect:/sessionErrorT";
             }
 
             return "redirect:/sessionError";
@@ -75,7 +75,7 @@ public class MessageController {
 
             // studentIDがある場合、studentmainへ移行
             if (session.getAttribute("studentID") != null) {
-                return "redirect:/studentmain";
+                return "redirect:/sessionErrorS";
             }
 
             return "redirect:/sessionError";
@@ -115,7 +115,7 @@ public class MessageController {
 
             // teacherIDがある場合、teachermainへ移行
             if (session.getAttribute("teacherID") != null) {
-                return "redirect:/teachermain";
+                return "redirect:/sessionErrorT";
             }
 
             return "redirect:/sessionError";
@@ -144,7 +144,7 @@ public class MessageController {
 
             // teacherIDがある場合、studentmainへ移行
             if (session.getAttribute("teacherID") != null) {
-                return "redirect:/teachermain";
+                return "redirect:/sessionErrorT";
             }
 
             return "redirect:/sessionError";
@@ -175,7 +175,7 @@ public class MessageController {
 
             // studentIDがある場合、studentmainへ移行
             if (session.getAttribute("studentID") != null) {
-                return "redirect:/studentmain";
+                return "redirect:/sessionErrorS";
             }
 
             return "redirect:/sessionError";
@@ -209,7 +209,7 @@ public class MessageController {
 
             // studentIDがある場合、studentmainへ移行
             if (session.getAttribute("studentID") != null) {
-                return "redirect:/studentmain";
+                return "redirect:/sessionErrorS";
             }
 
             return "redirect:/sessionError";
@@ -241,7 +241,7 @@ public class MessageController {
 
             // teacherIDがある場合、teachermainへ移行
             if (session.getAttribute("teacherID") != null) {
-                return "redirect:/teachermain";
+                return "redirect:/sessionErrorT";
             }
 
             return "redirect:/sessionError";
@@ -293,7 +293,7 @@ public class MessageController {
 
             // teacherIDがある場合、teachermainへ移行
             if (session.getAttribute("teacherID") != null) {
-                return "redirect:/teachermain";
+                return "redirect:/sessionErrorT";
             }
 
             return "redirect:/sessionError";
@@ -321,7 +321,7 @@ public class MessageController {
 
             // studentIDがある場合、studentmainへ移行
             if (session.getAttribute("studentID") != null) {
-                return "redirect:/studentmain";
+                return "redirect:/sessionErrorS";
             }
 
             return "redirect:/sessionError";
@@ -373,7 +373,7 @@ public class MessageController {
 
             // studentIDがある場合、studentmainへ移行
             if (session.getAttribute("studentID") != null) {
-                return "redirect:/studentmain";
+                return "redirect:/sessionErrorS";
             }
 
             return "redirect:/sessionError";

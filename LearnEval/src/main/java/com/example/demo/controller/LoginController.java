@@ -102,4 +102,16 @@ public class LoginController {
 
 		return "sessionError";
 	}
+	
+	@RequestMapping(path = "/sessionErrorT", method = RequestMethod.GET)
+	public String sessionErrorT() {
+
+		return "sessionerrorT";
+	}
+	
+	@RequestMapping(path = "/sessionErrorS", method = RequestMethod.GET)
+	public String sessionErrorS() {
+
+		return "sessionerrorS";
+	}
 }

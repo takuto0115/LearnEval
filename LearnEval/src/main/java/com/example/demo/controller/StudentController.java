@@ -28,15 +28,16 @@ public class StudentController {
     JdbcTemplate jdbcTemplate;
 
     @RequestMapping(path = "/studentmain", method = RequestMethod.GET)
-    public String mainGet(HttpSession session) {
+    public String mainGet(HttpSession session,Model model) {
         System.out.println("studentmain");
 
         // studentIDがない場合、sessionErrorへ移行
         if (check.studentSessionCheck(session)) {
 
-            // teacherIDがある場合、teachermainへ移行
+            // teacherIDがある場合、アラートを表示してからteachermainへ移行
             if(session.getAttribute("teacherID") != null) {
-                return "redirect:/teachermain";
+            	
+                return "redirect:/sessionErrorT";
             }
 
             return "redirect:/sessionError";
@@ -66,7 +67,7 @@ public class StudentController {
 
             // teacherIDがある場合、teachermainへ移行
             if(session.getAttribute("teacherID") != null) {
-                return "redirect:/teachermain";
+                return "redirect:/sessionErrorT";
             }
 
             return "redirect:/sessionError";
@@ -106,7 +107,7 @@ public class StudentController {
 
             // teacherIDがある場合、teachermainへ移行
             if(session.getAttribute("teacherID") != null) {
-                return "redirect:/teachermain";
+                return "redirect:/sessionErrorT";
             }
 
             return "redirect:/sessionError";
@@ -227,7 +228,7 @@ public class StudentController {
 
             // teacherIDがある場合、teachermainへ移行
             if(session.getAttribute("teacherID") != null) {
-                return "redirect:/teachermain";
+                return "redirect:/sessionErrorT";
             }
 
             return "redirect:/sessionError";
