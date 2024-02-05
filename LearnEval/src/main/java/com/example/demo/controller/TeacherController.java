@@ -15,20 +15,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.service.SessionCheckService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class TeacherController {
 
-	SessionCheck check = new SessionCheck();
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	@Autowired
+	SessionCheckService check;
 
 	@RequestMapping(path = "/teachermain", method = RequestMethod.GET)
 	public String mainGet(HttpSession session) {
 		System.out.println("teachermain");
 		/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
 		return "teachermain";
@@ -37,7 +40,7 @@ public class TeacherController {
 	@RequestMapping(path = "/teachertestmenu", method = RequestMethod.GET)
 	public String testMenuGet(Model model,HttpSession session) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
 
@@ -61,7 +64,7 @@ public class TeacherController {
 	@RequestMapping(path = "/teacherstumenu", method = RequestMethod.GET)
 	public String stuMenuGet(HttpSession session) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
 		return "teacherstumenu";
@@ -73,7 +76,7 @@ public class TeacherController {
 	public String testexGet(Model model,@PathVariable String num,HttpSession session) {
 
 		/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
 
@@ -234,7 +237,7 @@ public class TeacherController {
 	@RequestMapping(path = "/newtest/{num}", method = RequestMethod.GET)
 	public String newtestGet(HttpSession session,@PathVariable String num,Model model) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
 
@@ -265,7 +268,7 @@ public class TeacherController {
 			,String first,String second,String third,String forth,String answer_num,
 			MultipartFile image,String title) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
-		if (check.sessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 			return "redirect:/sessionError";
 		}
 		String encodedImage = null;
