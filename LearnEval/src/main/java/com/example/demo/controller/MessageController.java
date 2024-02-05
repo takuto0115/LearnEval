@@ -71,7 +71,7 @@ public class MessageController {
     @RequestMapping(path = "/teachermessagehome", method = RequestMethod.GET)
     public String teachermessagehomeGET(HttpSession session, Model model) {
         // teacherIDがない場合、sessionErrorへ移行
-        if (check.studentSessionCheck(session)) {
+        if (check.teacherSessionCheck(session)) {
 
             // studentIDがある場合、studentmainへ移行
             if (session.getAttribute("studentID") != null) {
@@ -171,7 +171,7 @@ public class MessageController {
     @RequestMapping(path = "/teachermessagenew", method = RequestMethod.GET)
     public String teachermessagenew(Model model, HttpSession session, String selectclass) {
         // teacherIDがない場合、sessionErrorへ移行
-        if (check.studentSessionCheck(session)) {
+        if (check.teacherSessionCheck(session)) {
 
             // studentIDがある場合、studentmainへ移行
             if (session.getAttribute("studentID") != null) {
@@ -205,7 +205,7 @@ public class MessageController {
     @RequestMapping(path = "/teachermessagenew/{studentID}", method = RequestMethod.GET)
     public String teachermessagenewpost(Model model, HttpSession session, @PathVariable String studentID) {
         // teacherIDがない場合、sessionErrorへ移行
-        if (check.studentSessionCheck(session)) {
+        if (check.teacherSessionCheck(session)) {
 
             // studentIDがある場合、studentmainへ移行
             if (session.getAttribute("studentID") != null) {
@@ -317,7 +317,7 @@ public class MessageController {
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.GET)
     public String teacherGet(Model model, @PathVariable String roomID, HttpSession session) {
         // teacherIDがない場合、sessionErrorへ移行
-        if (check.studentSessionCheck(session)) {
+        if (check.teacherSessionCheck(session)) {
 
             // studentIDがある場合、studentmainへ移行
             if (session.getAttribute("studentID") != null) {
@@ -369,7 +369,7 @@ public class MessageController {
     @RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.POST)
     public String teacherPost(@PathVariable String roomID, String messageInput, HttpSession session) {
         // teacherIDがない場合、sessionErrorへ移行
-        if (check.studentSessionCheck(session)) {
+        if (check.teacherSessionCheck(session)) {
 
             // studentIDがある場合、studentmainへ移行
             if (session.getAttribute("studentID") != null) {
