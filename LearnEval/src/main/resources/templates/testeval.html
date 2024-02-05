@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="/css/header.css" />
-<title>テスト結果</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/header.css" />
+    <title>テスト結果</title>
 </head>
 <body>
-	  <header>
+<header>
     <span>LearnEval</span>
     <form th:action="@{/studentmain}" method="GET">
-      <input type="submit" id="home-button" value="ホーム">
+        <input type="submit" id="home-button" value="ホーム">
     </form>
     <form th:action="@{/login}" method="GET">
-      <input type="submit" id="logout-button" value="ログアウト">
+        <input type="submit" id="logout-button" value="ログアウト">
     </form>
-  </header>
-  <main>
-	<h1>テスト結果</h1>
-	<table border="1">
-				<tr>
-		<th:block th:each="ratio : ${ratioList}">
-			<td th:text="${ratio}"></td>
-		</th:block>
-		</tr>
-		<tr>
-		<th:block th:each="select : ${selectList}">
-			<td th:text="${select}"></td>
-		</th:block>
-		</tr>
-		</table>
-		<p th:text="${endTime}"></p>
-		<p th:text="${answer_rate} + '%'"></p>
-		<a href="/teachertestmenu">戻る</a>
-		</main>
+</header>
+<main>
+    <h1>テスト結果</h1>
+    <table border="1">
+        <tr>
+            <th:block th:each="ratio : ${ratioList}">
+                <td th:text="${ratio}"></td>
+            </th:block>
+        </tr>
+        <tr>
+            <th:block th:each="select : ${selectList}">
+                <td th:text="${select}"></td>
+            </th:block>
+        </tr>
+    </table>
+    <p th:text="${endTime}"></p>
+    <p th:text="${answer_rate} + '%'"></p>
+    <a href="/teachertestmenu">戻る</a>
+</main>
 </body>
 </html>

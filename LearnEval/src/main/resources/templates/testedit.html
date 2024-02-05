@@ -24,19 +24,17 @@
     </form>
 </header>
 <main>
+    <!-- 言語を編集できるようにする
+    新規登録の際に言語を強制的に入れさせる
+     -->
     <h1 th:text="'問題' + ${number}"></h1>
     <div class="container">
         <div class="row">
             <div class="col-9" id="imagearea">
-						<input type="text" name="langage">
-						<lavel>既存の言語</lavel>
-						<select>
-						<th:block th:each="lang : ${language}">
-                        <option th:text="${lang.language}"></option>
-                        </select>
-                        </th:block><br>
-                        <th:block th:each="image : ${image}">
-						<form th:action="@{/testeditimg}" method="POST" enctype="multipart/form-data">
+                <lavel th:text="${lang_null}" style="color: red;"></lavel>
+                <form th:action="@{/imgedit}" method="POST" enctype="multipart/form-data">
+                    <br>
+                    <th:block th:each="image : ${image}">
                         <h3 th:text="'現在の問題画像 '+ ${image.imageNumber} + '枚目' "></h3>
                         <img th:src="${'data:image/png;base64,' + image.image}" width="100%" height="100%">
                         <h3>更新後の問題画像</h3>
@@ -44,10 +42,10 @@
                         <input type="hidden" name="imagenum" th:value="${image.imageNumber}">
                         <input type="hidden" name="num" th:value="${number}">
                         <input type="submit" value="更新する">
-                    </form>
-                    <hr>
-                </th:block>
-                <form th:action="@{/testeditimg}" method="POST" enctype="multipart/form-data">
+                    </th:block>
+                </form>
+                <hr>
+                <form th:action="@{/imgedit}" method="POST" enctype="multipart/form-data">
                     <h3>画像を追加する</h3><input type="file" name="upimage"><br>
                     <input type="hidden" name="imagenum" value="new">
                     <input type="hidden" name="num" th:value="${number}">
@@ -55,6 +53,32 @@
                 </form>
             </div>
             <div class="col-3" id="editarea">
+                <lavel>既存の言語</lavel>
+                <select>
+                    <th:block th:each="lang : ${lang_list}">
+                        <option th:text="${lang.language}"></option>
+                    </th:block>
+                </select>
+                  <button onclick="toggleSection('language')">言語変更</button>
+                    <div id="language" class="hiddenContent">
+                <form th:action="@{/langedit}" method="POST">
+                    <p>言語：</p>
+                    <input type="text" name="in_lang">
+                    <input type="hidden" name="num" th:value="${number}">
+                    <input type="submit" value="更新する">
+                </form>
+                    </div>
+                    <hr>
+                    <button onclick="toggleSection('title')">タイトル変更</button>
+                    <div id="title" class="hiddenContent">
+                <h3>テストタイトル</h3>
+                <form th:action="@{/titleedit}" method="POST">
+                    <p><input type="text" th:value="${title}" name="title"></p>
+                    <input type="hidden" name="num" th:value="${number}">
+                    <input type="submit" value="更新する">
+                </form>
+                    </div>
+                <hr>
                 <th:block th:each="que : ${question}">
                     <button th:onclick="'toggleSection(' + ${que.selectNumber} + ')'"
                             th:text="'設問' + ${que.selectNumber}"></button>
@@ -67,13 +91,13 @@
                         <label th:text="'4：' + ${que.select_forth}"></label><br>
                         <label th:text="'答え：' + ${que.answer}"></label><br>
 
-                        <form th:action="@{/testedit_q}" method="POST">
+                        <form th:action="@{/questionedit}" method="POST">
                             <!-- プルダウン 作成-->
                             <h2>更新後の問題文</h2>
-                            <label th:text="'1：'"></label><input type="text" name="first"><br>
-                            <label th:text="'2：'"></label><input type="text" name="second"><br>
-                            <label th:text="'3：'"></label><input type="text" name="third"><br>
-                            <label th:text="'4：'"></label><input type="text" name="forth"><br>
+                            <label th:text="'1：'"></label><input type="text" name="first" th:value="${que.select_first}"><br>
+                            <label th:text="'2：'"></label><input type="text" name="second" th:value="${que.select_sec}"><br>
+                            <label th:text="'3：'"></label><input type="text" name="third" th:value="${que.select_third}"><br>
+                            <label th:text="'4：'"></label><input type="text" name="forth" th:value="${que.select_forth}"><br>
                             <label th:text="'答え：'"></label><br>
                             <select id="dropdown1" name="answer_num">
                                 <option value="1">1</option>
@@ -81,7 +105,7 @@
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                             </select><br>
-                            <input type="hidden" name="num" th:value="${number}">
+                            <input type="hidden" name="num" th:value="${que.selectNumber}">
                             <input type="hidden" name="quenum" th:value="${number}">
                             <input type="submit" value="更新する">
                         </form>
@@ -92,7 +116,7 @@
                 <button onclick="toggleSection('new')">設問追加</button>
 
                 <div id="new" class="hiddenContent">
-                    <form th:action="@{/testedit_q}" method="POST">
+                    <form th:action="@{/questionedit}" method="POST">
                         <!-- プルダウン 作成-->
                         <h2>追加の問題文</h2>
                         <label th:text="'1：'"></label><input type="text" name="first"><br>
@@ -125,6 +149,9 @@
             </div>
         </div>
     </div>
+    <form onclick="">
+
+    </form>
 </main>
 </body>
 </html>
