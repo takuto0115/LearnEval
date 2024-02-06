@@ -12,9 +12,16 @@
 <h1 th:text="'問題' + ${number}" style="padding: 20px;"></h1>
 <div class="container">
     <div class="row">
-        <div class="col-9">
-            <p><img th:src="${'data:image/png;base64,' + image}" width="100%" height="100%"></p>
-        </div>
+                    <div class="col-9" id="imagearea">
+                    <br>
+                    <th:block th:each="image : ${image}">
+                    <div th:id="${image.questionNumber} + '' + ${image.imageNumber}" class="hiddenContent">
+                        <h3 th:text="${image.imageNumber} + '枚目' "></h3>
+                        <img th:src="${'data:image/png;base64,' + image.image}" width="100%" height="100%">
+                    </div>
+                    <hr>
+                    </th:block>
+            </div>
         <div class="col-3">
             <h2 th:text="${title}"></h2>
             <form th:action="@{/test}" method="POST">

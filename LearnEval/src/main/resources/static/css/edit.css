@@ -26,14 +26,6 @@ section{
 	margin-top: 10px;
 	padding: auto;
 }
-#imagearea{
-	margin:auto;
-	margin-top: 0;
-	height: 500px;
-    border: 1px solid black;
-    padding: 10px;
-    overflow: auto;
-}
 button:hover {
 	cursor: pointer;
 }

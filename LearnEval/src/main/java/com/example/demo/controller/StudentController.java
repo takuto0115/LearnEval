@@ -102,8 +102,6 @@ public class StudentController {
             return "redirect:/sessionError";
         }
 
-        session.setAttribute("qestion", num);
-
         // SELECT文の結果をしまうためのリスト
         List<Map<String, Object>> q_result;
 
@@ -111,7 +109,7 @@ public class StudentController {
         List<Map<String, Object>> c_result;
         
         // SELECT文の実行
-        String title= jdbcTemplate.queryForObject("select * from testtitle where questionNumber = ?",String.class, num);
+        String title= jdbcTemplate.queryForObject("select title from testtitle where questionNumber = ?",String.class, num);
 
         // SELECT文の実行
         q_result = jdbcTemplate.queryForList("select * from tests where questionNumber = ?", num);
@@ -122,11 +120,10 @@ public class StudentController {
 
         Map<String, Object> question = q_result.get(0);
 
-        String image = (String) question.get("image");
         int number = ((Number) question.get("questionNumber")).intValue();
 
         model.addAttribute("title", title);
-        model.addAttribute("image", image);
+        model.addAttribute("image", q_result);
         model.addAttribute("number", number);
         model.addAttribute("question", c_result);
 
@@ -153,9 +150,6 @@ public class StudentController {
 
         // SELECT文の結果をしまうためのリスト
         List<Map<String, Object>> q_result;
-
-        List<Map<String, Object>> result;
-        Map<String, Object> map;
 
         q_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ? ORDER BY selectNumber asc",
                 num);
