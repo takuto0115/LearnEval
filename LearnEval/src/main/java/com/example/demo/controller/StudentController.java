@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.demo.service.SessionCheckService;
+import com.example.demo.service.StudentService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -23,6 +24,9 @@ public class StudentController {
 
     @Autowired
     SessionCheckService check;
+    
+    @Autowired
+    StudentService studentService;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -209,7 +213,7 @@ public class StudentController {
     }
 
     @RequestMapping(path = "/studenteval", method = RequestMethod.GET)
-    public String evalGet(HttpSession session) {
+    public String evalGet(HttpSession session,Model model) {
         // studentIDがない場合、sessionErrorへ移行
         if (check.studentSessionCheck(session)) {
 
@@ -220,6 +224,10 @@ public class StudentController {
 
             return "redirect:/sessionError";
         }
+        
+        model.addAttribute("test_list",studentService.findByStudentID(session.getAttribute("studentID").toString()));
+        
+        
         return "studenteval";
     }
 

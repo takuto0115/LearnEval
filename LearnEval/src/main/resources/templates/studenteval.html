@@ -24,9 +24,9 @@
 	</tr>
 	<th:block th:each="test : ${test_list}">
 		<tr>
-			<td th:text="${test.test_name}"></td>
-			<td th:text="${test.score}"></td>
-			<td th:text="${test.pass}"></td>
+			<td th:text="${test.questionNumber}"></td>
+			<td th:text="${test.answer_rate}+'%'"></td>
+			<td th:text="${test.end_time}"></td>
   </table>
 </body>
 </html>
