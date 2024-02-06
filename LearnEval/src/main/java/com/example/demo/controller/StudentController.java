@@ -22,60 +22,60 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class StudentController {
 
-    @Autowired
-    SessionCheckService check;
-    
-    @Autowired
-    StudentService studentService;
+	@Autowired
+	SessionCheckService check;
 
-    @Autowired
-    JdbcTemplate jdbcTemplate;
+	@Autowired
+	StudentService studentService;
 
-    @RequestMapping(path = "/studentmain", method = RequestMethod.GET)
-    public String mainGet(HttpSession session,Model model) {
-        System.out.println("studentmain");
+	@Autowired
+	JdbcTemplate jdbcTemplate;
 
-        // studentIDがない場合、sessionErrorへ移行
-        if (check.studentSessionCheck(session)) {
+	@RequestMapping(path = "/studentmain", method = RequestMethod.GET)
+	public String mainGet(HttpSession session,Model model) {
+		System.out.println("studentmain");
 
-            // teacherIDがある場合、アラートを表示してからteachermainへ移行
-            if(session.getAttribute("teacherID") != null) {
-            	
-                return "redirect:/sessionErrorT";
-            }
+		// studentIDがない場合、sessionErrorへ移行
+		if (check.studentSessionCheck(session)) {
 
-            return "redirect:/sessionError";
-        }
+			// teacherIDがある場合、アラートを表示してからteachermainへ移行
+			if(session.getAttribute("teacherID") != null) {
 
-        return "studentmain";
-    }
+				return "redirect:/sessionErrorT";
+			}
 
-    @RequestMapping(path = "/studentmain", method = RequestMethod.POST)
-    public String mainPost(String page) {
-        switch (page) {
-            case "テスト一覧":
-                return "redirect:/studenttestmenu";
-            case "成績一覧":
-                return "redirect:/studenteval";
-            case "メッセージ一覧":
-                return "redirect:/studentmessagehome";
-        }
-        return "/studentmain";
-    }
+			return "redirect:/sessionError";
+		}
 
-    @RequestMapping(path = "/studenttestmenu", method = RequestMethod.GET)
-    public String testMenuGet(Model model, HttpSession session) {
+		return "studentmain";
+	}
 
-        // studentIDがない場合、sessionErrorへ移行
-        if (check.studentSessionCheck(session)) {
+	@RequestMapping(path = "/studentmain", method = RequestMethod.POST)
+	public String mainPost(String page) {
+		switch (page) {
+		case "テスト一覧":
+			return "redirect:/studenttestmenu";
+		case "成績一覧":
+			return "redirect:/studenteval";
+		case "メッセージ一覧":
+			return "redirect:/studentmessagehome";
+		}
+		return "/studentmain";
+	}
 
-            // teacherIDがある場合、teachermainへ移行
-            if(session.getAttribute("teacherID") != null) {
-                return "redirect:/sessionErrorT";
-            }
+	@RequestMapping(path = "/studenttestmenu", method = RequestMethod.GET)
+	public String testMenuGet(Model model, HttpSession session) {
 
-            return "redirect:/sessionError";
-        }
+		// studentIDがない場合、sessionErrorへ移行
+		if (check.studentSessionCheck(session)) {
+
+			// teacherIDがある場合、teachermainへ移行
+			if(session.getAttribute("teacherID") != null) {
+				return "redirect:/sessionErrorT";
+			}
+
+			return "redirect:/sessionError";
+		}
 
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> tests;
@@ -89,150 +89,150 @@ public class StudentController {
 		model.addAttribute("question", tests);
 		model.addAttribute("newNum", newNum);
 
-        return "studenttestmenu";
-    }
+		return "studenttestmenu";
+	}
 
-    @RequestMapping(path = "/testpage/{num}", method = RequestMethod.GET)
-    public String testexGet(Model model, @PathVariable String num, HttpSession session) {
+	@RequestMapping(path = "/testpage/{num}", method = RequestMethod.GET)
+	public String testexGet(Model model, @PathVariable String num, HttpSession session) {
 
-        // studentIDがない場合、sessionErrorへ移行
-        if (check.studentSessionCheck(session)) {
+		// studentIDがない場合、sessionErrorへ移行
+		if (check.studentSessionCheck(session)) {
 
-            // teacherIDがある場合、teachermainへ移行
-            if(session.getAttribute("teacherID") != null) {
-                return "redirect:/sessionErrorT";
-            }
+			// teacherIDがある場合、teachermainへ移行
+			if(session.getAttribute("teacherID") != null) {
+				return "redirect:/sessionErrorT";
+			}
 
-            return "redirect:/sessionError";
-        }
+			return "redirect:/sessionError";
+		}
 
-        // SELECT文の結果をしまうためのリスト
-        List<Map<String, Object>> q_result;
+		// SELECT文の結果をしまうためのリスト
+		List<Map<String, Object>> q_result;
 
-        // SELECT文の結果をしまうためのリスト
-        List<Map<String, Object>> c_result;
-        
-        // SELECT文の実行
-        String title= jdbcTemplate.queryForObject("select title from testtitle where questionNumber = ?",String.class, num);
+		// SELECT文の結果をしまうためのリスト
+		List<Map<String, Object>> c_result;
 
-        // SELECT文の実行
-        q_result = jdbcTemplate.queryForList("select * from tests where questionNumber = ?", num);
+		// SELECT文の実行
+		String title= jdbcTemplate.queryForObject("select title from testtitle where questionNumber = ?",String.class, num);
 
-        // SELECT文の実行
-        c_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ? ORDER BY selectNumber asc",
-                num);
+		// SELECT文の実行
+		q_result = jdbcTemplate.queryForList("select * from tests where questionNumber = ?", num);
 
-        Map<String, Object> question = q_result.get(0);
+		// SELECT文の実行
+		c_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ? ORDER BY selectNumber asc",
+				num);
 
-        int number = ((Number) question.get("questionNumber")).intValue();
+		Map<String, Object> question = q_result.get(0);
 
-        model.addAttribute("title", title);
-        model.addAttribute("image", q_result);
-        model.addAttribute("number", number);
-        model.addAttribute("question", c_result);
+		int number = ((Number) question.get("questionNumber")).intValue();
 
-        return "testpage";
-    }
+		model.addAttribute("title", title);
+		model.addAttribute("image", q_result);
+		model.addAttribute("number", number);
+		model.addAttribute("question", c_result);
 
-    @RequestMapping(path = "/test", method = RequestMethod.POST)
-    public String test(HttpSession session, String select1, String select2, String select3, String select4, String select5,
-            String select6, String num, String selectNumber, Model model) {
+		return "testpage";
+	}
 
-        String[] select = { select1, select2, select3, select4, select5, select6 };
+	@RequestMapping(path = "/test", method = RequestMethod.POST)
+	public String test(HttpSession session, String select1, String select2, String select3, String select4, String select5,
+			String select6, String num, String selectNumber, Model model) {
 
-        // selectの中身がNullの場合、""に変換する
-        for (int i = 0; i < select.length; i++) {
-            if (select[i] == null) {
-                select[i] = "";
-            }
-        }
+		String[] select = { select1, select2, select3, select4, select5, select6 };
 
-        int i = 0;
-        double count = 0;
-        String studentID = (String) session.getAttribute("studentID");
-        String[] ratio = { "×", "×", "×", "×", "×", "×" };
+		// selectの中身がNullの場合、""に変換する
+		for (int i = 0; i < select.length; i++) {
+			if (select[i] == null) {
+				select[i] = "";
+			}
+		}
 
-        // SELECT文の結果をしまうためのリスト
-        List<Map<String, Object>> q_result;
+		int i = 0;
+		double count = 0;
+		String studentID = (String) session.getAttribute("studentID");
+		String[] ratio = { "×", "×", "×", "×", "×", "×" };
 
-        q_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ? ORDER BY selectNumber asc",
-                num);
+		// SELECT文の結果をしまうためのリスト
+		List<Map<String, Object>> q_result;
 
-        for (Map<String, Object> Checking : q_result) {
-            String answer = Checking.get("answer").toString();
-            if (select[i].equals(answer)) {
-                ratio[i] = "〇";
-            }
-            i++;
-        }
+		q_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ? ORDER BY selectNumber asc",
+				num);
 
-        for (int j = 0; j < i; j++) {
-            if (ratio[j].equals("〇")) {
-                count++;
-            }
-        }
+		for (Map<String, Object> Checking : q_result) {
+			String answer = Checking.get("answer").toString();
+			if (select[i].equals(answer)) {
+				ratio[i] = "〇";
+			}
+			i++;
+		}
 
-        double answer_rate = count / i;
+		for (int j = 0; j < i; j++) {
+			if (ratio[j].equals("〇")) {
+				count++;
+			}
+		}
 
-        int answer_rate_int = (int) (answer_rate * 100);
+		double answer_rate = count / i;
 
-        // 現在時刻をnowに保存する
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String endTime = now.format(formatter);
+		int answer_rate_int = (int) (answer_rate * 100);
 
-        // 学生ID、問題ID、選んだ六つの選択肢(select_first-sixth)、正答率、終了時間をevalテーブルに保存する
-        jdbcTemplate.update(
-                "insert into eval (studentID,questionNumber,select_first,select_second,select_third,select_fourth,select_fifth,select_sixth,answer_rate,end_time) value (?,?,?,?,?,?,?,?,?,?);",
-                studentID, num, select1, select2, select3, select4, select5, select6, answer_rate_int, endTime);
+		// 現在時刻をnowに保存する
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String endTime = now.format(formatter);
 
-        // select1から6をlistに保存する
-        List<String> selectList = List.of(select);
+		// 学生ID、問題ID、選んだ六つの選択肢(select_first-sixth)、正答率、終了時間をevalテーブルに保存する
+		jdbcTemplate.update(
+				"insert into eval (studentID,questionNumber,select_first,select_second,select_third,select_fourth,select_fifth,select_sixth,answer_rate,end_time) value (?,?,?,?,?,?,?,?,?,?);",
+				studentID, num, select1, select2, select3, select4, select5, select6, answer_rate_int, endTime);
 
-        // selectListから""を削除する
-        selectList = selectList.stream().filter(s -> !s.equals("")).collect(Collectors.toList());
+		// select1から6をlistに保存する
+		List<String> selectList = List.of(select);
 
-        List<String> ratioList = List.of(ratio);
+		// selectListから""を削除する
+		selectList = selectList.stream().filter(s -> !s.equals("")).collect(Collectors.toList());
 
-        // ratioListをi番目までだけにする
-        ratioList = ratioList.subList(0, i);
+		List<String> ratioList = List.of(ratio);
 
-        // ratioListをmodelに保存する
-        model.addAttribute("ratioList", ratioList);
+		// ratioListをi番目までだけにする
+		ratioList = ratioList.subList(0, i);
 
-        // selectListをmodelに保存する
-        model.addAttribute("selectList", selectList);
+		// ratioListをmodelに保存する
+		model.addAttribute("ratioList", ratioList);
 
-        // answer_rateをmodelに保存する
-        model.addAttribute("answer_rate", answer_rate);
+		// selectListをmodelに保存する
+		model.addAttribute("selectList", selectList);
 
-        // 終了時刻をmodelに保存する
-        model.addAttribute("endTime", endTime);
+		// answer_rateをmodelに保存する
+		model.addAttribute("answer_rate", answer_rate);
 
-        return "testeval";
-    }
+		// 終了時刻をmodelに保存する
+		model.addAttribute("endTime", endTime);
 
-    @RequestMapping(path = "/studenteval", method = RequestMethod.GET)
-    public String evalGet(HttpSession session,Model model) {
-        // studentIDがない場合、sessionErrorへ移行
-        if (check.studentSessionCheck(session)) {
+		return "testeval";
+	}
 
-            // teacherIDがある場合、teachermainへ移行
-            if(session.getAttribute("teacherID") != null) {
-                return "redirect:/sessionErrorT";
-            }
+	@RequestMapping(path = "/studenteval", method = RequestMethod.GET)
+	public String evalGet(HttpSession session,Model model) {
+		// studentIDがない場合、sessionErrorへ移行
+		if (check.studentSessionCheck(session)) {
 
-            return "redirect:/sessionError";
-        }
-        
-        model.addAttribute("test_list",studentService.findByStudentID(session.getAttribute("studentID").toString()));
-        
-        
-        return "studenteval";
-    }
+			// teacherIDがある場合、teachermainへ移行
+			if(session.getAttribute("teacherID") != null) {
+				return "redirect:/sessionErrorT";
+			}
 
-    @RequestMapping(path = "/studenteval", method = RequestMethod.POST)
-    public String evalPOST() {
-        return "redirect:/studentmain";
-    }
+			return "redirect:/sessionError";
+		}
+
+		model.addAttribute("test_list",studentService.findByStudentID(session.getAttribute("studentID").toString()));
+
+
+		return "studenteval";
+	}
+
+	@RequestMapping(path = "/studenteval", method = RequestMethod.POST)
+	public String evalPOST() {
+		return "redirect:/studentmain";
+	}
 }
