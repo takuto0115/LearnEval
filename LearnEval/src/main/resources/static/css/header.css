@@ -39,12 +39,21 @@ header {
     padding: 1%;
     border-radius: 5px; 
     position: absolute;
-    top: 50%;  
+    top: 50px;  
     transform: translateY(-50%);  
-    right: 10%;  
+    right: 160px;  
     }
 
-
+#logout-button:hover{
+	background-color: lightgray;
+	color: black;
+	cursor: pointer;
+}
+#home-button:hover{
+	background-color: rgb(97, 180, 207);
+	color: black;
+	cursor: pointer;
+	}
 main{
 	text-align: center;
 	padding: 10px;

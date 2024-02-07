@@ -181,6 +181,8 @@ public class StudentController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String endTime = now.format(formatter);
 
+		System.out.println(num);
+		
 		// 学生ID、問題ID、選んだ六つの選択肢(select_first-sixth)、正答率、終了時間をevalテーブルに保存する
 		jdbcTemplate.update(
 				"insert into eval (studentID,questionNumber,select_first,select_second,select_third,select_fourth,select_fifth,select_sixth,answer_rate,end_time) value (?,?,?,?,?,?,?,?,?,?);",
@@ -204,7 +206,7 @@ public class StudentController {
 		model.addAttribute("selectList", selectList);
 
 		// answer_rateをmodelに保存する
-		model.addAttribute("answer_rate", answer_rate);
+		model.addAttribute("answer_rate", answer_rate_int);
 
 		// 終了時刻をmodelに保存する
 		model.addAttribute("endTime", endTime);

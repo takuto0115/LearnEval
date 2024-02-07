@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/css/header.css" />
+    <link rel="stylesheet" type="text/css" href="/css/eval.css" />
     <title>テスト結果</title>
 </head>
 <body>
@@ -17,7 +18,7 @@
 </header>
 <main>
     <h1>テスト結果</h1>
-    <table border="1">
+    <table border="1" style="margin:auto; padding: auto;">
         <tr>
             <th:block th:each="ratio : ${ratioList}">
                 <td th:text="${ratio}"></td>

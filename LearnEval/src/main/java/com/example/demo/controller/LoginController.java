@@ -84,18 +84,6 @@ public class LoginController {
 		}
 		return "login";
 	}
-
-	@RequestMapping(path = "/forget", method = RequestMethod.GET)
-	public String forget() {
-
-		return "forget";
-	}
-	@RequestMapping(path = "/forget", method = RequestMethod.POST)
-	public String editPass(String id,String pass,Model model) {
-
-		model.addAttribute("login","<script>alert('パスワードが変更されました');</script>");
-		return "redirect:/login";
-	}
 	
 	@RequestMapping(path = "/sessionError", method = RequestMethod.GET)
 	public String sessionError() {

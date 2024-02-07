@@ -1,0 +1,10 @@
+@charset "UTF-8";
+table {
+    table-layout: fixed;
+}
+
+td {
+    width: 200px;
+    white-space: nowrap;
+    word-break: break-all;
+}
