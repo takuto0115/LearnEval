@@ -236,6 +236,14 @@ public class MessageController {
 	// 生徒側メッセージ画面表示
 	@RequestMapping(path = "/studentmessage/{roomID}", method = RequestMethod.GET)
 	public String studentGet(Model model, @PathVariable String roomID, HttpSession session) {
+		
+		List<Map<String, Object>> studentID = jdbcTemplate.queryForList("select studentID from room where roomID = ?", roomID);
+		
+		//studentIDとsessionに入っているstudentIDが一致しない場合、sessionErrorへ移行
+		if (!studentID.get(0).get("studentID").equals(session.getAttribute("studentID"))) {
+			return "redirect:/sessionError";
+		}
+		
 		// studentIDがない場合、sessionErrorへ移行
 		if (check.studentSessionCheck(session)) {
 
@@ -316,6 +324,13 @@ public class MessageController {
 	// 教師側メッセージ画面表示
 	@RequestMapping(path = "/teachermessage/{roomID}", method = RequestMethod.GET)
 	public String teacherGet(Model model, @PathVariable String roomID, HttpSession session) {
+		
+        List<Map<String, Object>> teacherID = jdbcTemplate.queryForList("select teacherID from room where roomID = ?", roomID);
+		
+		//studentIDとsessionに入っているstudentIDが一致しない場合、sessionErrorへ移行
+		if (!teacherID.get(0).get("teacherID").equals(session.getAttribute("teacherID"))) {
+			return "redirect:/sessionError";
+		}
 		// teacherIDがない場合、sessionErrorへ移行
 		if (check.teacherSessionCheck(session)) {
 
