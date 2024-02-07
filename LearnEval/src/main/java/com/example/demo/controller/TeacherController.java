@@ -88,6 +88,8 @@ public class TeacherController {
 
             return "redirect:/sessionError";
         }
+        
+        
 		return "teacherstumenu";
 	}
 	
