@@ -8,6 +8,16 @@
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@700&family=Dela+Gothic+One&family=DotGothic16&family=Mochiy+Pop+One&family=Mochiy+Pop+P+One&family=Noto+Sans+JP:wght@800&family=Zen+Maru+Gothic:wght@300;700&display=swap" rel="stylesheet">
   <title>生徒一覧</title>
+  
+  <script>
+	  document.addEventListener("DOMContentLoaded", function() {
+      var alertContent = document.getElementById("x").textContent;
+      if (alertContent === "1") {
+        alert("すでにルームがあります");
+      }
+    });
+  </script>
+  
 </head>
 <body>
   <header> <span>LearnEval</span>
@@ -19,22 +29,71 @@
     </form>
   </header>
       <main>
-      <table>
-      <th:block th:each="student : ${student}">
-	<tr th:if="${iterStat.index % 10 == 0}">
-      <th>クラス</th>
-      <th>番号</th>
-      <th>名前</th>
-      <th>追試</th>
-    </tr>
-			<tr>
-				<td th:text="${student.class}"></td>
-				<td th:text="${student.studentID}"></td>
-				<td th:text="${student.name}"></td>
-				<td th:text="${student.retry}" ></td>
-			</tr>
+      <h1>先生側生徒一覧画面</h1>
+	  
+	  
+	  <a th:href="@{/teachermain}" id="newroom">メインはこちら</a>
+	  
+	  <form th:action="@{/teacherstumenu}" method="GET">
+        <label for="class">クラス:</label>
+          <select id="selectclass" name="selectclass">
+		   <optgroup label="ITスペシャリスト科"> 
+            <option value="1A">1A</option>
+            <option value="2A">2A</option>
+            <option value="3A">3A</option>
+            <option value="4A">4A</option>
+           </optgroup>
+           <optgroup label="高度情報処理科">
+            <option value="1B">1B</option>
+            <option value="2B">2B</option>
+            <option value="3B">3B</option>
+           </optgroup>
+           <optgroup label="情報システム科">
+            <option value="1C">1C</option>
+            <option value="2C">2C</option>
+            <option value="1D">1D</option>
+            <option value="2D">2D</option>
+           </optgroup>
+           <optgroup label="情報ネットワーク科">
+            <option value="1N">1N</option>
+            <option value="2N">2N</option>
+           </optgroup>
+           <optgroup label="ゲームクリエイター科"> 
+            <option value="1E">1E</option>
+            <option value="2E">2E</option>
+            <option value="3E">3E</option>
+            <option value="4E">4E</option>
+           </optgroup>
+           <optgroup label="Web・CGデザイン科"> 
+            <option value="1F">1F</option>
+            <option value="2F">2F</option>
+            <option value="3F">3F</option>
+           </optgroup>
+           <optgroup label="建築設計科"> 
+            <option value="1G">1G</option>
+            <option value="2G">2G</option>
+            <option value="1H">1H</option>
+            <option value="2H">2H</option>
+            <option value="1I">1I</option>
+            <option value="2I">2I</option>
+            <option value="3K">3K</option>
+           </optgroup> 
+            
+          </select>
+          
+          <input type="submit" value="検索">
+       </form>
+	  
+    <table>
+      <th:block th:each="result : ${resultList}">
+             <tr>
+               <td><a th:href="'/teacherstueval/' + ${result.studentID}" th:text="${result.name}"></a></td>
+             </tr>
       </th:block>
     </table>
+    
+    <p th:text="${alert}" id="x"></p>
+      
   </main>
 </body>
 </html>

@@ -75,29 +75,72 @@ public class TeacherController {
 	}
 
 
+	//生徒一覧画面
 	@RequestMapping(path = "/teacherstumenu", method = RequestMethod.GET)
-	public String stuMenuGet(HttpSession session) {
-		/*セッションの中身がない場合、ログイン画面へ移行*/
+	public String stuMenuGet(HttpSession session, Model model, String selectclass) {
 		// teacherIDがない場合、sessionErrorへ移行
-        if (check.teacherSessionCheck(session)) {
+				if (check.teacherSessionCheck(session)) {
 
-            // studentIDがある場合、studentmainへ移行
-            if (session.getAttribute("studentID") != null) {
-                return "redirect:/sessionErrorS";
-            }
+					// studentIDがある場合、studentmainへ移行
+					if (session.getAttribute("studentID") != null) {
+						return "redirect:/sessionErrorS";
+					}
 
-            return "redirect:/sessionError";
-        }
-        
-        //studentの一覧を取得
-        List<Map<String, Object>> s_result = jdbcTemplate.queryForList("select * from students");
-        
-        
-        System.out.println(s_result);
-        //studentの一覧をmodelにしまってHTMLで出せるようにする。
-        session.setAttribute("student", s_result);
+					return "redirect:/sessionError";
+				}
+
+				List<Map<String, Object>> resultList;
+
+				if (selectclass != null) {
+					resultList = jdbcTemplate.queryForList("select * from students where class = ? order by number asc;",
+							selectclass);
+				} else {
+					resultList = jdbcTemplate.queryForList("select * from students order by number asc;");
+				}
+
+				String i = (String) session.getAttribute("alert");
+
+				if ("1".equals(i)) {
+					model.addAttribute("alert", "1");
+					session.setAttribute("alert", "0");
+				}
+
+				model.addAttribute("resultList", resultList);
         
 		return "teacherstumenu";
+	}
+	
+	//生徒一覧から個人成績画面
+	@RequestMapping(path = "/teacherstueval/{studentID}", method = RequestMethod.GET)
+	public String stuMenuPOST(HttpSession session, Model model, @PathVariable String studentID) {
+		// teacherIDがない場合、sessionErrorへ移行
+		if (check.teacherSessionCheck(session)) {
+
+			// studentIDがある場合、studentmainへ移行
+			if (session.getAttribute("studentID") != null) {
+				return "redirect:/sessionErrorS";
+			}
+
+			return "redirect:/sessionError";
+		}
+		
+		List<Map<String, Object>> result = jdbcTemplate.queryForList("SELECT questionNumber,answer_rate,end_time FROM eval WHERE studentID = ? order by end_time asc", studentID);
+
+		//resultの中身のend_timeを年月日:時分に変換する
+		for (int i = 0; i < result.size(); i++) {
+			Map<String, Object> map = result.get(i);
+			String time = (String) map.get("end_time");
+			String year = time.substring(0, 4);
+			String month = time.substring(5, 7);
+			String day = time.substring(8, 10);
+			String hour = time.substring(11, 13);
+			String minute = time.substring(14, 16);
+			String newTime = year + ":" + month + ":" + day + ":" + hour + ":" + minute ;
+			map.put("end_time", newTime);
+		}
+		model.addAttribute("test_list", result);
+
+		return "teacherstueval";
 	}
 	
 	//ここから問題編集
@@ -377,5 +420,5 @@ public class TeacherController {
 		return "redirect:/testedit/" + num;
 	}
 	
-	//ここまで新規問題作成
+
 }

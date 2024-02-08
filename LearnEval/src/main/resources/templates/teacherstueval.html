@@ -9,80 +9,24 @@
 </head>
 <body>
   <header> <span>LearnEval</span>
-        <form th:action="@{/teachermain}" method="GET">
-    <input type="submit" id="home-button" value="ホーム">
-    </form>
-  <form th:action="@{/login}" method="GET">
+	<form th:action="@{/login}" method="GET">
     <input type="submit" id="logout-button" value="ログアウト">
+    </form>
+    <form th:action="@{/teachermain}" method="GET">
+    <input type="submit" id="home-button" value="ホーム">
     </form>
   </header>
   <table>
-    <tr>
-      <th>問題</th>
-      <th>問題数</th>
-      <th>正答数</th>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>4</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td id="qnum"></td>
-      <td>5</td>
-      <td>2</td>
-    </tr>
+	<tr>
+		<th>問題</th>
+		<th>正答率</th>
+		<th>最終解答時刻</th>
+	</tr>
+	<th:block th:each="test : ${test_list}">
+		<tr>
+			<td th:text="'問'+${test.questionNumber}"></td>
+			<td th:text="${test.answer_rate}+'%'"></td>
+			<td th:text="${test.end_time}"></td>
   </table>
-  <form th:action="@{/studenteval}" method="POST"> <input type="submit" value="メインメニューに戻る"> </form>
 </body>
 </html>
