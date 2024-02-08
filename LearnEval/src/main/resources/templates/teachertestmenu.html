@@ -19,11 +19,11 @@
   <main>
     <h1 style="text-align: center;">問題一覧</h1> 
     <table>
-      <tr>
+      <th:block th:each="question : ${question}">
+	<tr  th:if="${iterStat.index % 10 == 0}">
         <th>問題番号</th>
         <th>言語</th>
       </tr>
-      <th:block th:each="question : ${question}">
         <tr>
           <td>
             <a th:href="'/testedit/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>

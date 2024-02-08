@@ -89,6 +89,13 @@ public class TeacherController {
             return "redirect:/sessionError";
         }
         
+        //studentの一覧を取得
+        List<Map<String, Object>> s_result = jdbcTemplate.queryForList("select * from students");
+        
+        
+        System.out.println(s_result);
+        //studentの一覧をmodelにしまってHTMLで出せるようにする。
+        session.setAttribute("student", s_result);
         
 		return "teacherstumenu";
 	}
@@ -141,6 +148,7 @@ public class TeacherController {
 			}
 		}
 
+		model.addAttribute("size", c_result.size());
 		model.addAttribute("language", language);
 		model.addAttribute("title", title);
 		model.addAttribute("lang_list", n_result);

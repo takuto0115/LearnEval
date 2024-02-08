@@ -19,14 +19,22 @@
     </form>
   </header>
       <main>
-  <table>
-    <tr>
+      <table>
+      <th:block th:each="student : ${student}">
+	<tr th:if="${iterStat.index % 10 == 0}">
       <th>クラス</th>
       <th>番号</th>
       <th>名前</th>
       <th>追試</th>
     </tr>
-  </table>
+			<tr>
+				<td th:text="${student.class}"></td>
+				<td th:text="${student.studentID}"></td>
+				<td th:text="${student.name}"></td>
+				<td th:text="${student.retry}" ></td>
+			</tr>
+      </th:block>
+    </table>
   </main>
 </body>
 </html>

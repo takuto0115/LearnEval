@@ -30,7 +30,7 @@ public class LoginController {
 	}
 	
 	@RequestMapping(path = "/login", method = RequestMethod.POST)
-	public String checkUser(String type,String id,String pass,Model model,HttpSession session) {
+	public String checkUser(String type,String name,String id,Model model,HttpSession session) {
 
 		if("student".equals(type)) {
 
@@ -38,13 +38,12 @@ public class LoginController {
 			List<Map<String, Object>> result;
 
 			//SELECT文の実行
-			result = jdbcTemplate.queryForList("select * from students where studentID = ? and pass = ?",id,pass);
+			result = jdbcTemplate.queryForList("select * from students where name = ? and studentID = ?",name,id);
 
 			if (!result.isEmpty()) {
 
 				Map<String, Object> user = result.get(0);
 
-				String name = (String)user.get("name");
 				String studentID = (String)user.get("studentID").toString();
 
 				System.out.println(name);
@@ -62,13 +61,12 @@ public class LoginController {
 			List<Map<String, Object>> result;
 
 			//SELECT文の実行
-			result = jdbcTemplate.queryForList("select * from teachers where teacherID = ? and pass = ?",id,pass);
+			result = jdbcTemplate.queryForList("select * from teachers where teacherID = ? and name = ?",id,name);
 
 			if (!result.isEmpty()) {
 
 				Map<String, Object> user = result.get(0);
 
-				String name = (String)user.get("name");
 				String teacherID = (String)user.get("teacherID").toString();
 
 				System.out.println(name);
