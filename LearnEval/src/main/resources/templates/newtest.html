@@ -7,14 +7,14 @@
     <link rel="stylesheet" type="text/css" href="/css/header.css" />
     <link rel="stylesheet" type="text/css" href="/css/question.css" />
     <link rel="stylesheet" type="text/css" href="/css/edit.css" />
-    <script src="/js/edit.js"></script>
+    <script src="/js/test.js"></script>
     <title th:text="新規問題作成"></title>
 </head>
 <body>
 <header>
     <span>LearnEval</span>
     <form th:action="@{/teachermain}" method="GET">
-        <input onclick="home()" type="button" id="home-button" value="ホーム">
+        <input onclick="home('編集')" type="button" id="home-button" value="ホーム">
     </form>
 </header>
 <main>

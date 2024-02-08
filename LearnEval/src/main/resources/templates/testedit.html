@@ -113,11 +113,11 @@
                     </div>
                     <hr>
                 </th:block>
-                <div th:if="${size} == 6">
+                <div th:if="${size < 6}">
                 <button onclick="toggleSection('new')">設問追加</button>
+
                 <div id="new" class="hiddenContent">
                     <form th:action="@{/questionedit}" method="POST">
-                        <!-- プルダウン 作成-->
                         <p>追加の問題文</p>
                         <label th:text="'1：'"></label><input type="text" name="first"><br>
                         <label th:text="'2：'"></label><input type="text" name="second"><br>
@@ -135,8 +135,8 @@
                         <input type="submit" value="追加する">
                     </form>
                 </div>
-                </div>
                 <hr>
+                </div>
                 <p>削除する問題を選んでください</p>
                 <form th:action="@{/delete}" method="POST">
                     <select id="dropdown1" name="num">

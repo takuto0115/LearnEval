@@ -327,7 +327,7 @@ public class MessageController {
 		
         List<Map<String, Object>> teacherID = jdbcTemplate.queryForList("select teacherID from room where roomID = ?", roomID);
 		
-		//studentIDとsessionに入っているstudentIDが一致しない場合、sessionErrorへ移行
+		//teacherIDとsessionに入っているteacherIDが一致しない場合、sessionErrorへ移行
 		if (!teacherID.get(0).get("teacherID").equals(session.getAttribute("teacherID"))) {
 			return "redirect:/sessionError";
 		}

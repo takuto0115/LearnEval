@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
   <link rel="stylesheet" type="text/css" href="/css/table.css" />
+  <link rel="stylesheet" type="text/css" href="/css/newbutton.css" />
   <title>問題一覧</title>
 </head>
 <body>
@@ -32,7 +33,10 @@
         </tr>
       </th:block>
     </table>
-    <a th:href="'/newtest/' + ${newNum}" id="newquestion">新規問題作成</a>
+    <a th:href="'/newtest/' + ${newNum}" id="newquestion" class="btn btn-custom01">
+  <span class="btn-custom01-front">新規問題作成</span>
+  <i class="fas fa-angle-right fa-position-right"></i>
+</a>
   </main>
 </body>
 </html>
