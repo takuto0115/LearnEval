@@ -20,7 +20,7 @@
     <h1 style="text-align: center;">問題一覧</h1> 
     <table>
       <th:block th:each="question : ${question}">
-	<tr  th:if="${iterStat.index % 10 == 0}">
+	<tr  th:if="${question.questionNumber % 10 == 0}">
         <th>問題番号</th>
         <th>言語</th>
       </tr>

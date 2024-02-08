@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/css/header.css" />
     <link rel="stylesheet" type="text/css" href="/css/question.css" />
     <link rel="stylesheet" type="text/css" href="/css/edit.css" />
-    <script src="/js/edit.js"></script>
+    <script src="/js/test.js"></script>
     <title th:text="'問題' + ${number}"></title>
     <style>
         /* 初めは非表示に設定 */
@@ -20,7 +20,7 @@
 <header>
     <span>LearnEval</span>
     <form th:action="@{/teachermain}" method="GET">
-        <input onclick="home()" type="button" id="home-button" value="ホーム">
+        <input onclick="home('編集')" type="button" id="home-button" value="ホーム">
     </form>
 </header>
 <main>
@@ -113,9 +113,8 @@
                     </div>
                     <hr>
                 </th:block>
-                <div th:if="${size == 6}">
+                <div th:if="${size} == 6">
                 <button onclick="toggleSection('new')">設問追加</button>
-
                 <div id="new" class="hiddenContent">
                     <form th:action="@{/questionedit}" method="POST">
                         <!-- プルダウン 作成-->

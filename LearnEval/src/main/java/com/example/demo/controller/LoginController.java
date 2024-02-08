@@ -77,9 +77,9 @@ public class LoginController {
 				return "redirect:/teachermain";
 			}
 		}
-		else{
-			model.addAttribute("login","<script>alert('一致するIDがありません');</script>");
-		}
+		
+		model.addAttribute("name", name);
+		model.addAttribute("id", id);
 		return "login";
 	}
 	

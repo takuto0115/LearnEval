@@ -6,12 +6,11 @@
   <title>ログイン用ページ</title>
 </head>
 <body>
-  <div>[(${login})]</div>
   <div class="box">
     <h1>ログイン</h1>
     <form th:action="@{/login}" method="POST">
-      <p>名前：<input type="text" name="name" placeholder="漢字で入力"></p>
-      <p>ID：<input type="text" name="id"></p>
+      <p>名前：<input type="text" name="name" placeholder="漢字で入力" th:value="${name}"></p>
+      <p>ID：<input type="text" name="id" th:value="${id}"></p>
       <p>
         <div>
           <input type="radio" name="type" value="teacher" checked>先生</label>

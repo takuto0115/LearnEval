@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.demo.service.SessionCheckService;
-import com.example.demo.service.StudentService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,8 +24,6 @@ public class StudentController {
 	@Autowired
 	SessionCheckService check;
 
-	@Autowired
-	StudentService studentService;
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -226,8 +223,12 @@ public class StudentController {
 
 			return "redirect:/sessionError";
 		}
+		
+		String studentID =  (String) session.getAttribute("studentID");
+		
+		List<Map<String, Object>> result = jdbcTemplate.queryForList("SELECT questionNumber,answer_rate,end_time FROM eval WHERE studentID = ? order by end_time asc", studentID);
 
-		model.addAttribute("test_list",studentService.findByStudentID(session.getAttribute("studentID").toString()));
+		model.addAttribute("test_list", result);
 
 
 		return "studenteval";

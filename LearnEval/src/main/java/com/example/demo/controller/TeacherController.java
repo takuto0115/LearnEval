@@ -374,7 +374,7 @@ public class TeacherController {
 
 			return "newtest";
 		}
-		return "testedit/" + num;
+		return "redirect:/testedit/" + num;
 	}
 	
 	//ここまで新規問題作成
