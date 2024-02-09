@@ -378,7 +378,6 @@ public class MessageController {
 		}
 
 		
-		System.out.println(resultList);
 		model.addAttribute("resultList", resultList);
 		model.addAttribute("roomID", roomID);
 

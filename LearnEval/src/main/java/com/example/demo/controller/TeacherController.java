@@ -29,18 +29,17 @@ public class TeacherController {
 
 	@RequestMapping(path = "/teachermain", method = RequestMethod.GET)
 	public String mainGet(HttpSession session) {
-		System.out.println("teachermain");
 		/*セッションの中身がない場合、ログイン画面へ移行*/
 		// teacherIDがない場合、sessionErrorへ移行
-        if (check.teacherSessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 
-            // studentIDがある場合、studentmainへ移行
-            if (session.getAttribute("studentID") != null) {
-                return "redirect:/sessionErrorS";
-            }
+			// studentIDがある場合、studentmainへ移行
+			if (session.getAttribute("studentID") != null) {
+				return "redirect:/sessionErrorS";
+			}
 
-            return "redirect:/sessionError";
-        }
+			return "redirect:/sessionError";
+		}
 		return "teachermain";
 	}
 
@@ -48,15 +47,15 @@ public class TeacherController {
 	public String testMenuGet(Model model,HttpSession session) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
 		// teacherIDがない場合、sessionErrorへ移行
-        if (check.teacherSessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 
-            // studentIDがある場合、studentmainへ移行
-            if (session.getAttribute("studentID") != null) {
-                return "redirect:/sessionErrorS";
-            }
+			// studentIDがある場合、studentmainへ移行
+			if (session.getAttribute("studentID") != null) {
+				return "redirect:/sessionErrorS";
+			}
 
-            return "redirect:/sessionError";
-        }
+			return "redirect:/sessionError";
+		}
 
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> tests;
@@ -65,7 +64,6 @@ public class TeacherController {
 		tests = jdbcTemplate.queryForList("select * from testtitle");
 
 		String newNum = Integer.toString(tests.size() + 1);
-		System.out.println(newNum);
 		//実行結果をmodelにしまってHTMLで出せるようにする。
 		model.addAttribute("question", tests);
 		model.addAttribute("newNum", newNum);
@@ -79,37 +77,37 @@ public class TeacherController {
 	@RequestMapping(path = "/teacherstumenu", method = RequestMethod.GET)
 	public String stuMenuGet(HttpSession session, Model model, String selectclass) {
 		// teacherIDがない場合、sessionErrorへ移行
-				if (check.teacherSessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 
-					// studentIDがある場合、studentmainへ移行
-					if (session.getAttribute("studentID") != null) {
-						return "redirect:/sessionErrorS";
-					}
+			// studentIDがある場合、studentmainへ移行
+			if (session.getAttribute("studentID") != null) {
+				return "redirect:/sessionErrorS";
+			}
 
-					return "redirect:/sessionError";
-				}
+			return "redirect:/sessionError";
+		}
 
-				List<Map<String, Object>> resultList;
+		List<Map<String, Object>> resultList;
 
-				if (selectclass != null) {
-					resultList = jdbcTemplate.queryForList("select * from students where class = ? order by number asc;",
-							selectclass);
-				} else {
-					resultList = jdbcTemplate.queryForList("select * from students order by number asc;");
-				}
+		if (selectclass != null) {
+			resultList = jdbcTemplate.queryForList("select * from students where class = ? order by number asc;",
+					selectclass);
+		} else {
+			resultList = jdbcTemplate.queryForList("select * from students order by number asc;");
+		}
 
-				String i = (String) session.getAttribute("alert");
+		String i = (String) session.getAttribute("alert");
 
-				if ("1".equals(i)) {
-					model.addAttribute("alert", "1");
-					session.setAttribute("alert", "0");
-				}
+		if ("1".equals(i)) {
+			model.addAttribute("alert", "1");
+			session.setAttribute("alert", "0");
+		}
 
-				model.addAttribute("resultList", resultList);
-        
+		model.addAttribute("resultList", resultList);
+
 		return "teacherstumenu";
 	}
-	
+
 	//生徒一覧から個人成績画面
 	@RequestMapping(path = "/teacherstueval/{studentID}", method = RequestMethod.GET)
 	public String stuMenuPOST(HttpSession session, Model model, @PathVariable String studentID) {
@@ -123,7 +121,7 @@ public class TeacherController {
 
 			return "redirect:/sessionError";
 		}
-		
+
 		List<Map<String, Object>> result = jdbcTemplate.queryForList("SELECT questionNumber,answer_rate,end_time FROM eval WHERE studentID = ? order by end_time asc", studentID);
 
 		//resultの中身のend_timeを年月日:時分に変換する
@@ -142,7 +140,7 @@ public class TeacherController {
 
 		return "teacherstueval";
 	}
-	
+
 	//ここから問題編集
 
 	@RequestMapping(path = "/testedit/{num}", method = RequestMethod.GET)
@@ -248,11 +246,18 @@ public class TeacherController {
 		return "redirect:/testedit/" + num;
 	}
 
+	//言語の編集
+
+	@RequestMapping(path = "/langedit", method = RequestMethod.POST)
+	public String edit_lang(String in_lang, String num) {
+		jdbcTemplate.update("update testtitle set language = ? where questionNumber = ?", in_lang, num);
+		return "redirect:/testedit/" + num;
+	}
+
 	//問題制作,編集
 	@RequestMapping(path = "/questionedit", method = RequestMethod.POST)
 	public String edit_q(String first,String second,String third,String forth,String answer_num,String quenum,String num,HttpSession session)
 			throws IOException {
-		System.out.println(first + second + third + forth);
 		String[] question = {first,second,third,forth};
 
 		int ans = Integer.parseInt(answer_num);
@@ -278,9 +283,9 @@ public class TeacherController {
 
 		return "redirect:/testedit/" + quenum;
 	}
-	
+
 	//ここまで問題編集
-	
+
 	//問題削除
 
 	@RequestMapping(path = "/delete", method = RequestMethod.POST)
@@ -303,24 +308,24 @@ public class TeacherController {
 		return "redirect:/testedit/" + quenum;
 
 	}
-	
+
 	//ここまで問題削除
-	
+
 	//新規問題作成
 
 	@RequestMapping(path = "/newtest/{num}", method = RequestMethod.GET)
 	public String newtestGet(HttpSession session,@PathVariable String num,Model model) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
 		// teacherIDがない場合、sessionErrorへ移行
-        if (check.teacherSessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 
-            // studentIDがある場合、studentmainへ移行
-            if (session.getAttribute("studentID") != null) {
-                return "redirect:/sessionErrorS";
-            }
+			// studentIDがある場合、studentmainへ移行
+			if (session.getAttribute("studentID") != null) {
+				return "redirect:/sessionErrorS";
+			}
 
-            return "redirect:/sessionError";
-        }
+			return "redirect:/sessionError";
+		}
 
 		//languageの一覧を取得
 		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from testtitle");
@@ -350,15 +355,15 @@ public class TeacherController {
 			MultipartFile image,String title) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
 		// teacherIDがない場合、sessionErrorへ移行
-        if (check.teacherSessionCheck(session)) {
+		if (check.teacherSessionCheck(session)) {
 
-            // studentIDがある場合、studentmainへ移行
-            if (session.getAttribute("studentID") != null) {
-                return "redirect:/sessionErrorS";
-            }
+			// studentIDがある場合、studentmainへ移行
+			if (session.getAttribute("studentID") != null) {
+				return "redirect:/sessionErrorS";
+			}
 
-            return "redirect:/sessionError";
-        }
+			return "redirect:/sessionError";
+		}
 		String encodedImage = null;
 		//受け取ったすべての変数が""ではないかつupimageが入っている場合のみ進む
 		if(!num.equals("") && !language.equals("") &&
@@ -403,7 +408,6 @@ public class TeacherController {
 			}
 			//アラートで入力を求める
 			model.addAttribute("null_error", "全ての項目を入力してください");
-			//受け取った変数をすべてmodelに格納
 			model.addAttribute("num", num);
 			model.addAttribute("language", language);
 			model.addAttribute("first", first);
@@ -419,6 +423,6 @@ public class TeacherController {
 		}
 		return "redirect:/testedit/" + num;
 	}
-	
+
 
 }

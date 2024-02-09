@@ -30,7 +30,6 @@ public class StudentController {
 
 	@RequestMapping(path = "/studentmain", method = RequestMethod.GET)
 	public String mainGet(HttpSession session,Model model) {
-		System.out.println("studentmain");
 
 		// studentIDがない場合、sessionErrorへ移行
 		if (check.studentSessionCheck(session)) {
@@ -81,7 +80,6 @@ public class StudentController {
 		tests = jdbcTemplate.queryForList("select * from testtitle");
 
 		String newNum = Integer.toString(tests.size() + 1);
-		System.out.println(newNum);
 		//実行結果をmodelにしまってHTMLで出せるようにする。
 		model.addAttribute("question", tests);
 		model.addAttribute("newNum", newNum);
@@ -177,8 +175,6 @@ public class StudentController {
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String endTime = now.format(formatter);
-
-		System.out.println(num);
 		
 		// 学生ID、問題ID、選んだ六つの選択肢(select_first-sixth)、正答率、終了時間をevalテーブルに保存する
 		jdbcTemplate.update(
@@ -229,7 +225,6 @@ public class StudentController {
 		List<Map<String, Object>> result = jdbcTemplate.queryForList("SELECT questionNumber,answer_rate,end_time FROM eval WHERE studentID = ? order by end_time asc", studentID);
 
 		model.addAttribute("test_list", result);
-
 
 		return "studenteval";
 	}

@@ -46,8 +46,6 @@ public class LoginController {
 
 				String studentID = (String)user.get("studentID").toString();
 
-				System.out.println(name);
-
 				session.setAttribute("name",name);
 				session.setAttribute("studentID",studentID);
 
@@ -68,8 +66,6 @@ public class LoginController {
 				Map<String, Object> user = result.get(0);
 
 				String teacherID = (String)user.get("teacherID").toString();
-
-				System.out.println(name);
 
 				session.setAttribute("name",name);
 				session.setAttribute("teacherID",teacherID);
