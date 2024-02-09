@@ -129,13 +129,13 @@ public class TeacherController {
 		//resultの中身のend_timeを年月日:時分に変換する
 		for (int i = 0; i < result.size(); i++) {
 			Map<String, Object> map = result.get(i);
-			String time = (String) map.get("end_time");
+			String time = (String) map.get("end_time").toString();
 			String year = time.substring(0, 4);
 			String month = time.substring(5, 7);
 			String day = time.substring(8, 10);
 			String hour = time.substring(11, 13);
 			String minute = time.substring(14, 16);
-			String newTime = year + ":" + month + ":" + day + ":" + hour + ":" + minute ;
+			String newTime = year + "/" + month + "/" + day + " " + hour + ":" + minute ;
 			map.put("end_time", newTime);
 		}
 		model.addAttribute("test_list", result);

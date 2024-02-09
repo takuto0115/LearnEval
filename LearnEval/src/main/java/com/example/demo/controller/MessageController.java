@@ -239,9 +239,12 @@ public class MessageController {
 		
 		List<Map<String, Object>> studentID = jdbcTemplate.queryForList("select studentID from room where roomID = ?", roomID);
 		
+		System.out.println(studentID.get(0).get("studentID"));
+		System.out.println(session.getAttribute("studentID"));
+		
 		//studentIDとsessionに入っているstudentIDが一致しない場合、sessionErrorへ移行
 		if (!studentID.get(0).get("studentID").equals(session.getAttribute("studentID"))) {
-			return "redirect:/sessionError";
+			return "redirect:/sessionErrorS";
 		}
 		
 		// studentIDがない場合、sessionErrorへ移行
@@ -374,6 +377,8 @@ public class MessageController {
 			result.put("daytime", formattedDateTime);
 		}
 
+		
+		System.out.println(resultList);
 		model.addAttribute("resultList", resultList);
 		model.addAttribute("roomID", roomID);
 

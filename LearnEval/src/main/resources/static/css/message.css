@@ -5,6 +5,15 @@ main {
     text-align: center;
 }
 
+table{
+	text-align: center;
+	margin: auto;
+	margin-top: 10px;
+}
+td,tr{
+	padding-bottom: 20px;
+}
+
 /* メッセージエリアのスタイリング */
 #messagearea {
     width: 1250px;
