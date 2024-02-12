@@ -158,7 +158,7 @@ public class TeacherController {
 		//SELECT文の結果をしまう
 		String title = jdbcTemplate.queryForObject("select title from testtitle where questionNumber = ?",String.class,num);
 		//SELECT文の結果をしまう
-		String language = jdbcTemplate.queryForObject("select language from testtitle where questionNumber = ?",String.class,num);
+		String genre = jdbcTemplate.queryForObject("select genre from testtitle where questionNumber = ?",String.class,num);
 		//SELECT文の実行
 		q_result = jdbcTemplate.queryForList("select * from tests where questionNumber = ?",num);
 		//SELECT文の実行
@@ -173,15 +173,15 @@ public class TeacherController {
 		}
 
 		//languageの一覧を取得
-		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from testtitle");
+		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select genre from testtitle");
 
 		//nresultのかぶった項目を取り除く
 		for (int i = 0; i < n_result.size(); i++) {
 			Map<String, Object> map = n_result.get(i);
-			String lang = (String) map.get("language");
+			String lang = (String) map.get("genre");
 			for (int j = i + 1; j < n_result.size(); j++) {
 				Map<String, Object> map2 = n_result.get(j);
-				String lang2 = (String) map2.get("language");
+				String lang2 = (String) map2.get("genre");
 				if (lang.equals(lang2)) {
 					n_result.remove(j);
 					j--;
@@ -190,9 +190,9 @@ public class TeacherController {
 		}
 
 		model.addAttribute("size", c_result.size());
-		model.addAttribute("language", language);
+		model.addAttribute("genre", genre);
 		model.addAttribute("title", title);
-		model.addAttribute("lang_list", n_result);
+		model.addAttribute("genre_list", n_result);
 		model.addAttribute("delNum", delNum);
 		model.addAttribute("image", q_result);
 		model.addAttribute("number", num);
@@ -246,11 +246,11 @@ public class TeacherController {
 		return "redirect:/testedit/" + num;
 	}
 
-	//言語の編集
+	//ジャンルの編集
 
-	@RequestMapping(path = "/langedit", method = RequestMethod.POST)
-	public String edit_lang(String in_lang, String num) {
-		jdbcTemplate.update("update testtitle set language = ? where questionNumber = ?", in_lang, num);
+	@RequestMapping(path = "/genreedit", method = RequestMethod.POST)
+	public String edit_lang(String genre, String num) {
+		jdbcTemplate.update("update testtitle set genre = ? where questionNumber = ?", genre, num);
 		return "redirect:/testedit/" + num;
 	}
 
@@ -328,15 +328,15 @@ public class TeacherController {
 		}
 
 		//languageの一覧を取得
-		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from testtitle");
+		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select genre from testtitle");
 
 		//nresultのかぶった項目を取り除く
 		for (int i = 0; i < n_result.size(); i++) {
 			Map<String, Object> map = n_result.get(i);
-			String language = (String) map.get("language");
+			String language = (String) map.get("genre");
 			for (int j = i + 1; j < n_result.size(); j++) {
 				Map<String, Object> map2 = n_result.get(j);
-				String language2 = (String) map2.get("language");
+				String language2 = (String) map2.get("genre");
 				if (language.equals(language2)) {
 					n_result.remove(j);
 					j--;
@@ -344,13 +344,13 @@ public class TeacherController {
 			}
 		}
 
-		model.addAttribute("lang_list", n_result);
+		model.addAttribute("genre_list", n_result);
 		model.addAttribute("num", num);
 		return "newtest";
 	}
 	
 	@RequestMapping(path = "/newtest", method = RequestMethod.POST)
-	public String newtestGet(HttpSession session,Model model,String num,String language
+	public String newtestGet(HttpSession session,Model model,String num,String genre
 			,String first,String second,String third,String forth,String answer_num,
 			MultipartFile image,String title) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
@@ -366,7 +366,7 @@ public class TeacherController {
 		}
 		String encodedImage = null;
 		//受け取ったすべての変数が""ではないかつupimageが入っている場合のみ進む
-		if(!num.equals("") && !language.equals("") &&
+		if(!num.equals("") && !genre.equals("") &&
 				!first.equals("") && !second.equals("") && !third.equals("") && !forth.equals("") &&
 				!answer_num.equals("") && !title.equals("") && image != null && !image.isEmpty()) {
 			//アップロードされたファイルをバイトデータに変換する。
@@ -382,7 +382,7 @@ public class TeacherController {
 			//選択肢の数値から答えを取得
 			String answer = questions[ans - 1];
 			//タイトルの登録
-			jdbcTemplate.update("insert into testtitle (questionNumber,title,language) value (?,?,?)",num,title,language);
+			jdbcTemplate.update("insert into testtitle (questionNumber,title,genre) value (?,?,?)",num,title,genre);
 			//新規問題の登録
 			jdbcTemplate.update("insert into tests (questionNumber,image,imageNumber) value (?,?,1)",
 					num, encodedImage);
@@ -396,10 +396,10 @@ public class TeacherController {
 			//nresultのかぶった項目を取り除く
 			for (int i = 0; i < n_result.size(); i++) {
 				Map<String, Object> map = n_result.get(i);
-				String lang = (String) map.get("language");
+				String lang = (String) map.get("genre");
 				for (int j = i + 1; j < n_result.size(); j++) {
 					Map<String, Object> map2 = n_result.get(j);
-					String lang2 = (String) map2.get("language");
+					String lang2 = (String) map2.get("genre");
 					if (lang.equals(lang2)) {
 						n_result.remove(j);
 						j--;
@@ -409,7 +409,7 @@ public class TeacherController {
 			//アラートで入力を求める
 			model.addAttribute("null_error", "全ての項目を入力してください");
 			model.addAttribute("num", num);
-			model.addAttribute("language", language);
+			model.addAttribute("genre", genre);
 			model.addAttribute("first", first);
 			model.addAttribute("second", second);
 			model.addAttribute("third", third);

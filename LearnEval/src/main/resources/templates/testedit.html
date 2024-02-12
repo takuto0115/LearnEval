@@ -53,17 +53,17 @@
                 </form>
             </div>
             <div class="col-3" id="editarea">
-                  <button onclick="toggleSection('language')">言語変更</button>
+                  <button onclick="toggleSection('language')">ジャンル変更</button>
                     <div id="language" class="hiddenContent">
-				<p>既存の言語</p>
+				<p>既存のジャンル</p>
                 <select>
-                    <th:block th:each="lang : ${lang_list}">
-                        <option th:text="${lang.language}"></option>
+                    <th:block th:each="genre : ${genre_list}">
+                        <option th:text="${genre.genre}"></option>
                     </th:block>
                 </select><br>
-                <form th:action="@{/langedit}" method="POST">
-                    <p>変更後の言語</p>
-                    <input type="text" th:value="${language}" name="in_lang">
+                <form th:action="@{/genreedit}" method="POST">
+                    <p>変更後のジャンル</p>
+                    <input type="text" th:value="${genre}" name="genre">
                     <input type="hidden" name="num" th:value="${number}">
                     <input type="submit" value="更新する">
                 </form>

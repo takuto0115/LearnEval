@@ -24,13 +24,13 @@
       <th:block th:each="question : ${question}">
 	<tr  th:if="${question.questionNumber % 10 == 0}">
         <th>問題番号</th>
-        <th>言語</th>
+        <th>ジャンル</th>
       </tr>
         <tr>
           <td>
             <a th:href="'/testedit/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>
           </td>
-          <td th:text="${question.language}"></td>
+          <td th:text="${question.genre}"></td>
         <td>
 			<input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'" value="削除">
 		</td>

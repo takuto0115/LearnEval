@@ -21,13 +21,13 @@
     <th:block th:each="question : ${question}">
       <tr th:if="${question.questionNumber % 10 == 1}">
         <th>問題番号</th>
-        <th>言語</th>
+        <th>ジャンル</th>
       </tr>
       <tr>
         <td>
           <a th:href="'/testpage/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>
         </td>
-        <td th:text="${question.language}"></td>
+        <td th:text="${question.genre}"></td>
       </tr>
     </th:block>
   </table>
