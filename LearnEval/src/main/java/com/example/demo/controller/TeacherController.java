@@ -286,7 +286,7 @@ public class TeacherController {
 
 	//ここまで問題編集
 
-	//問題削除
+	//設問削除
 
 	@RequestMapping(path = "/delete", method = RequestMethod.POST)
 	public String delete(String num, String quenum, HttpSession session)
@@ -311,7 +311,7 @@ public class TeacherController {
 
 	//ここまで問題削除
 
-	//新規問題作成
+	//問題新規作成
 
 	@RequestMapping(path = "/newtest/{num}", method = RequestMethod.GET)
 	public String newtestGet(HttpSession session,@PathVariable String num,Model model) {
@@ -348,7 +348,7 @@ public class TeacherController {
 		model.addAttribute("num", num);
 		return "newtest";
 	}
-
+	
 	@RequestMapping(path = "/newtest", method = RequestMethod.POST)
 	public String newtestGet(HttpSession session,Model model,String num,String language
 			,String first,String second,String third,String forth,String answer_num,
@@ -424,5 +424,29 @@ public class TeacherController {
 		return "redirect:/testedit/" + num;
 	}
 
-
+    //問題削除
+	
+	@RequestMapping(path = "/deletetest/{num}", method = RequestMethod.GET)
+	public String deleteTest(@PathVariable String num) {
+		System.out.println(num);
+		jdbcTemplate.update("delete from testtitle where questionNumber = ?", num);
+		jdbcTemplate.update("delete from tests where questionNumber = ?", num);
+		jdbcTemplate.update("delete from choices where questionNumber = ?", num);
+		//今まであった問題の数をselectNumber昇順で取得
+		List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select * from testtitle ORDER BY questionNumber asc");
+		//サイズを取り出してナンバリングをする
+		int size = n_result.size();
+		//ナンバリング
+		for (int i = 0; i < size; i++) {
+			Map<String, Object> map = n_result.get(i);
+			int questionNumber = (int) map.get("questionNumber");
+			jdbcTemplate.update("update testtitle set questionNumber = ? where questionNumber = ?",
+					i + 1, questionNumber);
+		}
+		//test,choicesのquestionNumberを1ずつ減らす
+		jdbcTemplate.update("update tests set questionNumber = questionNumber - 1 where questionNumber > ?",num);
+		jdbcTemplate.update("update choices set questionNumber = questionNumber - 1 where questionNumber > ?",num);
+			
+		return "redirect:/teachertestmenu";
+	}
 }

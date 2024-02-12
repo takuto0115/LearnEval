@@ -15,6 +15,17 @@ function home(message){
 	}
 }
 
+function testdelete(num){
+    var result = window.confirm("問"+num+"を削除しますか？");
+	
+    if( result ) {
+		location.href = "/deletetest/" + num;
+	}
+	else {
+		alert("キャンセルされました");
+	}
+}
+
     function toggleSection(sectionId) {
       var section = document.getElementById(sectionId);
       if (section.style.display == "block") {

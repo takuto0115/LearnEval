@@ -5,6 +5,7 @@
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
   <link rel="stylesheet" type="text/css" href="/css/table.css" />
   <link rel="stylesheet" type="text/css" href="/css/newbutton.css" />
+  <script src="/js/test.js"></script>
   <title>問題一覧</title>
 </head>
 <body>
@@ -30,6 +31,9 @@
             <a th:href="'/testedit/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>
           </td>
           <td th:text="${question.language}"></td>
+        <td>
+			<input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'" value="削除">
+		</td>
         </tr>
       </th:block>
     </table>
