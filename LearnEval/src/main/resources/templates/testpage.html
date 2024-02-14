@@ -12,7 +12,7 @@
 </head>
 <body>
 	<header>
-    <span>LearnEval</span>
+    <span>LearnEval(生徒)</span>
     <form th:action="@{/teachermain}" method="GET">
         <input onclick="home('解答')" type="button" id="home-button" value="ホーム">
     </form>
@@ -36,7 +36,7 @@
             <form th:action="@{/test}" method="POST">
                 <th:block th:each="que : ${question}">
                     <div class="pull">
-                        <label th:text="'設問　' + ${que.selectNumber} + ':'"></label>
+                        <label th:text="'設問' + ${que.selectNumber} + ':'"></label>
                         <select th:name="'select'+${que.selectNumber}" style="font-size: 15px;">
                             <option value="無回答">-</option>
                             <option th:value="${que.select_first}" th:text="${que.select_first}"></option>

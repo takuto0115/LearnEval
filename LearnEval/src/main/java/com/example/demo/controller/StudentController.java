@@ -221,15 +221,13 @@ public class StudentController {
 			@RequestParam(name = "type", required = false)String type) {
 		// studentIDがない場合、sessionErrorへ移行
 		if (check.studentSessionCheck(session)) {
-
 			// teacherIDがある場合、teachermainへ移行
 			if(session.getAttribute("teacherID") != null) {
 				return "redirect:/sessionErrorT";
 			}
-
 			return "redirect:/sessionError";
 		}
-		//typeがnullの場合,""
+		//typeがnullの場合,""に変換する
 		if (type == null) {
 			type = "";
 		}
@@ -244,10 +242,5 @@ public class StudentController {
 		model.addAttribute("test_list", result);
 
 		return "studenteval";
-	}
-
-	@RequestMapping(path = "/studenteval", method = RequestMethod.POST)
-	public String evalPOST() {
-		return "redirect:/studentmain";
 	}
 }
