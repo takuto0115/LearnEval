@@ -15,6 +15,18 @@
     <input type="submit" id="home-button" value="ホーム">
     </form>
   </header>
+<!--  プルダウンを作成する-->]
+<main>
+	<p>
+<form th:action="@{/studenteval}" method="GET">
+	<label>ソートする項目を選択:</label>
+	<select name="type" id="type">
+		<option value="questionNumber">問題</option>
+		<option value="end_time">最終回答時刻</option>
+	</select>	
+	<input type="submit" value="選択">
+	</form>
+	</p>
   <table>
 	<tr>
 		<th>問題</th>
@@ -23,9 +35,10 @@
 	</tr>
 	<th:block th:each="test : ${test_list}">
 		<tr>
-			<td th:text="${test.questionNumber}"></td>
+			<td th:text="'問' + ${test.questionNumber}"></td>
 			<td th:text="${test.answer_rate}+'%'"></td>
 			<td th:text="${test.end_time}"></td>
   </table>
+  </main>
 </body>
 </html>

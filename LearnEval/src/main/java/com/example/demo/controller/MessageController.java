@@ -163,8 +163,10 @@ public class MessageController {
 			jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);", teacherID,
 					session.getAttribute("studentID"));
 		}
+		//新規room作成後、生徒側メッセージホーム画面へ移行
+		int roomID = jdbcTemplate.queryForObject("select roomID from room where teacherID = ? and studentID = ?;", Integer.class, teacherID, session.getAttribute("studentID"));
 
-		return "redirect:/studentmessagehome";
+		return "redirect:/studentmessage/" + roomID;
 	}
 
 	// 教師側新規room作成画面表示
@@ -229,8 +231,11 @@ public class MessageController {
 			jdbcTemplate.update("INSERT INTO room (teacherID, studentID) VALUES(?, ?);",
 					session.getAttribute("teacherID"), studentID);
 		}
+		
+		//新規room作成後、教員側メッセージホーム画面へ移行
+		int roomID = jdbcTemplate.queryForObject("select roomID from room where teacherID = ? and studentID = ?;", Integer.class, session.getAttribute("teacherID"), studentID);
 
-		return "redirect:/teachermessagehome";
+		return "redirect:/teachermessage/"+roomID;
 	}
 
 	// 生徒側メッセージ画面表示

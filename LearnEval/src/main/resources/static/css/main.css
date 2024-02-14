@@ -6,13 +6,13 @@ a {
   background: #fff;
   width: 600px;
   height:  85px;
-  text-align: auto;
   margin:15px;
   border: 3px solid #333;
   box-shadow: 0 5px 0 #333;
   border-radius: 6px;
   display: inline-block;
   transition: .3s;
+  text-decoration: none;
 }
 a:hover {
   transform: translateY(5px);

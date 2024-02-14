@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.service.SessionCheckService;
 
@@ -175,7 +177,7 @@ public class StudentController {
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String endTime = now.format(formatter);
-		
+
 		// 学生ID、問題ID、選んだ六つの選択肢(select_first-sixth)、正答率、終了時間をevalテーブルに保存する
 		jdbcTemplate.update(
 				"insert into eval (studentID,questionNumber,select_first,select_second,select_third,select_fourth,select_fifth,select_sixth,answer_rate,end_time) value (?,?,?,?,?,?,?,?,?,?);",
@@ -191,6 +193,13 @@ public class StudentController {
 
 		// ratioListをi番目までだけにする
 		ratioList = ratioList.subList(0, i);
+		
+		//問に対応したEndtimeの新しい順にデータを取得
+		//resultの三番目のendotimeを取得
+		//endtime3より古いデータを削除
+		List<Map<String, Object>> result = jdbcTemplate.queryForList("SELECT * FROM eval WHERE studentID = ? AND questionNumber = ? ORDER BY end_time desc",studentID,num);
+		String endtime3 = (String) result.get(2).get("end_time").toString();
+		jdbcTemplate.update("DELETE FROM eval WHERE studentID = ? AND questionNumber = ? AND end_time < ?",studentID,num,endtime3);
 
 		// ratioListをmodelに保存する
 		model.addAttribute("ratioList", ratioList);
@@ -208,7 +217,8 @@ public class StudentController {
 	}
 
 	@RequestMapping(path = "/studenteval", method = RequestMethod.GET)
-	public String evalGet(HttpSession session,Model model) {
+	public String evalGet(HttpSession session,Model model,
+			@RequestParam(name = "type", required = false)String type) {
 		// studentIDがない場合、sessionErrorへ移行
 		if (check.studentSessionCheck(session)) {
 
@@ -219,11 +229,18 @@ public class StudentController {
 
 			return "redirect:/sessionError";
 		}
-		
+		//typeがnullの場合,""
+		if (type == null) {
+			type = "";
+		}
+		System.out.println(type);
 		String studentID =  (String) session.getAttribute("studentID");
-		
-		List<Map<String, Object>> result = jdbcTemplate.queryForList("SELECT questionNumber,answer_rate,end_time FROM eval WHERE studentID = ? order by end_time asc", studentID);
-
+		List<Map<String, Object>> result = new ArrayList<>();
+		if (type.equals("questionNumber")) {
+			result = jdbcTemplate.queryForList("SELECT questionNumber,answer_rate,end_time FROM eval WHERE studentID = ? order by questionNumber asc", studentID);
+		}else {
+			result = jdbcTemplate.queryForList("SELECT questionNumber,answer_rate,end_time FROM eval WHERE studentID = ? order by end_time asc", studentID);
+		}
 		model.addAttribute("test_list", result);
 
 		return "studenteval";
