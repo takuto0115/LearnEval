@@ -26,15 +26,13 @@ function testdelete(num){
 	}
 }
 
-    function toggleSection(sectionId) {
-      var section = document.getElementById(sectionId);
-      if (section.style.display == "block") {
-        section.style.display = "none";
-      } else {
-        section.style.display = "block";
-      }
-    }
-    
+function questiondelete() {
+		alert("削除しました。");
+	}
+
+function edit(message){
+	alert(message + "が完了しました。");
+}    
 function newtest(){
 	alert("新規テストを作成しました。\n編集画面へ移行します。");
 }

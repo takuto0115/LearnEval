@@ -389,8 +389,8 @@ public class TeacherController {
 
 	//設問削除
 
-	@RequestMapping(path = "/delete", method = RequestMethod.POST)
-	public String delete(String num, String quenum, HttpSession session)
+	@RequestMapping(path = "/delete/{num}", method = RequestMethod.POST)
+	public String delete(@PathVariable String num, String quenum, HttpSession session)
 			throws IOException {
 
 		jdbcTemplate.update("delete from choices where questionNumber = ? and selectNumber = ?", quenum, num);

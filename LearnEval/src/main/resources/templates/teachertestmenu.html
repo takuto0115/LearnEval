@@ -22,15 +22,15 @@
 </header>
 <main>
     <form th:action="@{/testsearch}" method="GET">
-        <select id="genre" name="genre">
+        <p><select id="genre" name="genre">
             <th:block th:each="genre : ${genre}">
                 <option th:text="${genre.genre}"></option>
             </th:block>
         </select>
-        <input type="submit" value="検索">
+        <input type="submit" value="検索"></p>
     </form>
     <form th:action="@{/teachertestmenu}" method="GET">
-        <input type="submit" value="全問題表示">
+        <p><input type="submit" value="全問題表示"></p>
     </form>
     <h1>問題一覧</h1>
     <div class="container">

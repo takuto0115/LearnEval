@@ -31,7 +31,7 @@
                         <input type="file" name="upimage"><br>
                         <input type="hidden" name="imagenum" th:value="${image.imageNumber}">
                         <input type="hidden" name="num" th:value="${number}">
-                        <input type="submit" value="更新する">
+                        <input type="submit" value="更新する" onclick="edit('更新')">
                 </form>
                     <hr>
                     </th:block>
@@ -39,7 +39,7 @@
                     <h3>画像を追加する</h3><input type="file" name="upimage"><br>
                     <input type="hidden" name="imagenum" value="new">
                     <input type="hidden" name="num" th:value="${number}">
-                    <input type="submit" value="追加する">
+                    <input type="submit" value="追加する" onclick="edit('追加')">
                 </form>
                 <div th:if="${imgsize > 1}">
                 <p>削除する画像を選んでください</p>
@@ -65,14 +65,14 @@
                     <p>変更後のジャンル</p>
                     <input type="text" th:value="${genre}" name="genre">
                     <input type="hidden" name="num" th:value="${number}">
-                    <input type="submit" value="更新する">
+                    <input type="submit" value="更新する" onclick="edit('更新')">
                 </form>
                     <hr>
                 <p>変更後のテストタイトル</p>
                 <form th:action="@{/titleedit}" method="POST">
                     <p><input type="text" th:value="${title}" name="title"></p>
                     <input type="hidden" name="num" th:value="${number}">
-                    <input type="submit" value="更新する">
+                    <input type="submit" value="更新する" onclick="edit('更新')">
                 </form>
                 <hr>
                 <th:block th:each="que : ${question}">
@@ -101,7 +101,7 @@
                             </select><br>
                             <input type="hidden" name="num" th:value="${que.selectNumber}">
                             <input type="hidden" name="quenum" th:value="${number}">
-                            <input type="submit" value="更新する">
+                            <input type="submit" value="更新する" onclick="edit('更新')">
                         </form>
                     <hr>
                 </th:block>
@@ -121,7 +121,7 @@
                         </select><br>
                         <input type="hidden" name="num" value="new">
                         <input type="hidden" name="quenum" th:value="${number}">
-                        <input type="submit" value="追加する">
+                        <input type="submit" value="追加する" onclick="edit('追加')">
                     </form>
                 <hr>
                 </div>
@@ -134,7 +134,7 @@
                         </th:block>
                     </select>
                     <input type="hidden" name="quenum" th:value="${number}">
-                    <input type="submit" value="削除する">
+                    <input type="submit" value="削除する" onclick="delete()">
                 </form>
             </label>
             </div>
