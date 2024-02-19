@@ -27,7 +27,7 @@
             <table>
                 <th:block th:each="result : ${resultList}">
                     <tr>
-                        <td><a th:href="'/studentmessage/' + ${result.roomID}" th:text="${result.name}"></a></td>
+                        <td><a class="messagebottun" th:href="'/studentmessage/' + ${result.roomID}" th:text="${result.name}"></a></td>
                     </tr>
                 </th:block>
             </table>

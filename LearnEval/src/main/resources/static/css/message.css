@@ -102,6 +102,7 @@ td,tr{
     text-decoration: none; /* aタグの下線を非表示に */
     color: #fff; /* 文字色 */
     font-size: 1.5rem; /* フォントサイズ */
+    margin: auto; /* 外側の余白設定 */
 }
 
 /* メッセージボタンのホバーエフェクト */
