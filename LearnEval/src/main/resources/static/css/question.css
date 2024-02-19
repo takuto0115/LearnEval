@@ -3,12 +3,12 @@ body{
 	padding-top: 0;
 }
 main{
-padding: 10%;
-padding-top: 0;
+padding: 0;
+padding-bottom: 30px;
 }
-h1,p{
+h1,p ,h3{
 		text-align: center;
-		margin-bottom: 5%;
+		margin-bottom: 10px;
 }
 section{
 	padding: 10px;
@@ -40,11 +40,19 @@ img{
 	border : solid 1px black;
 }
 #imagearea{
-	margin:auto;
-	margin-top: 0;
+	margin: auto;
 	height: 500px;
     border: 1px solid black;
     padding: 10px;
     overflow: auto;
 }
+#questionarea{
+	margin: auto;
+		margin-top: 0;
+		height: 500px;
+		border: 1px solid black;
+		padding: 10px;
+		overflow: auto;
+}
+
 	

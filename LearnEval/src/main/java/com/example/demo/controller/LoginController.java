@@ -30,19 +30,15 @@ public class LoginController {
 	}
 	
 	@RequestMapping(path = "/login", method = RequestMethod.POST)
-	public String checkUser(String type,String name,String id,Model model,HttpSession session) {
+	public String checkUser(String name,String id,Model model,HttpSession session) {
 
-		if("student".equals(type)) {
+		//入力されたIDとパスワードをもとにDBを検索
+		List<Map<String, Object>> s_result = jdbcTemplate.queryForList("select * from students where name = ? and studentID = ?",name,id);
+		List<Map<String, Object>> t_result = jdbcTemplate.queryForList("select * from teachers where teacherID = ? and name = ?",id,name);
 
-			//SELECT文の結果をしまうためのリスト
-			List<Map<String, Object>> result;
+			if (!s_result.isEmpty()) {
 
-			//SELECT文の実行
-			result = jdbcTemplate.queryForList("select * from students where name = ? and studentID = ?",name,id);
-
-			if (!result.isEmpty()) {
-
-				Map<String, Object> user = result.get(0);
+				Map<String, Object> user = s_result.get(0);
 
 				String studentID = (String)user.get("studentID").toString();
 
@@ -51,19 +47,9 @@ public class LoginController {
 
 				return "redirect:/studentmain";
 			}
-		}
-		else if(type.equals("teacher")) {
+			if (!t_result.isEmpty()) {
 
-
-			//SELECT文の結果をしまうためのリスト
-			List<Map<String, Object>> result;
-
-			//SELECT文の実行
-			result = jdbcTemplate.queryForList("select * from teachers where teacherID = ? and name = ?",id,name);
-
-			if (!result.isEmpty()) {
-
-				Map<String, Object> user = result.get(0);
+				Map<String, Object> user = t_result.get(0);
 
 				String teacherID = (String)user.get("teacherID").toString();
 
@@ -72,7 +58,6 @@ public class LoginController {
 
 				return "redirect:/teachermain";
 			}
-		}
 		
 		model.addAttribute("name", name);
 		model.addAttribute("id", id);

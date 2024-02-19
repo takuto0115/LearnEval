@@ -2,6 +2,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
   <link rel="stylesheet" type="text/css" href="/css/table.css" />
   <link rel="stylesheet" type="text/css" href="/css/newbutton.css" />
@@ -19,13 +21,16 @@
     </form>
   </header>
   <main>
-    <h1 style="text-align: center;">問題一覧</h1> 
-    <table>
-      <th:block th:each="question : ${question}">
-	<tr  th:if="${question.questionNumber % 10 == 0}">
+    <h1>問題一覧</h1> 
+    <div class="container">
+    <div class="row">
+		  <div class="col-4">
+			  <table>
+	<tr>
         <th>問題番号</th>
         <th>ジャンル</th>
       </tr>
+      <th:block th:each="question : ${test1}">
         <tr>
           <td>
             <a th:href="'/testedit/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>
@@ -37,8 +42,50 @@
         </tr>
       </th:block>
     </table>
-    <a th:href="'/newtest/' + ${newNum}" id="newquestion" class="btn btn-custom01">
-  <span class="btn-custom01-front">新規問題作成</span>
+		  </div>
+		  		  <div class="col-4">
+		   <table>
+	<tr>
+        <th>問題番号</th>
+        <th>ジャンル</th>
+      </tr>
+      <th:block th:each="question : ${test2}">
+        <tr>
+          <td>
+            <a th:href="'/testedit/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>
+          </td>
+          <td th:text="${question.genre}"></td>
+        <td>
+			<input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'" value="削除">
+		</td>
+        </tr>
+      </th:block>
+    </table>
+		  </div>
+		  		  <div class="col-4">
+		   <table>
+	<tr>
+        <th>問題番号</th>
+        <th>ジャンル</th>
+      </tr>
+      <th:block th:each="question : ${test3}">
+        <tr>
+          <td>
+            <a th:href="'/testedit/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>
+          </td>
+          <td th:text="${question.genre}"></td>
+        <td>
+			<input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'" value="削除">
+		</td>
+        </tr>
+      </th:block>
+    </table>
+		  </div>
+    </div>
+	</div>
+ 
+    <a href="/newtest" id="newquestion" class="btn btn-custom01">
+  <label class="btn-custom01-front">新規問題作成</label>
   <i class="fas fa-angle-right fa-position-right"></i>
 </a>
   </main>

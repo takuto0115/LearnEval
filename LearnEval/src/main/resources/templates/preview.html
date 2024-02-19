@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/header.css" />
+    <link rel="stylesheet" type="text/css" href="/css/question.css" />
+    <link rel="stylesheet" type="text/css" href="/css/edit.css" />
+    <script src="/js/test.js"></script>
+    <title>プレビュー画面</title>
+</head>
+<body>
+<header>
+    <span>LearnEval(教師)</span>
+    <form th:action="@{/teachermain}" method="GET">
+        <input onclick="home('編集')" type="button" id="home-button" value="ホーム">
+    </form>
+</header>
+    <h1 style="font-size: 30px;">以下の内容でよろしいですか？</h1>
+    <h3 style="font-size: 20px;">追加後は編集画面へ遷移します。</h3>
+<main>
+	<form th:action="@{/preview}" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-9" id="imagearea">
+                 <img th:src="${'data:image/png;base64,' + encodedImage}" width="100%" height="100%">
+                 <input type="hidden" name="image" th:value="${encodedImage}">
+            </div>
+            <div class="col-3" id="questionarea">
+				<p>ジャンル</p>
+                    <p th:text="${genre}"></p>
+						<input type="hidden" name="genre" th:value="${genre}">
+                  <hr>
+                <p>テストタイトル</p>
+                    <p th:text="${title}"></p>
+						<input type="hidden" name="title" th:value="${title}">
+                  <hr>
+                        <p>設問1</p>
+						<ul>
+                        <li th:text="'1：' + ${first}"></li>
+                        <li th:text="'2：' + ${second}"></li>
+                        <li th:text="'3：' + ${third}"></li>
+                        <li th:text="'4：' + ${forth}"></li>
+                        <p th:text="'答え：' + ${answer_num}"></p>
+                        <input type="hidden" name="first" th:value="${first}">
+                        <input type="hidden" name="second" th:value="${second}">
+                        <input type="hidden" name="third" th:value="${third}">
+                        <input type="hidden" name="forth" th:value="${forth}">
+                        <input type="hidden" name="answer_num" th:value="${answer_num}">
+                        </ul>
+            </div>
+        </div>
+    </div>
+    <input type="submit" value="問題を追加する" onclick="newtest()">
+        </form>
+        <button onclick="history.back()">問題作成画面へ戻る</button>
+</main>
+</body>
+</html>

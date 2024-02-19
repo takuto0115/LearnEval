@@ -62,12 +62,28 @@ public class TeacherController {
 
 		//SELECT文の実行
 		tests = jdbcTemplate.queryForList("select * from testtitle");
-
-		String newNum = Integer.toString(tests.size() + 1);
+		
+		//結果を3等分する
+		int size = tests.size();
+		int size2 = size / 3;
+		int size3 = size - size2;
+		List<Map<String, Object>> test1 = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> test2 = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> test3 = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < size; i++) {
+			if (i < size2) {
+				test1.add(tests.get(i));
+			} else if (i < size3) {
+				test2.add(tests.get(i));
+			} else {
+				test3.add(tests.get(i));
+			}
+		}
+System.out.println(size + " " + size2 + " " + size3);
 		//実行結果をmodelにしまってHTMLで出せるようにする。
-		model.addAttribute("question", tests);
-		model.addAttribute("newNum", newNum);
-
+		model.addAttribute("test1", test1);
+		model.addAttribute("test2", test2);
+		model.addAttribute("test3", test3);
 
 		return "teachertestmenu";
 	}
@@ -165,11 +181,17 @@ public class TeacherController {
 		c_result = jdbcTemplate.queryForList("SELECT * FROM choices WHERE questionNumber = ? ORDER BY selectNumber asc",num);
 
 		List<Integer> delNum  = new ArrayList<Integer>(); 
+		List<Integer> delimg  = new ArrayList<Integer>();
 
 		//choiceの数分のナンバリング
 		for (int i = 0; i < c_result.size(); i++) {
 			System.out.println(i);
 			delNum.add(i, i+1);
+		}
+		//tetsの数分のナンバリング
+		for (int i = 0; i < q_result.size(); i++) {
+			System.out.println(i);
+			delimg.add(i, i + 1);
 		}
 
 		//languageの一覧を取得
@@ -188,7 +210,8 @@ public class TeacherController {
 				}
 			}
 		}
-
+		model.addAttribute("delimg",delimg);
+		model.addAttribute("imgsize",q_result.size());
 		model.addAttribute("size", c_result.size());
 		model.addAttribute("genre", genre);
 		model.addAttribute("title", title);
@@ -311,10 +334,35 @@ public class TeacherController {
 
 	//ここまで問題削除
 
+	//画像削除
+	
+	@RequestMapping(path = "/deleteimg", method = RequestMethod.POST)
+	public String deleteimg(String quenum, String imagenum, HttpSession session)
+			throws IOException {
+
+		jdbcTemplate.update("delete from tests where questionNumber = ? and imageNumber = ?", quenum, imagenum);
+
+		//今まであった画像の数をimageNumber昇順で取得
+		List<Map<String, Object>> n_result = jdbcTemplate
+				.queryForList("select * from tests where questionNumber = ? ORDER BY imageNumber asc", quenum);
+		//サイズを取り出してナンバリングをする
+		int size = n_result.size();
+		//ナンバリング
+		for (int i = 0; i < size; i++) {
+			Map<String, Object> map = n_result.get(i);
+			int imageNumber = (int) map.get("imageNumber");
+			jdbcTemplate.update("update tests set imageNumber = ? where questionNumber = ? and imageNumber = ?",
+					i + 1, quenum, imageNumber);
+		}
+		return "redirect:/testedit/" + quenum;
+
+	}
+	
+	//ここまで画像削除
 	//問題新規作成
 
-	@RequestMapping(path = "/newtest/{num}", method = RequestMethod.GET)
-	public String newtestGet(HttpSession session,@PathVariable String num,Model model) {
+	@RequestMapping(path = "/newtest", method = RequestMethod.GET)
+	public String newtestGet(HttpSession session,Model model) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
 		// teacherIDがない場合、sessionErrorへ移行
 		if (check.teacherSessionCheck(session)) {
@@ -333,11 +381,11 @@ public class TeacherController {
 		//nresultのかぶった項目を取り除く
 		for (int i = 0; i < n_result.size(); i++) {
 			Map<String, Object> map = n_result.get(i);
-			String language = (String) map.get("genre");
+			String genre = (String) map.get("genre");
 			for (int j = i + 1; j < n_result.size(); j++) {
 				Map<String, Object> map2 = n_result.get(j);
-				String language2 = (String) map2.get("genre");
-				if (language.equals(language2)) {
+				String genre2 = (String) map2.get("genre");
+				if (genre.equals(genre2)) {
 					n_result.remove(j);
 					j--;
 				}
@@ -345,12 +393,11 @@ public class TeacherController {
 		}
 
 		model.addAttribute("genre_list", n_result);
-		model.addAttribute("num", num);
 		return "newtest";
 	}
 	
 	@RequestMapping(path = "/newtest", method = RequestMethod.POST)
-	public String newtestGet(HttpSession session,Model model,String num,String genre
+	public String newtestGet(HttpSession session,Model model,String genre
 			,String first,String second,String third,String forth,String answer_num,
 			MultipartFile image,String title) {
 		/*セッションの中身がない場合、ログイン画面へ移行*/
@@ -366,7 +413,7 @@ public class TeacherController {
 		}
 		String encodedImage = null;
 		//受け取ったすべての変数が""ではないかつupimageが入っている場合のみ進む
-		if(!num.equals("") && !genre.equals("") &&
+		if(!genre.equals("") &&
 				!first.equals("") && !second.equals("") && !third.equals("") && !forth.equals("") &&
 				!answer_num.equals("") && !title.equals("") && image != null && !image.isEmpty()) {
 			//アップロードされたファイルをバイトデータに変換する。
@@ -376,19 +423,6 @@ public class TeacherController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			String[] questions = {first,second,third,forth};
-			//選択肢の数値をint型に変換
-			int ans = Integer.parseInt(answer_num);
-			//選択肢の数値から答えを取得
-			String answer = questions[ans - 1];
-			//タイトルの登録
-			jdbcTemplate.update("insert into testtitle (questionNumber,title,genre) value (?,?,?)",num,title,genre);
-			//新規問題の登録
-			jdbcTemplate.update("insert into tests (questionNumber,image,imageNumber) value (?,?,1)",
-					num, encodedImage);
-			//新規選択肢の登録
-			jdbcTemplate.update("insert into choices (questionNumber,select_first,select_sec,select_third,select_forth,answer,selectNumber) value (?,?,?,?,?,?,1)",
-					num,first,second,third,forth,answer);
 		}else {
 			//languageの一覧を取得
 			List<Map<String, Object>> n_result = jdbcTemplate.queryForList("select language from testtitle");
@@ -396,11 +430,11 @@ public class TeacherController {
 			//nresultのかぶった項目を取り除く
 			for (int i = 0; i < n_result.size(); i++) {
 				Map<String, Object> map = n_result.get(i);
-				String lang = (String) map.get("genre");
+				String gen = (String) map.get("genre");
 				for (int j = i + 1; j < n_result.size(); j++) {
 					Map<String, Object> map2 = n_result.get(j);
-					String lang2 = (String) map2.get("genre");
-					if (lang.equals(lang2)) {
+					String gen2 = (String) map2.get("genre");
+					if (gen.equals(gen2)) {
 						n_result.remove(j);
 						j--;
 					}
@@ -408,7 +442,6 @@ public class TeacherController {
 			}
 			//アラートで入力を求める
 			model.addAttribute("null_error", "全ての項目を入力してください");
-			model.addAttribute("num", num);
 			model.addAttribute("genre", genre);
 			model.addAttribute("first", first);
 			model.addAttribute("second", second);
@@ -417,10 +450,51 @@ public class TeacherController {
 			model.addAttribute("answer_num", answer_num);
 			model.addAttribute("image", image);
 			model.addAttribute("title", title);
-			model.addAttribute("lang_list", n_result);
+			model.addAttribute("genre_list", n_result);
 
 			return "newtest";
 		}
+		model.addAttribute("genre", genre);
+		model.addAttribute("first", first);
+		model.addAttribute("second", second);
+		model.addAttribute("third", third);
+		model.addAttribute("forth", forth);
+		model.addAttribute("answer_num", answer_num);
+		model.addAttribute("title", title);
+		model.addAttribute("encodedImage", encodedImage);
+		return "/preview";
+	}
+	
+	//プレビュー画面
+	@RequestMapping(path = "/preview", method = RequestMethod.POST)
+	public String preview(HttpSession session,Model model,String genre,String first,String second,String third,String forth,String answer_num,String title,String image) {
+		/*セッションの中身がない場合、ログイン画面へ移行*/
+		// teacherIDがない場合、sessionErrorへ移行
+		if (check.teacherSessionCheck(session)) {
+
+			// studentIDがある場合、studentmainへ移行
+			if (session.getAttribute("studentID") != null) {
+				return "redirect:/sessionErrorS";
+			}
+
+			return "redirect:/sessionError";
+		}
+		String[] questions = {first,second,third,forth};
+		//選択肢の数値をint型に変換
+		int ans = Integer.parseInt(answer_num);
+		//選択肢の数値から答えを取得
+		String answer = questions[ans - 1];
+		//今まであった問題の数+1を取得
+		int num = jdbcTemplate.queryForObject("select count(*) from testtitle", Integer.class) + 1;
+		//タイトルの登録
+		jdbcTemplate.update("insert into testtitle (questionNumber,title,genre) value (?,?,?)",num,title,genre);
+		//新規問題の登録
+		jdbcTemplate.update("insert into tests (questionNumber,image,imageNumber) value (?,?,1)",
+				num, image);
+		//新規選択肢の登録
+		jdbcTemplate.update("insert into choices (questionNumber,select_first,select_sec,select_third,select_forth,answer,selectNumber) value (?,?,?,?,?,?,1)",
+				num,first,second,third,forth,answer);
+
 		return "redirect:/testedit/" + num;
 	}
 

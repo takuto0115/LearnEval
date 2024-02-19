@@ -9,12 +9,6 @@
     <link rel="stylesheet" type="text/css" href="/css/edit.css" />
     <script src="/js/test.js"></script>
     <title th:text="'問題' + ${number}"></title>
-    <style>
-        /* 初めは非表示に設定 */
-        .hiddenContent {
-            display: none;
-        }
-    </style>
 </head>
 <body>
 <header>
@@ -23,16 +17,13 @@
         <input onclick="home('編集')" type="button" id="home-button" value="ホーム">
     </form>
 </header>
-<main>
     <h1 th:text="'問題' + ${number}"></h1>
-    <h2>ボタンを押すと編集画面が現れます</h2>
+<main>
     <div class="container">
         <div class="row">
             <div class="col-9" id="imagearea">
                     <br>
                     <th:block th:each="image : ${image}">
-                  <button th:onclick="'toggleSection('+ ${image.questionNumber} +${image.imageNumber} +')'" th:text = "${image.imageNumber} + '枚目の画像'"></button>
-                    <div th:id="${image.questionNumber} + '' + ${image.imageNumber}" class="hiddenContent">
                 <form th:action="@{/imgedit}" method="POST" enctype="multipart/form-data">
                         <h3 th:text="'現在の問題画像 '+ ${image.imageNumber} + '枚目' "></h3>
                         <img th:src="${'data:image/png;base64,' + image.image}" width="100%" height="100%">
@@ -42,7 +33,6 @@
                         <input type="hidden" name="num" th:value="${number}">
                         <input type="submit" value="更新する">
                 </form>
-                    </div>
                     <hr>
                     </th:block>
                 <form th:action="@{/imgedit}" method="POST" enctype="multipart/form-data">
@@ -51,11 +41,21 @@
                     <input type="hidden" name="num" th:value="${number}">
                     <input type="submit" value="追加する">
                 </form>
+                <div th:if="${imgsize > 1}">
+                <p>削除する画像を選んでください</p>
+                <form th:action="@{/deleteimg}" method="POST">
+                    <select id="dropdown1" name="imagenum">
+                        <th:block th:each="delimg : ${delimg}">
+                            <option th:value="${delimg}" th:text="${delimg}"></option>
+                        </th:block>
+                    </select>
+                    <input type="hidden" name="quenum" th:value="${number}">
+                    <input type="submit" value="削除する">
+                </form>
+                </div>
             </div>
-            <div class="col-3" id="editarea">
-                  <button onclick="toggleSection('language')">ジャンル変更</button>
-                    <div id="language" class="hiddenContent">
-				<p>既存のジャンル</p>
+            <div class="col-3" id="questionarea">
+				<p>ジャンル例</p>
                 <select>
                     <th:block th:each="genre : ${genre_list}">
                         <option th:text="${genre.genre}"></option>
@@ -67,23 +67,16 @@
                     <input type="hidden" name="num" th:value="${number}">
                     <input type="submit" value="更新する">
                 </form>
-                    </div>
                     <hr>
-                    <button onclick="toggleSection('title')">タイトル変更</button>
-                    <div id="title" class="hiddenContent">
                 <p>変更後のテストタイトル</p>
                 <form th:action="@{/titleedit}" method="POST">
                     <p><input type="text" th:value="${title}" name="title"></p>
                     <input type="hidden" name="num" th:value="${number}">
                     <input type="submit" value="更新する">
                 </form>
-                    </div>
                 <hr>
                 <th:block th:each="que : ${question}">
-                    <button th:onclick="'toggleSection(' + ${que.selectNumber} + ')'"
-                            th:text="'設問' + ${que.selectNumber}"></button>
-
-                    <div th:id="${que.selectNumber}" class="hiddenContent">
+					<h3 th:text="'設問'+${que.selectNumber}"></h3>
                         <p>現在の問題文</p>
 						<ul>
                         <li th:text="'1：' + ${que.select_first}"></li>
@@ -110,13 +103,9 @@
                             <input type="hidden" name="quenum" th:value="${number}">
                             <input type="submit" value="更新する">
                         </form>
-                    </div>
                     <hr>
                 </th:block>
                 <div th:if="${size < 6}">
-                <button onclick="toggleSection('new')">設問追加</button>
-
-                <div id="new" class="hiddenContent">
                     <form th:action="@{/questionedit}" method="POST">
                         <p>追加の問題文</p>
                         <label th:text="'1：'"></label><input type="text" name="first"><br>
@@ -134,9 +123,9 @@
                         <input type="hidden" name="quenum" th:value="${number}">
                         <input type="submit" value="追加する">
                     </form>
-                </div>
                 <hr>
                 </div>
+                <label th:if="${size > 1}">
                 <p>削除する問題を選んでください</p>
                 <form th:action="@{/delete}" method="POST">
                     <select id="dropdown1" name="num">
@@ -147,6 +136,7 @@
                     <input type="hidden" name="quenum" th:value="${number}">
                     <input type="submit" value="削除する">
                 </form>
+            </label>
             </div>
         </div>
     </div>

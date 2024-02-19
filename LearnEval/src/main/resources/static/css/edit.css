@@ -21,11 +21,6 @@ li {
 section{
 	font-size: 1px;
 }
-#editarea{
-	margin:auto;
-	margin-top: 10px;
-	padding: auto;
-}
 button:hover {
 	cursor: pointer;
 }

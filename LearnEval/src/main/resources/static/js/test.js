@@ -34,3 +34,7 @@ function testdelete(num){
         section.style.display = "block";
       }
     }
+    
+function newtest(){
+	alert("新規テストを作成しました。\n編集画面へ移行します。");
+}

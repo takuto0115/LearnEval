@@ -21,12 +21,6 @@
             <form th:action="@{/login}" method="POST">
                 <p>名前<input type="text" name="name" placeholder="漢字で入力" th:value="${name}"></p>
                 <p>ID<input type="text" name="id" th:value="${id}"></p>
-                <p>
-                    <ul class="radio_select">
-                        <li><input type="radio" name="type" value="teacher" checked>先生</li>
-                        <li><input type="radio" name="type" value="student">生徒</li>
-                    </ul>
-                </p>
                 <input type="submit" value="ログイン">
             </form>
             <p style="color: red; font-size: 15px; font-weight: bold;">すべてあっているのにログインできない場合は<br>管理者へ伝えてください</p>
