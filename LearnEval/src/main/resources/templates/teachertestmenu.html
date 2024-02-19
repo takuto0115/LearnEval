@@ -1,93 +1,130 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="/css/header.css" />
-  <link rel="stylesheet" type="text/css" href="/css/table.css" />
-  <link rel="stylesheet" type="text/css" href="/css/newbutton.css" />
-  <script src="/js/test.js"></script>
-  <title>問題一覧</title>
+    <link rel="stylesheet" type="text/css" href="/css/header.css" />
+    <link rel="stylesheet" type="text/css" href="/css/table.css" />
+    <link rel="stylesheet" type="text/css" href="/css/newbutton.css" />
+    <script src="/js/test.js"></script>
+    <title>問題一覧</title>
 </head>
 <body>
-  <header>
+<header>
     <span>LearnEval(教師)</span>
     <form th:action="@{/teachermain}" method="GET">
-      <input type="submit" id="home-button" value="ホーム">
+        <input type="submit" id="home-button" value="ホーム">
     </form>
     <form th:action="@{/login}" method="GET">
-      <input type="submit" id="logout-button" value="ログアウト">
+        <input type="submit" id="logout-button" value="ログアウト">
     </form>
-  </header>
-  <main>
-    <h1>問題一覧</h1> 
+</header>
+<main>
+    <form th:action="@{/testsearch}" method="GET">
+        <select id="genre" name="genre">
+            <th:block th:each="genre : ${genre}">
+                <option th:text="${genre.genre}"></option>
+            </th:block>
+        </select>
+        <input type="submit" value="検索">
+    </form>
+    <form th:action="@{/teachertestmenu}" method="GET">
+        <input type="submit" value="全問題表示">
+    </form>
+    <h1>問題一覧</h1>
     <div class="container">
-    <div class="row">
-		  <div class="col-4">
-			  <table>
-	<tr>
-        <th>問題番号</th>
-        <th>ジャンル</th>
-      </tr>
-      <th:block th:each="question : ${test1}">
-        <tr>
-          <td>
-            <a th:href="'/testedit/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>
-          </td>
-          <td th:text="${question.genre}"></td>
-        <td>
-			<input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'" value="削除">
-		</td>
-        </tr>
-      </th:block>
-    </table>
-		  </div>
-		  		  <div class="col-4">
-		   <table>
-	<tr>
-        <th>問題番号</th>
-        <th>ジャンル</th>
-      </tr>
-      <th:block th:each="question : ${test2}">
-        <tr>
-          <td>
-            <a th:href="'/testedit/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>
-          </td>
-          <td th:text="${question.genre}"></td>
-        <td>
-			<input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'" value="削除">
-		</td>
-        </tr>
-      </th:block>
-    </table>
-		  </div>
-		  		  <div class="col-4">
-		   <table>
-	<tr>
-        <th>問題番号</th>
-        <th>ジャンル</th>
-      </tr>
-      <th:block th:each="question : ${test3}">
-        <tr>
-          <td>
-            <a th:href="'/testedit/' + ${question.questionNumber}" th:text="'問' + ${question.questionNumber}"/>
-          </td>
-          <td th:text="${question.genre}"></td>
-        <td>
-			<input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'" value="削除">
-		</td>
-        </tr>
-      </th:block>
-    </table>
-		  </div>
+        <div class="row">
+            <div th:if="${size >= 10}" class="col-4">
+                <table>
+                    <tr>
+                        <th>問題番号</th>
+                        <th>ジャンル</th>
+                    </tr>
+                    <th:block th:each="question : ${test1}">
+                        <tr>
+                            <td>
+                                <a th:href="'/testedit/' + ${question.questionNumber}"
+                                   th:text="'問' + ${question.questionNumber}"/>
+                            </td>
+                            <td th:text="${question.genre}"></td>
+                            <td>
+                                <input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'"
+                                       value="削除">
+                            </td>
+                        </tr>
+                    </th:block>
+                </table>
+            </div>
+            <div th:if="${size >= 10}" class="col-4">
+                <table>
+                    <tr>
+                        <th>問題番号</th>
+                        <th>ジャンル</th>
+                    </tr>
+                    <th:block th:each="question : ${test2}">
+                        <tr>
+                            <td>
+                                <a th:href="'/testedit/' + ${question.questionNumber}"
+                                   th:text="'問' + ${question.questionNumber}"/>
+                            </td>
+                            <td th:text="${question.genre}"></td>
+                            <td>
+                                <input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'"
+                                       value="削除">
+                            </td>
+                        </tr>
+                    </th:block>
+                </table>
+            </div>
+            <div th:if="${size >= 10}" class="col-4">
+                <table>
+                    <tr>
+                        <th>問題番号</th>
+                        <th>ジャンル</th>
+                    </tr>
+                    <th:block th:each="question : ${test3}">
+                        <tr>
+                            <td>
+                                <a th:href="'/testedit/' + ${question.questionNumber}"
+                                   th:text="'問' + ${question.questionNumber}"/>
+                            </td>
+                            <td th:text="${question.genre}"></td>
+                            <td>
+                                <input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'"
+                                       value="削除">
+                            </td>
+                        </tr>
+                    </th:block>
+                </table>
+            </div>
+            <div th:if="${size < 10}">
+                <table>
+                    <tr>
+                        <th>問題番号</th>
+                        <th>ジャンル</th>
+                    </tr>
+                    <th:block th:each="question : ${tests}">
+                        <tr>
+                            <td>
+                                <a th:href="'/testedit/' + ${question.questionNumber}"
+                                   th:text="'問' + ${question.questionNumber}"/>
+                            </td>
+                            <td th:text="${question.genre}"></td>
+                            <td>
+                                <input type="button" th:onclick="'testdelete(' + ${question.questionNumber} + ')'"
+                                       value="削除">
+                            </td>
+                        </tr>
+                    </th:block>
+                </table>
+            </div>
+        </div>
+        <a href="/newtest" id="newquestion" class="btn btn-custom01">
+            <label class="btn-custom01-front">新規問題作成</label>
+            <i class="fas fa-angle-right fa-position-right"></i>
+        </a>
     </div>
-	</div>
- 
-    <a href="/newtest" id="newquestion" class="btn btn-custom01">
-  <label class="btn-custom01-front">新規問題作成</label>
-  <i class="fas fa-angle-right fa-position-right"></i>
-</a>
-  </main>
+</main>
 </body>
 </html>

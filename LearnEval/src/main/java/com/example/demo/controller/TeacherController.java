@@ -59,10 +59,26 @@ public class TeacherController {
 
 		//SELECT文の結果をしまうためのリスト
 		List<Map<String, Object>> tests;
+		List<Map<String, Object>> genre_List;
 
 		//SELECT文の実行
 		tests = jdbcTemplate.queryForList("select * from testtitle");
-		
+		genre_List = jdbcTemplate.queryForList("select genre from testtitle");
+
+		//nresultのかぶった項目を取り除く
+		for (int i = 0; i < genre_List.size(); i++) {
+			Map<String, Object> map = genre_List.get(i);
+			String gen1 = (String) map.get("genre");
+			for (int j = i + 1; j < genre_List.size(); j++) {
+				Map<String, Object> map2 = genre_List.get(j);
+				String gen2 = (String) map2.get("genre");
+				if (gen1.equals(gen2)) {
+					genre_List.remove(j);
+					j--;
+				}
+			}
+		}
+
 		//結果を3等分する
 		int size = tests.size();
 		int size2 = size / 3;
@@ -79,12 +95,74 @@ public class TeacherController {
 				test3.add(tests.get(i));
 			}
 		}
-System.out.println(size + " " + size2 + " " + size3);
+		System.out.println(size + " " + size2 + " " + size3);
+		//実行結果をmodelにしまってHTMLで出せるようにする。
+		model.addAttribute("size", size);
+		model.addAttribute("tests", tests);
+		model.addAttribute("test1", test1);
+		model.addAttribute("test2", test2);
+		model.addAttribute("test3", test3);
+		model.addAttribute("genre", genre_List);
+
+		return "teachertestmenu";
+	}
+
+	@RequestMapping(path = "/testsearch", method = RequestMethod.GET)
+	public String testSearchGet(Model model, HttpSession session,String genre) {
+		/*セッションの中身がない場合、ログイン画面へ移行*/
+		// teacherIDがない場合、sessionErrorへ移行
+		if (check.teacherSessionCheck(session)) {
+
+			// studentIDがある場合、studentmainへ移行
+			if (session.getAttribute("studentID") != null) {
+				return "redirect:/sessionErrorS";
+			}
+
+			return "redirect:/sessionError";
+		}
+		//SELECT文の結果をしまうためのリスト
+		List<Map<String, Object>> tests;
+		List<Map<String, Object>> genre_List;
+
+		//SELECT文の実行
+		tests = jdbcTemplate.queryForList("select * from testtitle where genre = ?",genre);
+		genre_List = jdbcTemplate.queryForList("select genre from testtitle");
+
+		//nresultのかぶった項目を取り除く
+		for (int i = 0; i < genre_List.size(); i++) {
+			Map<String, Object> map = genre_List.get(i);
+			String gen1 = (String) map.get("genre");
+			for (int j = i + 1; j < genre_List.size(); j++) {
+				Map<String, Object> map2 = genre_List.get(j);
+				String gen2 = (String) map2.get("genre");
+				if (gen1.equals(gen2)) {
+					genre_List.remove(j);
+					j--;
+				}
+			}
+		}
+		//結果を3等分する
+		int size = tests.size();
+		int size2 = size / 3;
+		int size3 = size - size2;
+		List<Map<String, Object>> test1 = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> test2 = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> test3 = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < size; i++) {
+			if (i < size2) {
+				test1.add(tests.get(i));
+			} else if (i < size3) {
+				test2.add(tests.get(i));
+			} else {
+				test3.add(tests.get(i));
+			}
+		}
 		//実行結果をmodelにしまってHTMLで出せるようにする。
 		model.addAttribute("test1", test1);
 		model.addAttribute("test2", test2);
 		model.addAttribute("test3", test3);
-
+		model.addAttribute("genre", genre_List);
+		model.addAttribute("tests", tests);
 		return "teachertestmenu";
 	}
 
@@ -335,7 +413,7 @@ System.out.println(size + " " + size2 + " " + size3);
 	//ここまで問題削除
 
 	//画像削除
-	
+
 	@RequestMapping(path = "/deleteimg", method = RequestMethod.POST)
 	public String deleteimg(String quenum, String imagenum, HttpSession session)
 			throws IOException {
@@ -357,7 +435,7 @@ System.out.println(size + " " + size2 + " " + size3);
 		return "redirect:/testedit/" + quenum;
 
 	}
-	
+
 	//ここまで画像削除
 	//問題新規作成
 
@@ -395,7 +473,7 @@ System.out.println(size + " " + size2 + " " + size3);
 		model.addAttribute("genre_list", n_result);
 		return "newtest";
 	}
-	
+
 	@RequestMapping(path = "/newtest", method = RequestMethod.POST)
 	public String newtestGet(HttpSession session,Model model,String genre
 			,String first,String second,String third,String forth,String answer_num,
@@ -464,7 +542,7 @@ System.out.println(size + " " + size2 + " " + size3);
 		model.addAttribute("encodedImage", encodedImage);
 		return "/preview";
 	}
-	
+
 	//プレビュー画面
 	@RequestMapping(path = "/preview", method = RequestMethod.POST)
 	public String preview(HttpSession session,Model model,String genre,String first,String second,String third,String forth,String answer_num,String title,String image) {
@@ -498,8 +576,8 @@ System.out.println(size + " " + size2 + " " + size3);
 		return "redirect:/testedit/" + num;
 	}
 
-    //問題削除
-	
+	//問題削除
+
 	@RequestMapping(path = "/deletetest/{num}", method = RequestMethod.GET)
 	public String deleteTest(@PathVariable String num) {
 		System.out.println(num);
@@ -520,7 +598,7 @@ System.out.println(size + " " + size2 + " " + size3);
 		//test,choicesのquestionNumberを1ずつ減らす
 		jdbcTemplate.update("update tests set questionNumber = questionNumber - 1 where questionNumber > ?",num);
 		jdbcTemplate.update("update choices set questionNumber = questionNumber - 1 where questionNumber > ?",num);
-			
+
 		return "redirect:/teachertestmenu";
 	}
 }
