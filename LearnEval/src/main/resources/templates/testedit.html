@@ -42,6 +42,7 @@
                     <input type="submit" value="追加する" onclick="edit('追加')">
                 </form>
                 <div th:if="${imgsize > 1}">
+					<hr>
                 <p>削除する画像を選んでください</p>
                 <form th:action="@{/deleteimg}" method="POST">
                     <select id="dropdown1" name="imagenum">
@@ -134,7 +135,7 @@
                         </th:block>
                     </select>
                     <input type="hidden" name="quenum" th:value="${number}">
-                    <input type="submit" value="削除する" onclick="delete()">
+                    <input type="submit" value="削除する">
                 </form>
             </label>
             </div>

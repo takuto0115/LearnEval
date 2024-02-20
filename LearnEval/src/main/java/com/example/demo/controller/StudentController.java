@@ -101,6 +101,9 @@ public class StudentController {
 		int size = tests.size();
 		int size2 = size / 3;
 		int size3 = size - size2;
+		if (size % 3 == 2) {
+			size3 = size3 - 1;
+		}
 		List<Map<String, Object>> test1 = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> test2 = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> test3 = new ArrayList<Map<String, Object>>();
@@ -163,6 +166,9 @@ public class StudentController {
 		int size = tests.size();
 		int size2 = size / 3;
 		int size3 = size - size2;
+		if (size % 3 == 2) {
+			size3 = size3 - 1;
+		}
 		List<Map<String, Object>> test1 = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> test2 = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> test3 = new ArrayList<Map<String, Object>>();
@@ -293,8 +299,11 @@ public class StudentController {
 		//resultの三番目のendotimeを取得
 		//endtime3より古いデータを削除
 		List<Map<String, Object>> result = jdbcTemplate.queryForList("SELECT * FROM eval WHERE studentID = ? AND questionNumber = ? ORDER BY end_time desc",studentID,num);
-		String endtime3 = (String) result.get(2).get("end_time").toString();
-		jdbcTemplate.update("DELETE FROM eval WHERE studentID = ? AND questionNumber = ? AND end_time < ?",studentID,num,endtime3);
+		if (result.size() > 3) {
+			String endtime3 = (String) result.get(2).get("end_time").toString();
+			jdbcTemplate.update("DELETE FROM eval WHERE studentID = ? AND questionNumber = ? AND end_time < ?",studentID,num,endtime3);
+		}
+
 
 		// ratioListをmodelに保存する
 		model.addAttribute("ratioList", ratioList);

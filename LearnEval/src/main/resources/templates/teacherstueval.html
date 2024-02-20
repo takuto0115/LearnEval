@@ -15,7 +15,19 @@
     <input type="submit" id="home-button" value="ホーム">
     </form>
   </header>
-  <table>
+  <main>
+	  	<p>
+<form th:action="@{/teastudenteval}" method="GET">
+	<label>ソートする項目を選択:</label>
+	<select name="type" id="type">
+		<option value="questionNumber">問題</option>
+		<option value="end_time">最終回答時刻</option>
+	</select>	
+	<input type = "hidden" name="id" th:value="${id}">
+	<input type="submit" value="選択">
+	</form>
+	</p>
+	  <table>
 	<tr>
 		<th>問題</th>
 		<th>正答率</th>
@@ -27,5 +39,6 @@
 			<td th:text="${test.answer_rate}+'%'"></td>
 			<td th:text="${test.end_time}"></td>
   </table>
+  </main>
 </body>
 </html>

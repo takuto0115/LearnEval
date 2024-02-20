@@ -36,6 +36,7 @@
             <form th:action="@{/test}" method="POST">
                 <th:block th:each="que : ${question}">
                     <div class="pull">
+						<p>
                         <label th:text="'設問' + ${que.selectNumber} + ':'"></label>
                         <select th:name="'select'+${que.selectNumber}" style="font-size: 15px;">
                             <option value="無回答">-</option>
@@ -45,6 +46,7 @@
                             <option th:value="${que.select_forth}" th:text="${que.select_forth}"></option>
                         </select><br>
                     </div>
+                    </p>
                 </th:block><br>
                 <input type="hidden" name="num" th:value="${number}">
                 <input type="submit" value="回答する">

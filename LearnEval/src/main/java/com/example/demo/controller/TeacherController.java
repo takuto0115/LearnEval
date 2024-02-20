@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.service.SessionCheckService;
@@ -83,6 +84,9 @@ public class TeacherController {
 		int size = tests.size();
 		int size2 = size / 3;
 		int size3 = size - size2;
+		if (size % 3 == 2) {
+			size3 = size3 - 1;
+		}
 		List<Map<String, Object>> test1 = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> test2 = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> test3 = new ArrayList<Map<String, Object>>();
@@ -145,6 +149,9 @@ public class TeacherController {
 		int size = tests.size();
 		int size2 = size / 3;
 		int size3 = size - size2;
+		if (size % 3 == 2) {
+			size3 = size3 - 1;
+		}
 		List<Map<String, Object>> test1 = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> test2 = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> test3 = new ArrayList<Map<String, Object>>();
@@ -212,7 +219,6 @@ public class TeacherController {
 			if (session.getAttribute("studentID") != null) {
 				return "redirect:/sessionErrorS";
 			}
-
 			return "redirect:/sessionError";
 		}
 
@@ -230,7 +236,36 @@ public class TeacherController {
 			String newTime = year + "/" + month + "/" + day + " " + hour + ":" + minute ;
 			map.put("end_time", newTime);
 		}
+		model.addAttribute("id", studentID);
 		model.addAttribute("test_list", result);
+
+		return "teacherstueval";
+	}
+	
+	@RequestMapping(path = "/teastudenteval", method = RequestMethod.GET)
+	public String evalGet(HttpSession session,Model model,
+			@RequestParam(name = "type", required = false)String type,String id) {
+		if (check.teacherSessionCheck(session)) {
+
+			// studentIDがある場合、studentmainへ移行
+			if (session.getAttribute("studentID") != null) {
+				return "redirect:/sessionErrorS";
+			}
+			return "redirect:/sessionError";
+		}
+		//typeがnullの場合,""に変換する
+		if (type == null) {
+			type = "";
+		}
+		System.out.println(type);
+		List<Map<String, Object>> result = new ArrayList<>();
+		if (type.equals("questionNumber")) {
+			result = jdbcTemplate.queryForList("SELECT questionNumber,answer_rate,end_time FROM eval WHERE studentID = ? order by questionNumber asc", id);
+		}else {
+			result = jdbcTemplate.queryForList("SELECT questionNumber,answer_rate,end_time FROM eval WHERE studentID = ? order by end_time asc", id);
+		}
+		model.addAttribute("test_list", result);
+		model.addAttribute("id", id);
 
 		return "teacherstueval";
 	}
@@ -389,8 +424,8 @@ public class TeacherController {
 
 	//設問削除
 
-	@RequestMapping(path = "/delete/{num}", method = RequestMethod.POST)
-	public String delete(@PathVariable String num, String quenum, HttpSession session)
+	@RequestMapping(path = "/delete", method = RequestMethod.POST)
+	public String delete(String num, String quenum, HttpSession session)
 			throws IOException {
 
 		jdbcTemplate.update("delete from choices where questionNumber = ? and selectNumber = ?", quenum, num);
